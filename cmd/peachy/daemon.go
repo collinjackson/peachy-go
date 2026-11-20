@@ -88,15 +88,29 @@ func (c *cli) daemon(ctx context.Context, listen, token, mode string) error {
 	if mode != "normal" && mode != "json-rpc" {
 		return fmt.Errorf("-mode is normal or json-rpc, not %q", mode)
 	}
-	d := &daemon{c: c, jsonRPC: mode == "json-rpc", byTS: map[int64]msgRef{}, byID: map[string]int64{},
-		queued: make(chan struct{})}
-	if err := d.load(); err != nil {
-		return err
-	}
 	if host, _, err := net.SplitHostPort(listen); err != nil {
 		return err
 	} else if ip := net.ParseIP(host); host != "localhost" && (ip == nil || !ip.IsLoopback()) && token == "" {
 		return errors.New("listening beyond this machine needs -token: anyone who reaches the daemon can read and send as this account")
+	}
+	ln, err := net.Listen("tcp", listen)
+	if err != nil {
+		return err
+	}
+	return c.serveDaemon(ctx, ln, token, mode)
+}
+
+// serveDaemon answers on ln until ctx ends.
+func (c *cli) serveDaemon(ctx context.Context, ln net.Listener, token, mode string) error {
+	if mode != "normal" && mode != "json-rpc" {
+		ln.Close()
+		return fmt.Errorf("-mode is normal or json-rpc, not %q", mode)
+	}
+	d := &daemon{c: c, jsonRPC: mode == "json-rpc", byTS: map[int64]msgRef{}, byID: map[string]int64{},
+		queued: make(chan struct{})}
+	if err := d.load(); err != nil {
+		ln.Close()
+		return err
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /v1/about", d.about)
@@ -105,7 +119,7 @@ func (c *cli) daemon(ctx context.Context, listen, token, mode string) error {
 	mux.HandleFunc("POST /v1/reactions/{number}", d.react)
 	mux.HandleFunc("DELETE /v1/reactions/{number}", d.react)
 	mux.HandleFunc("GET /v1/groups/{number}", d.groups)
-	srv := &http.Server{Addr: listen, Handler: guard(token, mux), ReadHeaderTimeout: 10 * time.Second}
+	srv := &http.Server{Handler: guard(token, mux), ReadHeaderTimeout: 10 * time.Second}
 
 	go d.pollLoop(ctx)
 	go func() {
@@ -114,8 +128,8 @@ func (c *cli) daemon(ctx context.Context, listen, token, mode string) error {
 		defer cancel()
 		_ = srv.Shutdown(shut)
 	}()
-	fmt.Fprintf(os.Stderr, "peachy daemon on http://%s (signal-cli REST API, %s mode). Ctrl-C stops.\n", listen, mode)
-	if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+	fmt.Fprintf(os.Stderr, "peachy daemon on http://%s (signal-cli REST API, %s mode). Ctrl-C stops.\n", ln.Addr(), mode)
+	if err := srv.Serve(ln); !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
 	return nil
