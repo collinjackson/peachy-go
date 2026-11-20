@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      # build.sh clones peachy-protocol at peachy-protocol.commit; rustup
+      # installs the toolchain its rust-toolchain.toml names.
+      - name: Cache the MLS engine build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.rustup/toolchains
+            target/peachy-protocol
+          key: engine-${{ runner.os }}-${{ hashFiles('peachy-protocol.commit') }}-test-issuer
+
+      # The test-issuer engine is for tests only; never ship it.
+      - name: Build
+        run: PEACHY_FEATURES=peachy-mls-cabi/test-issuer ./build.sh
+
+      - name: gofmt
+        run: |
+          out=$(gofmt -l .)
+          if [ -n "$out" ]; then echo "gofmt needed:"; echo "$out"; exit 1; fi
+
+      - name: go vet
+        env:
+          CGO_LDFLAGS: -L${{ github.workspace }}/target/lib
+        run: |
+          go vet ./...
+          go vet -tags testissuer ./...
+
+      - name: Test
+        env:
+          CGO_LDFLAGS: -L${{ github.workspace }}/target/lib
+        run: |
+          go test ./...
+          go test -race -tags testissuer ./...

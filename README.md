@@ -55,6 +55,23 @@ id, err := dev.SendText(ctx, conversationID, "hello", "")
 
 `cmd/peachy` is a complete example.
 
+## Test without a Peachy account
+
+`peachytest` is an in-memory fake Peachy server, written from
+peachy-protocol's docs alone, that Devices sign in to, link with and message
+through, on 127.0.0.1. The integration tests use it; build the engine with
+its test feature first:
+
+```
+PEACHY_FEATURES=peachy-mls-cabi/test-issuer ./build.sh
+CGO_LDFLAGS=-L$PWD/target/lib go test -tags testissuer ./...
+```
+
+`peachytest.Start(t)` starts one, `AddAccount` makes an account, and every
+number signs in with `peachytest.Code`. With `-tags testissuer`, a Device can
+also start conversations (`FoundGroupForTest`, `AddMemberForTest`,
+`RemoveMemberForTest`). The engine built that way is for tests only.
+
 ## License
 
 [MPL-2.0](LICENSE). You can use this library in any program, open or closed;

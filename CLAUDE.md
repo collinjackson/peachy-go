@@ -39,7 +39,11 @@ This is an independent open-source project, not part of the Peachy product.
 - `go test -tags testissuer ./...` adds tests that play a group's other
   member (`testissuer.go`), against an engine built with
   `PEACHY_FEATURES=peachy-mls-cabi/test-issuer ./build.sh`. Never ship that
-  engine.
+  engine. Those include the integration tests (`integration_test.go`,
+  `cmd/peachy/daemon_test.go`) against `peachytest`, an in-memory fake
+  server built only from peachy-protocol's docs; `testgroup.go` lets a
+  test Device found groups and add or remove members through it.
+- CI (`.github/workflows/ci.yml`) runs all of the above on every push.
 - When peachy-protocol moves: follow its `docs/CHANGELOG.md` "Do" lines,
   update `peachy-protocol.commit`, run `./generate.sh`.
 - Commit subjects start with a verb (`Add`, `Fix`, `Update`, `Remove`).
