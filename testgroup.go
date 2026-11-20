@@ -271,6 +271,7 @@ func (d *Device) submitLocked(ctx context.Context, group, commit []byte, welcome
 	if err != nil {
 		return fail(err)
 	}
+	d.rememberSent(wrapped, nowFunc())
 	handle, err := groupHandle(group)
 	if err != nil {
 		return fail(err)

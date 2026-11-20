@@ -81,6 +81,7 @@ type Device struct {
 	sweep *headSweep
 	// When every group was last checked against its head.
 	allChecked time.Time
+	ownSent    map[string]time.Time // nonces of envelopes sent, until they come back
 
 	// Groups forgotten and waiting for a seat (rejoin.go), as in rejoins.json.
 	rejoins map[string]*rejoin
@@ -515,6 +516,9 @@ func (d *Device) handle(ctx context.Context, accountKey []byte, env *pb.MailboxE
 		}
 		return &Event{Type: EventJoined, Conversation: string(group)}, nil
 	case pb.MailboxKind_MAILBOX_KIND_MLS, pb.MailboxKind_MAILBOX_KIND_COMMIT:
+		if d.sentByUs(env.GetPayload()) {
+			return nil, nil // our own send, back: acknowledged unopened
+		}
 		group, kind, inner, err := d.mls.openEnvelope(env.GetPayload())
 		if err != nil {
 			return nil, err
@@ -1142,6 +1146,7 @@ func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext 
 	if err != nil {
 		return err
 	}
+	d.rememberSent(payload, time.Now())
 	sent, err := call[pb.SendSealedRequest, pb.SendSealedResponse](ctx, d.rpc, "SendSealed", &pb.SendSealedRequest{
 		Payload:         payload,
 		Urgent:          urgent,

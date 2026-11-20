@@ -15,6 +15,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/rs/zerolog"
+
 	"github.com/collinjackson/peachy-go/peachytest"
 )
 
@@ -68,10 +70,17 @@ func signIn(t *testing.T, srv *peachytest.Server, phone, name, handle string) pe
 func (p person) poll(t *testing.T) []Event {
 	t.Helper()
 	var all []Event
+	// Every warning a poll logs fails the test: a device's mailbox, its own
+	// sends coming back included, should read cleanly.
+	var logged bytes.Buffer
+	ctx := zerolog.New(&logged).Level(zerolog.WarnLevel).WithContext(context.Background())
 	for {
-		events, more, err := p.Poll(context.Background())
+		events, more, err := p.Poll(ctx)
 		if err != nil {
 			t.Fatal(err)
+		}
+		if logged.Len() > 0 {
+			t.Fatalf("the poll warned: %s", logged.String())
 		}
 		all = append(all, events...)
 		if !more {
