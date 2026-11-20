@@ -35,7 +35,7 @@ peachy send Sam "on my way"       # send words
 echo "on my way" | peachy send Sam
 peachy send Sam -f photo.jpg "the view"
 peachy follow                     # print messages as they arrive; Ctrl-C stops
-peachy follow "Mission Cycling"   # just one chat
+peachy follow "Book Club"   # just one chat
 ```
 
 A chat can be named by its name, by someone in it, or by the start of its id
