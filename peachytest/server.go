@@ -61,13 +61,14 @@ type Server struct {
 	now      func() time.Time
 	accounts map[string]*account // by actor id
 	byPhone  map[string]*account
-	sessions map[string]*session // by bearer token
-	devices  map[string]*device  // by device id
-	heads    map[string]*head    // by string(handle)
-	payloads map[string]*payload // by envelope id
-	retries  map[string]string   // client_message_id → envelope id
-	objects  map[string][]byte   // object key → bytes
-	uploads  map[string]upload   // upload token → what may go up
+	sessions map[string]*session      // by bearer token
+	devices  map[string]*device       // by device id
+	heads    map[string]*head         // by string(handle)
+	payloads map[string]*payload      // by envelope id
+	retries  map[string]string        // client_message_id → envelope id
+	objects  map[string][]byte        // object key → bytes
+	uploads  map[string]upload        // upload token → what may go up
+	held     map[string]chan struct{} // actor → closed when its held calls may go on
 	streams  map[string]map[*subscriber]bool
 	pageSize int // heads per sweep page
 }
@@ -294,7 +295,22 @@ func (c *caller) needSession() (*session, error) {
 
 func unary[Req, Resp any](s *Server, mux *http.ServeMux, method string, f func(c *caller, req *Req) (*Resp, error)) {
 	path := "/peachy.v1.ChatService/" + method
-	mux.Handle(path, connect.NewUnaryHandler(path, func(_ context.Context, r *connect.Request[Req]) (*connect.Response[Resp], error) {
+	mux.Handle(path, connect.NewUnaryHandler(path, func(ctx context.Context, r *connect.Request[Req]) (*connect.Response[Resp], error) {
+		if method == "SendSealed" {
+			s.mu.Lock()
+			var wait chan struct{}
+			if c := s.caller(r.Header()); c.session != nil {
+				wait = s.held[c.session.actor]
+			}
+			s.mu.Unlock()
+			if wait != nil {
+				select {
+				case <-wait:
+				case <-ctx.Done():
+					return nil, connect.NewError(connect.CodeCanceled, ctx.Err())
+				}
+			}
+		}
 		s.mu.Lock()
 		defer s.mu.Unlock()
 		resp, err := f(s.caller(r.Header()), r.Msg)
@@ -424,6 +440,30 @@ func accountRecord(accessKey []byte, at time.Time) []byte {
 
 // HasAccessKey is whether actor's device registered an access key
 // (SetAccessKey).
+// HoldSends makes the account's SendSealed calls hang, as a connection that
+// dropped without a reset does, until the returned release is called or the
+// caller gives up.
+func (s *Server) HoldSends(actor string) (release func()) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.held == nil {
+		s.held = map[string]chan struct{}{}
+	}
+	ch := make(chan struct{})
+	s.held[actor] = ch
+	var once sync.Once
+	return func() {
+		once.Do(func() {
+			s.mu.Lock()
+			if s.held[actor] == ch {
+				delete(s.held, actor)
+			}
+			s.mu.Unlock()
+			close(ch)
+		})
+	}
+}
+
 func (s *Server) HasAccessKey(actor string) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()

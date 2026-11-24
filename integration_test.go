@@ -327,3 +327,57 @@ func TestFakeServerCredentialMatchesTestIssuer(t *testing.T) {
 		t.Fatalf("published keys:\nfake   %s\nengine %s", fake, keys)
 	}
 }
+
+// A send that hangs (a connection that dropped without a reset) holds up
+// neither receiving nor, past unaryTimeout, the sender.
+func TestHungSendDoesNotBlockReceiving(t *testing.T) {
+	srv := peachytest.Start(t)
+	ctx := context.Background()
+	alice := signIn(t, srv, "+15555550100", "Alice", "alice")
+	bob := signIn(t, srv, "+15555550101", "Bob", "bob")
+	dm, err := alice.FoundGroupForTest(ctx, "", true, []string{bob.actor})
+	if err != nil {
+		t.Fatal(err)
+	}
+	only(t, bob.poll(t), EventJoined)
+	alice.poll(t)
+
+	before := unaryTimeout
+	unaryTimeout = 2 * time.Second
+	defer func() { unaryTimeout = before }()
+
+	release := srv.HoldSends(alice.actor)
+	defer release()
+	sent := make(chan error, 1)
+	go func() {
+		_, err := alice.SendText(ctx, dm, "stuck", "")
+		sent <- err
+	}()
+	// Wait until her send is out of the lock and on the wire.
+	time.Sleep(200 * time.Millisecond)
+
+	// Bob's message still reaches her while her own send hangs.
+	if _, err := bob.SendText(ctx, dm, "are you there?", ""); err != nil {
+		t.Fatal(err)
+	}
+	got := make(chan []Event, 1)
+	go func() { got <- alice.poll(t) }()
+	select {
+	case events := <-got:
+		if m := only(t, events, EventMessage); m.Text != "are you there?" {
+			t.Fatalf("alice got %+v", m)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("alice's poll waited behind her hung send")
+	}
+
+	// Her send gives up at the timeout rather than at the client's ten minutes.
+	select {
+	case err := <-sent:
+		if err == nil {
+			t.Fatal("a held send succeeded")
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("the hung send didn't time out")
+	}
+}

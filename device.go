@@ -1114,45 +1114,13 @@ func (d *Device) sealTo(ctx context.Context, conversation string, plaintext []by
 
 // sealHinted is sealTo with a content hint (0 to 3), or none for -1.
 func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint int) error {
-	d.mu.Lock()
-	defer d.mu.Unlock()
-	if d.mls == nil {
-		return errors.New("not connected")
-	}
-	group := []byte(conversation)
-	roster, err := d.mls.roster(group)
-	if err != nil {
+	// Sealing takes the lock; the send doesn't, so a slow or hung request
+	// can't hold up receiving (or other sends) behind it.
+	req, r, err := d.sealLocked(conversation, plaintext, urgent, clientID, only, hint)
+	if err != nil || req == nil {
 		return err
 	}
-	var recipients []*pb.SealedRecipient
-	for _, m := range roster {
-		if m.deviceID != d.state.DeviceID && (only == nil || slices.Contains(only, m.actorID)) {
-			recipients = append(recipients, &pb.SealedRecipient{UserId: m.actorID, DeviceId: m.deviceID})
-		}
-	}
-	if len(recipients) == 0 {
-		return nil // nobody to tell, and no step of the ratchet spent
-	}
-	var ciphertext []byte
-	if hint >= 0 {
-		ciphertext, err = d.mls.encryptWithHint(group, plaintext, uint8(hint))
-	} else {
-		ciphertext, err = d.mls.encrypt(group, plaintext)
-	}
-	if err != nil {
-		return err
-	}
-	payload, err := d.mls.sealEnvelope(group, envelopeMessage, ciphertext)
-	if err != nil {
-		return err
-	}
-	d.rememberSent(payload, time.Now())
-	sent, err := call[pb.SendSealedRequest, pb.SendSealedResponse](ctx, d.rpc, "SendSealed", &pb.SendSealedRequest{
-		Payload:         payload,
-		Urgent:          urgent,
-		ClientMessageId: clientID,
-		Recipients:      recipients,
-	})
+	sent, err := call[pb.SendSealedRequest, pb.SendSealedResponse](ctx, r, "SendSealed", req)
 	if err != nil {
 		return err
 	}
@@ -1161,6 +1129,52 @@ func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext 
 			Msg("Peachy: devices in this conversation are gone; their leaves need removing")
 	}
 	return nil
+}
+
+// sealLocked encrypts and seals a message, returning the request that sends
+// it (nil when there's nobody to tell) and a copy of the rpc client to send
+// it with.
+func (d *Device) sealLocked(conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint int) (*pb.SendSealedRequest, *rpc, error) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	if d.mls == nil {
+		return nil, nil, errors.New("not connected")
+	}
+	group := []byte(conversation)
+	roster, err := d.mls.roster(group)
+	if err != nil {
+		return nil, nil, err
+	}
+	var recipients []*pb.SealedRecipient
+	for _, m := range roster {
+		if m.deviceID != d.state.DeviceID && (only == nil || slices.Contains(only, m.actorID)) {
+			recipients = append(recipients, &pb.SealedRecipient{UserId: m.actorID, DeviceId: m.deviceID})
+		}
+	}
+	if len(recipients) == 0 {
+		return nil, nil, nil // nobody to tell, and no step of the ratchet spent
+	}
+	var ciphertext []byte
+	if hint >= 0 {
+		ciphertext, err = d.mls.encryptWithHint(group, plaintext, uint8(hint))
+	} else {
+		ciphertext, err = d.mls.encrypt(group, plaintext)
+	}
+	if err != nil {
+		return nil, nil, err
+	}
+	payload, err := d.mls.sealEnvelope(group, envelopeMessage, ciphertext)
+	if err != nil {
+		return nil, nil, err
+	}
+	d.rememberSent(payload, time.Now())
+	r := *d.rpc
+	return &pb.SendSealedRequest{
+		Payload:         payload,
+		Urgent:          urgent,
+		ClientMessageId: clientID,
+		Recipients:      recipients,
+	}, &r, nil
 }
 
 // NewMessageID mints the id a message is sent under (a v4 uuid), for

@@ -33,7 +33,14 @@ func newRPC(base string) *rpc {
 	}
 }
 
+// unaryTimeout bounds each call, so a connection that drops without a reset
+// fails in seconds rather than at the client's ten-minute limit (which stays
+// for media). A variable for tests.
+var unaryTimeout = 30 * time.Second
+
 func call[Req, Resp any](ctx context.Context, r *rpc, method string, req *Req) (*Resp, error) {
+	ctx, cancel := context.WithTimeout(ctx, unaryTimeout)
+	defer cancel()
 	client := connect.NewClient[Req, Resp](r.http, r.base+"/peachy.v1.ChatService/"+method)
 	creq := connect.NewRequest(req)
 	if r.token != "" {
