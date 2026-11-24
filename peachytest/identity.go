@@ -52,7 +52,7 @@ func (s *Server) user(a *account) *pb.User {
 	}
 	if a.bot {
 		// The server serves a bot's row only to some clients (bots.md,
-		// Conventions); the fake serves it to everyone.
+		// Conventions); the fake serves it to everyone, unless HideBotRows.
 		u.Kind = pb.UserKind_USER_KIND_BOT
 		u.Bot = &pb.BotSummary{}
 	}
@@ -267,7 +267,7 @@ func (s *Server) getUsers(c *caller, req *pb.GetUsersRequest) (*pb.GetUsersRespo
 	}
 	resp := &pb.GetUsersResponse{}
 	for _, id := range req.GetUserIds() {
-		if a := s.accounts[id]; a != nil {
+		if a := s.accounts[id]; a != nil && !(a.bot && s.hideBotRows) {
 			resp.Users = append(resp.Users, s.user(a))
 		}
 	}

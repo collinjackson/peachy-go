@@ -72,6 +72,8 @@ type Server struct {
 	streams  map[string]map[*subscriber]bool
 	pageSize int            // heads per sweep page
 	commits  map[string]int // commits taken, by committing device
+
+	hideBotRows bool
 }
 
 type account struct {
@@ -299,6 +301,14 @@ func (s *Server) Commits(device string) int {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.commits[device]
+}
+
+// HideBotRows makes GetUsers leave out bots' rows, as Peachy's server does
+// for a client it doesn't serve bots to (bots.md, Conventions).
+func (s *Server) HideBotRows() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.hideBotRows = true
 }
 
 // StampSet is how many stamp keys the handle's set holds (0: none).
