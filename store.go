@@ -107,18 +107,27 @@ func (d *Device) ReadStore(ctx context.Context) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
+	d.mu.Lock()
+	if err := d.checkFloor(key, resp.GetVersion()); err != nil {
+		d.mu.Unlock()
+		return nil, err
+	}
 	if since != 0 && resp.GetVersion() == since {
-		d.mu.Lock()
 		defer d.mu.Unlock()
 		return d.store, nil
 	}
+	d.mu.Unlock()
 	s, err := openStore(key, resp)
 	if err != nil {
 		return nil, err
 	}
 	d.mu.Lock()
 	d.store = s
+	err = d.raiseFloor(key, s.Version)
 	d.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
 	d.adoptAccessKey(ctx, s.AccessKey)
 	return s, nil
 }

@@ -57,6 +57,12 @@ func (d *Device) patchStore(ctx context.Context, kind, key string, patch func(ma
 		if err != nil {
 			return err
 		}
+		d.mu.Lock()
+		err = d.checkFloor(accountKey, resp.GetVersion())
+		d.mu.Unlock()
+		if err != nil {
+			return err
+		}
 		if resp.GetVersion() == 0 {
 			// The account's first device writes the first manifest.
 			return errors.New("this account's settings store isn't set up yet")
@@ -172,8 +178,9 @@ func (d *Device) patchStore(ctx context.Context, kind, key string, patch func(ma
 		if !w.GetConflict() {
 			d.mu.Lock()
 			d.store = nil // re-read on next use
+			err := d.raiseFloor(accountKey, version+1)
 			d.mu.Unlock()
-			return nil
+			return err
 		}
 	}
 	return fmt.Errorf("the settings store kept changing under this write")

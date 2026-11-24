@@ -70,7 +70,8 @@ type Server struct {
 	uploads  map[string]upload        // upload token → what may go up
 	held     map[string]chan struct{} // actor → closed when its held calls may go on
 	streams  map[string]map[*subscriber]bool
-	pageSize int // heads per sweep page
+	pageSize int            // heads per sweep page
+	commits  map[string]int // commits taken, by committing device
 }
 
 type account struct {
@@ -82,6 +83,7 @@ type account struct {
 	approverSeed            []byte
 	accessKeyHash           []byte
 	store                   store
+	bot                     bool // a bot's account: its devices get pdc3 credentials
 }
 
 type session struct {
@@ -124,6 +126,7 @@ type payload struct {
 type head struct {
 	epoch    uint64
 	verifier []byte
+	stampSet [][]byte // the admins' stamp keys, once a founding enrolled them
 }
 
 type upload struct {
@@ -160,6 +163,7 @@ func New() *Server {
 		uploads:  map[string]upload{},
 		streams:  map[string]map[*subscriber]bool{},
 		pageSize: 5000,
+		commits:  map[string]int{},
 	}
 	s.hs = httptest.NewServer(s.handler())
 	s.URL = s.hs.URL
@@ -177,16 +181,44 @@ func (s *Server) Close() {
 // server-run approver founds the account: it mints the account key, pins
 // the identity key and writes the account store's first manifest, which
 // holds an access key (account-store.md "A device without the key", step 4).
+//
+// The account key is minted in the two-key form (64 bytes: store key, then
+// identity root), as a first device does from peachy-protocol 0.3.0 on
+// (account-store.md "The held account key"); AddAccountOneKey mints the
+// 32-byte form an older account holds.
 func (s *Server) AddAccount(phone, name, handle string) string {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.addAccount(phone, name, handle).id
 }
 
+// AddAccountOneKey is AddAccount with a 32-byte (one-key) account key.
+func (s *Server) AddAccountOneKey(phone, name, handle string) string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.addAccountKey(phone, name, handle, randomBytes(32)).id
+}
+
+// AddBot is AddAccount for a bot: its devices are issued pdc3 credentials
+// once certified, and GetUsers names it USER_KIND_BOT. A real bot signs in
+// with a connect code, not a phone (bots.md "Bot accounts"); the fake lets
+// a test Device sign in as one by phone, a shortcut no real server takes.
+func (s *Server) AddBot(phone, name, handle string) string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	a := s.addAccount(phone, name, handle)
+	a.bot = true
+	return a.id
+}
+
 func (s *Server) addAccount(phone, name, handle string) *account {
+	return s.addAccountKey(phone, name, handle, randomBytes(64))
+}
+
+func (s *Server) addAccountKey(phone, name, handle string, accountKey []byte) *account {
 	now := s.now()
 	a := &account{id: newUUID(), phone: phone, name: name, handle: handle, created: now,
-		accountKey: randomBytes(32), approverSeed: randomBytes(32)}
+		accountKey: accountKey, approverSeed: randomBytes(32)}
 	a.identity = accountIdentity(a.accountKey)
 	pub := ed25519.NewKeyFromSeed(a.approverSeed).Public().(ed25519.PublicKey)
 	a.approver = &device{id: newUUID(), actor: a.id, installID: "server-run-" + newUUID(), platform: "ios", mls: true,
@@ -260,6 +292,23 @@ func (s *Server) SetHeadPageSize(n int) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.pageSize = max(n, 1)
+}
+
+// Commits is how many commits the server took from device.
+func (s *Server) Commits(device string) int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.commits[device]
+}
+
+// StampSet is how many stamp keys the handle's set holds (0: none).
+func (s *Server) StampSet(handle []byte) int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if h := s.heads[string(handle)]; h != nil {
+		return len(h.stampSet)
+	}
+	return 0
 }
 
 // Head is a conversation head's epoch and verifier, and whether the server

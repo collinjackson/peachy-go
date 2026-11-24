@@ -67,12 +67,6 @@ func (m *mlsClient) create(group []byte) error {
 	return ffi(func() C.int32_t { return C.peachy_mls_group_create(m.c, p, n) })
 }
 
-func (m *mlsClient) merge(group []byte) error {
-	p, n := in(group)
-	var epoch C.uint64_t
-	return ffi(func() C.int32_t { return C.peachy_mls_group_merge_pending_commit(m.c, p, n, &epoch) })
-}
-
 // addMember stages and merges an add, returning the Welcome.
 func (m *mlsClient) addMember(group, keyPackage []byte) ([]byte, error) {
 	gp, gn := in(group)

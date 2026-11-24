@@ -32,6 +32,220 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type SignupCheck int32
+
+const (
+	SignupCheck_SIGNUP_CHECK_UNSPECIFIED SignupCheck = 0
+	SignupCheck_SIGNUP_CHECK_PUSH        SignupCheck = 1
+	SignupCheck_SIGNUP_CHECK_CAPTCHA     SignupCheck = 2
+)
+
+// Enum value maps for SignupCheck.
+var (
+	SignupCheck_name = map[int32]string{
+		0: "SIGNUP_CHECK_UNSPECIFIED",
+		1: "SIGNUP_CHECK_PUSH",
+		2: "SIGNUP_CHECK_CAPTCHA",
+	}
+	SignupCheck_value = map[string]int32{
+		"SIGNUP_CHECK_UNSPECIFIED": 0,
+		"SIGNUP_CHECK_PUSH":        1,
+		"SIGNUP_CHECK_CAPTCHA":     2,
+	}
+)
+
+func (x SignupCheck) Enum() *SignupCheck {
+	p := new(SignupCheck)
+	*p = x
+	return p
+}
+
+func (x SignupCheck) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SignupCheck) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[0].Descriptor()
+}
+
+func (SignupCheck) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[0]
+}
+
+func (x SignupCheck) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SignupCheck.Descriptor instead.
+func (SignupCheck) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{0}
+}
+
+type CommitScope int32
+
+const (
+	CommitScope_COMMIT_SCOPE_UNSPECIFIED CommitScope = 0
+	CommitScope_COMMIT_SCOPE_OWN         CommitScope = 1
+)
+
+// Enum value maps for CommitScope.
+var (
+	CommitScope_name = map[int32]string{
+		0: "COMMIT_SCOPE_UNSPECIFIED",
+		1: "COMMIT_SCOPE_OWN",
+	}
+	CommitScope_value = map[string]int32{
+		"COMMIT_SCOPE_UNSPECIFIED": 0,
+		"COMMIT_SCOPE_OWN":         1,
+	}
+)
+
+func (x CommitScope) Enum() *CommitScope {
+	p := new(CommitScope)
+	*p = x
+	return p
+}
+
+func (x CommitScope) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CommitScope) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[1].Descriptor()
+}
+
+func (CommitScope) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[1]
+}
+
+func (x CommitScope) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CommitScope.Descriptor instead.
+func (CommitScope) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{1}
+}
+
+type RemoteFlagKind int32
+
+const (
+	RemoteFlagKind_REMOTE_FLAG_KIND_UNSPECIFIED RemoteFlagKind = 0
+	// Compiled default off; the document turns it on.
+	RemoteFlagKind_REMOTE_FLAG_KIND_ROLLOUT RemoteFlagKind = 1
+	// Compiled default on; the document turns it off.
+	RemoteFlagKind_REMOTE_FLAG_KIND_KILL RemoteFlagKind = 2
+	// Compiled default off; once on for a device, on for good.
+	RemoteFlagKind_REMOTE_FLAG_KIND_ONE_WAY RemoteFlagKind = 3
+)
+
+// Enum value maps for RemoteFlagKind.
+var (
+	RemoteFlagKind_name = map[int32]string{
+		0: "REMOTE_FLAG_KIND_UNSPECIFIED",
+		1: "REMOTE_FLAG_KIND_ROLLOUT",
+		2: "REMOTE_FLAG_KIND_KILL",
+		3: "REMOTE_FLAG_KIND_ONE_WAY",
+	}
+	RemoteFlagKind_value = map[string]int32{
+		"REMOTE_FLAG_KIND_UNSPECIFIED": 0,
+		"REMOTE_FLAG_KIND_ROLLOUT":     1,
+		"REMOTE_FLAG_KIND_KILL":        2,
+		"REMOTE_FLAG_KIND_ONE_WAY":     3,
+	}
+)
+
+func (x RemoteFlagKind) Enum() *RemoteFlagKind {
+	p := new(RemoteFlagKind)
+	*p = x
+	return p
+}
+
+func (x RemoteFlagKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RemoteFlagKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[2].Descriptor()
+}
+
+func (RemoteFlagKind) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[2]
+}
+
+func (x RemoteFlagKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RemoteFlagKind.Descriptor instead.
+func (RemoteFlagKind) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{2}
+}
+
+// How a build was distributed. A rule that lists channels is off in every other.
+type ReleaseChannel int32
+
+const (
+	ReleaseChannel_RELEASE_CHANNEL_UNSPECIFIED ReleaseChannel = 0
+	// A debug build or a test run.
+	ReleaseChannel_RELEASE_CHANNEL_DEBUG ReleaseChannel = 1
+	// An official iOS or macOS app's beta build.
+	ReleaseChannel_RELEASE_CHANNEL_TESTFLIGHT ReleaseChannel = 2
+	// An official iOS or macOS app's store release.
+	ReleaseChannel_RELEASE_CHANNEL_APP_STORE ReleaseChannel = 3
+	// An official Android app's store release, whatever its track.
+	ReleaseChannel_RELEASE_CHANNEL_PLAY ReleaseChannel = 4
+	// The web client.
+	ReleaseChannel_RELEASE_CHANNEL_WEB ReleaseChannel = 5
+)
+
+// Enum value maps for ReleaseChannel.
+var (
+	ReleaseChannel_name = map[int32]string{
+		0: "RELEASE_CHANNEL_UNSPECIFIED",
+		1: "RELEASE_CHANNEL_DEBUG",
+		2: "RELEASE_CHANNEL_TESTFLIGHT",
+		3: "RELEASE_CHANNEL_APP_STORE",
+		4: "RELEASE_CHANNEL_PLAY",
+		5: "RELEASE_CHANNEL_WEB",
+	}
+	ReleaseChannel_value = map[string]int32{
+		"RELEASE_CHANNEL_UNSPECIFIED": 0,
+		"RELEASE_CHANNEL_DEBUG":       1,
+		"RELEASE_CHANNEL_TESTFLIGHT":  2,
+		"RELEASE_CHANNEL_APP_STORE":   3,
+		"RELEASE_CHANNEL_PLAY":        4,
+		"RELEASE_CHANNEL_WEB":         5,
+	}
+)
+
+func (x ReleaseChannel) Enum() *ReleaseChannel {
+	p := new(ReleaseChannel)
+	*p = x
+	return p
+}
+
+func (x ReleaseChannel) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ReleaseChannel) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[3].Descriptor()
+}
+
+func (ReleaseChannel) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[3]
+}
+
+func (x ReleaseChannel) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ReleaseChannel.Descriptor instead.
+func (ReleaseChannel) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{3}
+}
+
 // What an upload is. Sealed attachments are UPLOAD_KIND_FILE.
 type UploadKind int32
 
@@ -63,11 +277,11 @@ func (x UploadKind) String() string {
 }
 
 func (UploadKind) Descriptor() protoreflect.EnumDescriptor {
-	return file_peachy_v1_chat_proto_enumTypes[0].Descriptor()
+	return file_peachy_v1_chat_proto_enumTypes[4].Descriptor()
 }
 
 func (UploadKind) Type() protoreflect.EnumType {
-	return &file_peachy_v1_chat_proto_enumTypes[0]
+	return &file_peachy_v1_chat_proto_enumTypes[4]
 }
 
 func (x UploadKind) Number() protoreflect.EnumNumber {
@@ -76,7 +290,7 @@ func (x UploadKind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UploadKind.Descriptor instead.
 func (UploadKind) EnumDescriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{0}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{4}
 }
 
 // Where a sealed object lives, and for how long.
@@ -120,11 +334,11 @@ func (x SealedClass) String() string {
 }
 
 func (SealedClass) Descriptor() protoreflect.EnumDescriptor {
-	return file_peachy_v1_chat_proto_enumTypes[1].Descriptor()
+	return file_peachy_v1_chat_proto_enumTypes[5].Descriptor()
 }
 
 func (SealedClass) Type() protoreflect.EnumType {
-	return &file_peachy_v1_chat_proto_enumTypes[1]
+	return &file_peachy_v1_chat_proto_enumTypes[5]
 }
 
 func (x SealedClass) Number() protoreflect.EnumNumber {
@@ -133,7 +347,7 @@ func (x SealedClass) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SealedClass.Descriptor instead.
 func (SealedClass) EnumDescriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{1}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{5}
 }
 
 // What an envelope is, as the server knows it from the call that delivered it.
@@ -182,11 +396,11 @@ func (x MailboxKind) String() string {
 }
 
 func (MailboxKind) Descriptor() protoreflect.EnumDescriptor {
-	return file_peachy_v1_chat_proto_enumTypes[2].Descriptor()
+	return file_peachy_v1_chat_proto_enumTypes[6].Descriptor()
 }
 
 func (MailboxKind) Type() protoreflect.EnumType {
-	return &file_peachy_v1_chat_proto_enumTypes[2]
+	return &file_peachy_v1_chat_proto_enumTypes[6]
 }
 
 func (x MailboxKind) Number() protoreflect.EnumNumber {
@@ -195,7 +409,7 @@ func (x MailboxKind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MailboxKind.Descriptor instead.
 func (MailboxKind) EnumDescriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{2}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{6}
 }
 
 // Which door a token opens. Each purpose has its own key and its own origin_info
@@ -239,11 +453,11 @@ func (x CallTokenPurpose) String() string {
 }
 
 func (CallTokenPurpose) Descriptor() protoreflect.EnumDescriptor {
-	return file_peachy_v1_chat_proto_enumTypes[3].Descriptor()
+	return file_peachy_v1_chat_proto_enumTypes[7].Descriptor()
 }
 
 func (CallTokenPurpose) Type() protoreflect.EnumType {
-	return &file_peachy_v1_chat_proto_enumTypes[3]
+	return &file_peachy_v1_chat_proto_enumTypes[7]
 }
 
 func (x CallTokenPurpose) Number() protoreflect.EnumNumber {
@@ -252,7 +466,227 @@ func (x CallTokenPurpose) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use CallTokenPurpose.Descriptor instead.
 func (CallTokenPurpose) EnumDescriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{3}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{7}
+}
+
+type UserKind int32
+
+const (
+	UserKind_USER_KIND_UNSPECIFIED UserKind = 0
+	UserKind_USER_KIND_PERSON      UserKind = 1
+	UserKind_USER_KIND_BOT         UserKind = 2
+	// An organization's account that no code runs: a handle, a name and a face,
+	// with no device. Nobody can message it, mention it or add it to a chat.
+	UserKind_USER_KIND_ORGANIZATION_ACCOUNT UserKind = 3
+)
+
+// Enum value maps for UserKind.
+var (
+	UserKind_name = map[int32]string{
+		0: "USER_KIND_UNSPECIFIED",
+		1: "USER_KIND_PERSON",
+		2: "USER_KIND_BOT",
+		3: "USER_KIND_ORGANIZATION_ACCOUNT",
+	}
+	UserKind_value = map[string]int32{
+		"USER_KIND_UNSPECIFIED":          0,
+		"USER_KIND_PERSON":               1,
+		"USER_KIND_BOT":                  2,
+		"USER_KIND_ORGANIZATION_ACCOUNT": 3,
+	}
+)
+
+func (x UserKind) Enum() *UserKind {
+	p := new(UserKind)
+	*p = x
+	return p
+}
+
+func (x UserKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (UserKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[8].Descriptor()
+}
+
+func (UserKind) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[8]
+}
+
+func (x UserKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use UserKind.Descriptor instead.
+func (UserKind) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{8}
+}
+
+// Who owns a bot: a person or an organization.
+type BotOwnerKind int32
+
+const (
+	BotOwnerKind_BOT_OWNER_KIND_UNSPECIFIED  BotOwnerKind = 0
+	BotOwnerKind_BOT_OWNER_KIND_PERSON       BotOwnerKind = 1
+	BotOwnerKind_BOT_OWNER_KIND_ORGANIZATION BotOwnerKind = 2
+)
+
+// Enum value maps for BotOwnerKind.
+var (
+	BotOwnerKind_name = map[int32]string{
+		0: "BOT_OWNER_KIND_UNSPECIFIED",
+		1: "BOT_OWNER_KIND_PERSON",
+		2: "BOT_OWNER_KIND_ORGANIZATION",
+	}
+	BotOwnerKind_value = map[string]int32{
+		"BOT_OWNER_KIND_UNSPECIFIED":  0,
+		"BOT_OWNER_KIND_PERSON":       1,
+		"BOT_OWNER_KIND_ORGANIZATION": 2,
+	}
+)
+
+func (x BotOwnerKind) Enum() *BotOwnerKind {
+	p := new(BotOwnerKind)
+	*p = x
+	return p
+}
+
+func (x BotOwnerKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BotOwnerKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[9].Descriptor()
+}
+
+func (BotOwnerKind) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[9]
+}
+
+func (x BotOwnerKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BotOwnerKind.Descriptor instead.
+func (BotOwnerKind) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{9}
+}
+
+type BotStatus int32
+
+const (
+	BotStatus_BOT_STATUS_UNSPECIFIED BotStatus = 0
+	BotStatus_BOT_STATUS_ACTIVE      BotStatus = 1
+	// Paused by its owner: the server delivers it no message, and members' devices address it only commits and Welcomes.
+	BotStatus_BOT_STATUS_PAUSED BotStatus = 2
+	// By review or with its organization. Device revoked.
+	BotStatus_BOT_STATUS_SUSPENDED BotStatus = 3
+	// Deleted by its owner. Its device is revoked; GetBot by bot_id answers its card if out of development.
+	BotStatus_BOT_STATUS_DELETED BotStatus = 4
+)
+
+// Enum value maps for BotStatus.
+var (
+	BotStatus_name = map[int32]string{
+		0: "BOT_STATUS_UNSPECIFIED",
+		1: "BOT_STATUS_ACTIVE",
+		2: "BOT_STATUS_PAUSED",
+		3: "BOT_STATUS_SUSPENDED",
+		4: "BOT_STATUS_DELETED",
+	}
+	BotStatus_value = map[string]int32{
+		"BOT_STATUS_UNSPECIFIED": 0,
+		"BOT_STATUS_ACTIVE":      1,
+		"BOT_STATUS_PAUSED":      2,
+		"BOT_STATUS_SUSPENDED":   3,
+		"BOT_STATUS_DELETED":     4,
+	}
+)
+
+func (x BotStatus) Enum() *BotStatus {
+	p := new(BotStatus)
+	*p = x
+	return p
+}
+
+func (x BotStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BotStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[10].Descriptor()
+}
+
+func (BotStatus) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[10]
+}
+
+func (x BotStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BotStatus.Descriptor instead.
+func (BotStatus) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{10}
+}
+
+// What a bot may do in a chat beyond reading it and answering a mention of it.
+// Granted per chat in the group's own sealed state, never told to the server.
+// See docs/bots.md.
+type BotGrant int32
+
+const (
+	BotGrant_BOT_GRANT_UNSPECIFIED BotGrant = 0
+	// Post on its own: its own messages, and replies to anything but a mention of it.
+	BotGrant_BOT_GRANT_POST BotGrant = 1
+	// React to messages.
+	BotGrant_BOT_GRANT_REACT BotGrant = 2
+	// Take part in the chat's calls.
+	BotGrant_BOT_GRANT_CALL BotGrant = 3
+)
+
+// Enum value maps for BotGrant.
+var (
+	BotGrant_name = map[int32]string{
+		0: "BOT_GRANT_UNSPECIFIED",
+		1: "BOT_GRANT_POST",
+		2: "BOT_GRANT_REACT",
+		3: "BOT_GRANT_CALL",
+	}
+	BotGrant_value = map[string]int32{
+		"BOT_GRANT_UNSPECIFIED": 0,
+		"BOT_GRANT_POST":        1,
+		"BOT_GRANT_REACT":       2,
+		"BOT_GRANT_CALL":        3,
+	}
+)
+
+func (x BotGrant) Enum() *BotGrant {
+	p := new(BotGrant)
+	*p = x
+	return p
+}
+
+func (x BotGrant) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BotGrant) Descriptor() protoreflect.EnumDescriptor {
+	return file_peachy_v1_chat_proto_enumTypes[11].Descriptor()
+}
+
+func (BotGrant) Type() protoreflect.EnumType {
+	return &file_peachy_v1_chat_proto_enumTypes[11]
+}
+
+func (x BotGrant) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BotGrant.Descriptor instead.
+func (BotGrant) EnumDescriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{11}
 }
 
 // An account's row. `id` is the account's permanent key and is never shown;
@@ -283,8 +717,15 @@ type User struct {
 	// fixed while the account exists, not the
 	// account id. Their profile link is pchy.app/<handle>, or
 	// pchy.app/u/<public_id> when they have no handle.
-	PublicId      string `protobuf:"bytes,12,opt,name=public_id,json=publicId,proto3" json:"public_id,omitempty"`
-	PublicName    string `protobuf:"bytes,13,opt,name=public_name,json=publicName,proto3" json:"public_name,omitempty"`
+	PublicId   string `protobuf:"bytes,12,opt,name=public_id,json=publicId,proto3" json:"public_id,omitempty"`
+	PublicName string `protobuf:"bytes,13,opt,name=public_name,json=publicName,proto3" json:"public_name,omitempty"`
+	// What the account is. Unset reads as a person. A row of kind USER_KIND_BOT
+	// reaches only a client the server serves bots to (docs/bots.md, Conventions).
+	Kind UserKind `protobuf:"varint,14,opt,name=kind,proto3,enum=peachy.v1.UserKind" json:"kind,omitempty"`
+	// Set only when kind is USER_KIND_BOT. A bot has no phone; handle, display_name
+	// and avatar_url are its listing's.
+	Bot           *BotSummary          `protobuf:"bytes,15,opt,name=bot,proto3" json:"bot,omitempty"`
+	Organization  *AccountOrganization `protobuf:"bytes,20,opt,name=organization,proto3" json:"organization,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -389,18 +830,136 @@ func (x *User) GetPublicName() string {
 	return ""
 }
 
+func (x *User) GetKind() UserKind {
+	if x != nil {
+		return x.Kind
+	}
+	return UserKind_USER_KIND_UNSPECIFIED
+}
+
+func (x *User) GetBot() *BotSummary {
+	if x != nil {
+		return x.Bot
+	}
+	return nil
+}
+
+func (x *User) GetOrganization() *AccountOrganization {
+	if x != nil {
+		return x.Organization
+	}
+	return nil
+}
+
+type AccountOrganization struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Handle        string                 `protobuf:"bytes,3,opt,name=handle,proto3" json:"handle,omitempty"`
+	LogoUrl       string                 `protobuf:"bytes,4,opt,name=logo_url,json=logoUrl,proto3" json:"logo_url,omitempty"`
+	Verified      bool                   `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty"`
+	Sealed        bool                   `protobuf:"varint,6,opt,name=sealed,proto3" json:"sealed,omitempty"`
+	First         bool                   `protobuf:"varint,7,opt,name=first,proto3" json:"first,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountOrganization) Reset() {
+	*x = AccountOrganization{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountOrganization) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountOrganization) ProtoMessage() {}
+
+func (x *AccountOrganization) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountOrganization.ProtoReflect.Descriptor instead.
+func (*AccountOrganization) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AccountOrganization) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AccountOrganization) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AccountOrganization) GetHandle() string {
+	if x != nil {
+		return x.Handle
+	}
+	return ""
+}
+
+func (x *AccountOrganization) GetLogoUrl() string {
+	if x != nil {
+		return x.LogoUrl
+	}
+	return ""
+}
+
+func (x *AccountOrganization) GetVerified() bool {
+	if x != nil {
+		return x.Verified
+	}
+	return false
+}
+
+func (x *AccountOrganization) GetSealed() bool {
+	if x != nil {
+		return x.Sealed
+	}
+	return false
+}
+
+func (x *AccountOrganization) GetFirst() bool {
+	if x != nil {
+		return x.First
+	}
+	return false
+}
+
 type StartPhoneVerificationRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// E.164. A national trunk prefix after the country code is tolerated; the server
 	// canonicalizes the number and refuses one that cannot receive SMS.
-	Phone         string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	Phone         string           `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	AnswersChecks bool             `protobuf:"varint,3,opt,name=answers_checks,json=answersChecks,proto3" json:"answers_checks,omitempty"`
+	PushToken     *SignupPushToken `protobuf:"bytes,4,opt,name=push_token,json=pushToken,proto3" json:"push_token,omitempty"`
+	PushChallenge string           `protobuf:"bytes,5,opt,name=push_challenge,json=pushChallenge,proto3" json:"push_challenge,omitempty"`
+	Captcha       string           `protobuf:"bytes,6,opt,name=captcha,proto3" json:"captcha,omitempty"`
+	CaptchaNonce  []byte           `protobuf:"bytes,7,opt,name=captcha_nonce,json=captchaNonce,proto3" json:"captcha_nonce,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StartPhoneVerificationRequest) Reset() {
 	*x = StartPhoneVerificationRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[1]
+	mi := &file_peachy_v1_chat_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -412,7 +971,7 @@ func (x *StartPhoneVerificationRequest) String() string {
 func (*StartPhoneVerificationRequest) ProtoMessage() {}
 
 func (x *StartPhoneVerificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[1]
+	mi := &file_peachy_v1_chat_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,7 +984,7 @@ func (x *StartPhoneVerificationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartPhoneVerificationRequest.ProtoReflect.Descriptor instead.
 func (*StartPhoneVerificationRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{1}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *StartPhoneVerificationRequest) GetPhone() string {
@@ -435,17 +994,113 @@ func (x *StartPhoneVerificationRequest) GetPhone() string {
 	return ""
 }
 
+func (x *StartPhoneVerificationRequest) GetAnswersChecks() bool {
+	if x != nil {
+		return x.AnswersChecks
+	}
+	return false
+}
+
+func (x *StartPhoneVerificationRequest) GetPushToken() *SignupPushToken {
+	if x != nil {
+		return x.PushToken
+	}
+	return nil
+}
+
+func (x *StartPhoneVerificationRequest) GetPushChallenge() string {
+	if x != nil {
+		return x.PushChallenge
+	}
+	return ""
+}
+
+func (x *StartPhoneVerificationRequest) GetCaptcha() string {
+	if x != nil {
+		return x.Captcha
+	}
+	return ""
+}
+
+func (x *StartPhoneVerificationRequest) GetCaptchaNonce() []byte {
+	if x != nil {
+		return x.CaptchaNonce
+	}
+	return nil
+}
+
+type SignupPushToken struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ApnsToken       string                 `protobuf:"bytes,1,opt,name=apns_token,json=apnsToken,proto3" json:"apns_token,omitempty"`
+	ApnsEnvironment string                 `protobuf:"bytes,2,opt,name=apns_environment,json=apnsEnvironment,proto3" json:"apns_environment,omitempty"`
+	FcmToken        string                 `protobuf:"bytes,3,opt,name=fcm_token,json=fcmToken,proto3" json:"fcm_token,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SignupPushToken) Reset() {
+	*x = SignupPushToken{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignupPushToken) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignupPushToken) ProtoMessage() {}
+
+func (x *SignupPushToken) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignupPushToken.ProtoReflect.Descriptor instead.
+func (*SignupPushToken) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SignupPushToken) GetApnsToken() string {
+	if x != nil {
+		return x.ApnsToken
+	}
+	return ""
+}
+
+func (x *SignupPushToken) GetApnsEnvironment() string {
+	if x != nil {
+		return x.ApnsEnvironment
+	}
+	return ""
+}
+
+func (x *SignupPushToken) GetFcmToken() string {
+	if x != nil {
+		return x.FcmToken
+	}
+	return ""
+}
+
 type StartPhoneVerificationResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The canonical E.164 number the code went to. Send this to VerifyPhone.
-	Phone         string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	Phone         string      `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	Check         SignupCheck `protobuf:"varint,2,opt,name=check,proto3,enum=peachy.v1.SignupCheck" json:"check,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StartPhoneVerificationResponse) Reset() {
 	*x = StartPhoneVerificationResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[2]
+	mi := &file_peachy_v1_chat_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -457,7 +1112,7 @@ func (x *StartPhoneVerificationResponse) String() string {
 func (*StartPhoneVerificationResponse) ProtoMessage() {}
 
 func (x *StartPhoneVerificationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[2]
+	mi := &file_peachy_v1_chat_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,7 +1125,7 @@ func (x *StartPhoneVerificationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartPhoneVerificationResponse.ProtoReflect.Descriptor instead.
 func (*StartPhoneVerificationResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{2}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *StartPhoneVerificationResponse) GetPhone() string {
@@ -478,6 +1133,13 @@ func (x *StartPhoneVerificationResponse) GetPhone() string {
 		return x.Phone
 	}
 	return ""
+}
+
+func (x *StartPhoneVerificationResponse) GetCheck() SignupCheck {
+	if x != nil {
+		return x.Check
+	}
+	return SignupCheck_SIGNUP_CHECK_UNSPECIFIED
 }
 
 type VerifyPhoneRequest struct {
@@ -496,7 +1158,7 @@ type VerifyPhoneRequest struct {
 
 func (x *VerifyPhoneRequest) Reset() {
 	*x = VerifyPhoneRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[3]
+	mi := &file_peachy_v1_chat_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -508,7 +1170,7 @@ func (x *VerifyPhoneRequest) String() string {
 func (*VerifyPhoneRequest) ProtoMessage() {}
 
 func (x *VerifyPhoneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[3]
+	mi := &file_peachy_v1_chat_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -521,7 +1183,7 @@ func (x *VerifyPhoneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyPhoneRequest.ProtoReflect.Descriptor instead.
 func (*VerifyPhoneRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{3}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *VerifyPhoneRequest) GetPhone() string {
@@ -569,7 +1231,7 @@ type VerifyPhoneResponse struct {
 
 func (x *VerifyPhoneResponse) Reset() {
 	*x = VerifyPhoneResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[4]
+	mi := &file_peachy_v1_chat_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -581,7 +1243,7 @@ func (x *VerifyPhoneResponse) String() string {
 func (*VerifyPhoneResponse) ProtoMessage() {}
 
 func (x *VerifyPhoneResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[4]
+	mi := &file_peachy_v1_chat_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -594,7 +1256,7 @@ func (x *VerifyPhoneResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyPhoneResponse.ProtoReflect.Descriptor instead.
 func (*VerifyPhoneResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{4}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *VerifyPhoneResponse) GetSessionToken() string {
@@ -633,7 +1295,7 @@ type SignOutRequest struct {
 
 func (x *SignOutRequest) Reset() {
 	*x = SignOutRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[5]
+	mi := &file_peachy_v1_chat_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -645,7 +1307,7 @@ func (x *SignOutRequest) String() string {
 func (*SignOutRequest) ProtoMessage() {}
 
 func (x *SignOutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[5]
+	mi := &file_peachy_v1_chat_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -658,7 +1320,7 @@ func (x *SignOutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignOutRequest.ProtoReflect.Descriptor instead.
 func (*SignOutRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{5}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{7}
 }
 
 type SignOutResponse struct {
@@ -669,7 +1331,7 @@ type SignOutResponse struct {
 
 func (x *SignOutResponse) Reset() {
 	*x = SignOutResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[6]
+	mi := &file_peachy_v1_chat_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -681,7 +1343,7 @@ func (x *SignOutResponse) String() string {
 func (*SignOutResponse) ProtoMessage() {}
 
 func (x *SignOutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[6]
+	mi := &file_peachy_v1_chat_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -694,7 +1356,7 @@ func (x *SignOutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignOutResponse.ProtoReflect.Descriptor instead.
 func (*SignOutResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{6}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{8}
 }
 
 // A signed-in session. The bearer token itself never leaves the device that holds it.
@@ -717,7 +1379,7 @@ type Session struct {
 
 func (x *Session) Reset() {
 	*x = Session{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[7]
+	mi := &file_peachy_v1_chat_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -729,7 +1391,7 @@ func (x *Session) String() string {
 func (*Session) ProtoMessage() {}
 
 func (x *Session) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[7]
+	mi := &file_peachy_v1_chat_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -742,7 +1404,7 @@ func (x *Session) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Session.ProtoReflect.Descriptor instead.
 func (*Session) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{7}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Session) GetId() string {
@@ -802,7 +1464,7 @@ type ListSessionsRequest struct {
 
 func (x *ListSessionsRequest) Reset() {
 	*x = ListSessionsRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[8]
+	mi := &file_peachy_v1_chat_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -814,7 +1476,7 @@ func (x *ListSessionsRequest) String() string {
 func (*ListSessionsRequest) ProtoMessage() {}
 
 func (x *ListSessionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[8]
+	mi := &file_peachy_v1_chat_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -827,7 +1489,7 @@ func (x *ListSessionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsRequest.ProtoReflect.Descriptor instead.
 func (*ListSessionsRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{8}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{10}
 }
 
 type ListSessionsResponse struct {
@@ -840,7 +1502,7 @@ type ListSessionsResponse struct {
 
 func (x *ListSessionsResponse) Reset() {
 	*x = ListSessionsResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[9]
+	mi := &file_peachy_v1_chat_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -852,7 +1514,7 @@ func (x *ListSessionsResponse) String() string {
 func (*ListSessionsResponse) ProtoMessage() {}
 
 func (x *ListSessionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[9]
+	mi := &file_peachy_v1_chat_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -865,7 +1527,7 @@ func (x *ListSessionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsResponse.ProtoReflect.Descriptor instead.
 func (*ListSessionsResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{9}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ListSessionsResponse) GetSessions() []*Session {
@@ -884,7 +1546,7 @@ type RevokeSessionRequest struct {
 
 func (x *RevokeSessionRequest) Reset() {
 	*x = RevokeSessionRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[10]
+	mi := &file_peachy_v1_chat_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -896,7 +1558,7 @@ func (x *RevokeSessionRequest) String() string {
 func (*RevokeSessionRequest) ProtoMessage() {}
 
 func (x *RevokeSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[10]
+	mi := &file_peachy_v1_chat_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -909,7 +1571,7 @@ func (x *RevokeSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeSessionRequest.ProtoReflect.Descriptor instead.
 func (*RevokeSessionRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{10}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RevokeSessionRequest) GetSessionId() string {
@@ -927,7 +1589,7 @@ type RevokeSessionResponse struct {
 
 func (x *RevokeSessionResponse) Reset() {
 	*x = RevokeSessionResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[11]
+	mi := &file_peachy_v1_chat_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -939,7 +1601,7 @@ func (x *RevokeSessionResponse) String() string {
 func (*RevokeSessionResponse) ProtoMessage() {}
 
 func (x *RevokeSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[11]
+	mi := &file_peachy_v1_chat_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -952,7 +1614,7 @@ func (x *RevokeSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeSessionResponse.ProtoReflect.Descriptor instead.
 func (*RevokeSessionResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{11}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{13}
 }
 
 // An install's cryptographic identity: an Ed25519 key pair generated on the
@@ -1025,7 +1687,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[12]
+	mi := &file_peachy_v1_chat_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1037,7 +1699,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[12]
+	mi := &file_peachy_v1_chat_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1050,7 +1712,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{12}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Device) GetId() string {
@@ -1205,7 +1867,7 @@ type DeviceRevocation struct {
 
 func (x *DeviceRevocation) Reset() {
 	*x = DeviceRevocation{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[13]
+	mi := &file_peachy_v1_chat_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1217,7 +1879,7 @@ func (x *DeviceRevocation) String() string {
 func (*DeviceRevocation) ProtoMessage() {}
 
 func (x *DeviceRevocation) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[13]
+	mi := &file_peachy_v1_chat_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1230,7 +1892,7 @@ func (x *DeviceRevocation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeviceRevocation.ProtoReflect.Descriptor instead.
 func (*DeviceRevocation) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{13}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DeviceRevocation) GetDeviceId() string {
@@ -1278,7 +1940,7 @@ type DeviceLinkExchange struct {
 
 func (x *DeviceLinkExchange) Reset() {
 	*x = DeviceLinkExchange{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[14]
+	mi := &file_peachy_v1_chat_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1290,7 +1952,7 @@ func (x *DeviceLinkExchange) String() string {
 func (*DeviceLinkExchange) ProtoMessage() {}
 
 func (x *DeviceLinkExchange) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[14]
+	mi := &file_peachy_v1_chat_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1303,7 +1965,7 @@ func (x *DeviceLinkExchange) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeviceLinkExchange.ProtoReflect.Descriptor instead.
 func (*DeviceLinkExchange) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{14}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeviceLinkExchange) GetApproverDeviceId() string {
@@ -1380,7 +2042,7 @@ type StepDeviceLinkRequest struct {
 
 func (x *StepDeviceLinkRequest) Reset() {
 	*x = StepDeviceLinkRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[15]
+	mi := &file_peachy_v1_chat_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1392,7 +2054,7 @@ func (x *StepDeviceLinkRequest) String() string {
 func (*StepDeviceLinkRequest) ProtoMessage() {}
 
 func (x *StepDeviceLinkRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[15]
+	mi := &file_peachy_v1_chat_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1405,7 +2067,7 @@ func (x *StepDeviceLinkRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepDeviceLinkRequest.ProtoReflect.Descriptor instead.
 func (*StepDeviceLinkRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{15}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *StepDeviceLinkRequest) GetDeviceId() string {
@@ -1510,7 +2172,7 @@ type StepDeviceLinkResponse struct {
 
 func (x *StepDeviceLinkResponse) Reset() {
 	*x = StepDeviceLinkResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[16]
+	mi := &file_peachy_v1_chat_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1522,7 +2184,7 @@ func (x *StepDeviceLinkResponse) String() string {
 func (*StepDeviceLinkResponse) ProtoMessage() {}
 
 func (x *StepDeviceLinkResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[16]
+	mi := &file_peachy_v1_chat_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1535,7 +2197,7 @@ func (x *StepDeviceLinkResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepDeviceLinkResponse.ProtoReflect.Descriptor instead.
 func (*StepDeviceLinkResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{16}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{18}
 }
 
 type RegisterDeviceRequest struct {
@@ -1574,14 +2236,15 @@ type RegisterDeviceRequest struct {
 	// 0x00 <SHA-256 of this request's bearer token, 32 bytes>: this login holds the
 	// device key. A login new to the install's row is refused without a valid one.
 	// Send it on every registration. See docs/identity.md, "Taking over a row".
-	KeyProof      []byte `protobuf:"bytes,10,opt,name=key_proof,json=keyProof,proto3" json:"key_proof,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	KeyProof         []byte `protobuf:"bytes,10,opt,name=key_proof,json=keyProof,proto3" json:"key_proof,omitempty"`
+	RestoreLockToken []byte `protobuf:"bytes,11,opt,name=restore_lock_token,json=restoreLockToken,proto3" json:"restore_lock_token,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *RegisterDeviceRequest) Reset() {
 	*x = RegisterDeviceRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[17]
+	mi := &file_peachy_v1_chat_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1593,7 +2256,7 @@ func (x *RegisterDeviceRequest) String() string {
 func (*RegisterDeviceRequest) ProtoMessage() {}
 
 func (x *RegisterDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[17]
+	mi := &file_peachy_v1_chat_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1606,7 +2269,7 @@ func (x *RegisterDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterDeviceRequest.ProtoReflect.Descriptor instead.
 func (*RegisterDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{17}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *RegisterDeviceRequest) GetInstallId() string {
@@ -1672,6 +2335,13 @@ func (x *RegisterDeviceRequest) GetKeyProof() []byte {
 	return nil
 }
 
+func (x *RegisterDeviceRequest) GetRestoreLockToken() []byte {
+	if x != nil {
+		return x.RestoreLockToken
+	}
+	return nil
+}
+
 type RegisterDeviceResponse struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	Device *Device                `protobuf:"bytes,1,opt,name=device,proto3" json:"device,omitempty"`
@@ -1696,7 +2366,7 @@ type RegisterDeviceResponse struct {
 
 func (x *RegisterDeviceResponse) Reset() {
 	*x = RegisterDeviceResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[18]
+	mi := &file_peachy_v1_chat_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1708,7 +2378,7 @@ func (x *RegisterDeviceResponse) String() string {
 func (*RegisterDeviceResponse) ProtoMessage() {}
 
 func (x *RegisterDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[18]
+	mi := &file_peachy_v1_chat_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1721,7 +2391,7 @@ func (x *RegisterDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterDeviceResponse.ProtoReflect.Descriptor instead.
 func (*RegisterDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{18}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *RegisterDeviceResponse) GetDevice() *Device {
@@ -1781,7 +2451,7 @@ type ListDevicesRequest struct {
 
 func (x *ListDevicesRequest) Reset() {
 	*x = ListDevicesRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[19]
+	mi := &file_peachy_v1_chat_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1793,7 +2463,7 @@ func (x *ListDevicesRequest) String() string {
 func (*ListDevicesRequest) ProtoMessage() {}
 
 func (x *ListDevicesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[19]
+	mi := &file_peachy_v1_chat_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1806,7 +2476,7 @@ func (x *ListDevicesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDevicesRequest.ProtoReflect.Descriptor instead.
 func (*ListDevicesRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{19}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{21}
 }
 
 type ListDevicesResponse struct {
@@ -1818,7 +2488,7 @@ type ListDevicesResponse struct {
 
 func (x *ListDevicesResponse) Reset() {
 	*x = ListDevicesResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[20]
+	mi := &file_peachy_v1_chat_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1830,7 +2500,7 @@ func (x *ListDevicesResponse) String() string {
 func (*ListDevicesResponse) ProtoMessage() {}
 
 func (x *ListDevicesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[20]
+	mi := &file_peachy_v1_chat_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1843,7 +2513,7 @@ func (x *ListDevicesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDevicesResponse.ProtoReflect.Descriptor instead.
 func (*ListDevicesResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{20}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListDevicesResponse) GetDevices() []*Device {
@@ -1867,7 +2537,7 @@ type RevokeDeviceRequest struct {
 
 func (x *RevokeDeviceRequest) Reset() {
 	*x = RevokeDeviceRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[21]
+	mi := &file_peachy_v1_chat_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1879,7 +2549,7 @@ func (x *RevokeDeviceRequest) String() string {
 func (*RevokeDeviceRequest) ProtoMessage() {}
 
 func (x *RevokeDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[21]
+	mi := &file_peachy_v1_chat_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1892,7 +2562,7 @@ func (x *RevokeDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeDeviceRequest.ProtoReflect.Descriptor instead.
 func (*RevokeDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{21}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *RevokeDeviceRequest) GetDeviceId() string {
@@ -1920,7 +2590,7 @@ type RevokeDeviceResponse struct {
 
 func (x *RevokeDeviceResponse) Reset() {
 	*x = RevokeDeviceResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[22]
+	mi := &file_peachy_v1_chat_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1932,7 +2602,7 @@ func (x *RevokeDeviceResponse) String() string {
 func (*RevokeDeviceResponse) ProtoMessage() {}
 
 func (x *RevokeDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[22]
+	mi := &file_peachy_v1_chat_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1945,7 +2615,7 @@ func (x *RevokeDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeDeviceResponse.ProtoReflect.Descriptor instead.
 func (*RevokeDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{22}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *RevokeDeviceResponse) GetWasLetIn() bool {
@@ -1988,7 +2658,7 @@ type ApproveDeviceRequest struct {
 
 func (x *ApproveDeviceRequest) Reset() {
 	*x = ApproveDeviceRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[23]
+	mi := &file_peachy_v1_chat_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2000,7 +2670,7 @@ func (x *ApproveDeviceRequest) String() string {
 func (*ApproveDeviceRequest) ProtoMessage() {}
 
 func (x *ApproveDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[23]
+	mi := &file_peachy_v1_chat_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2013,7 +2683,7 @@ func (x *ApproveDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveDeviceRequest.ProtoReflect.Descriptor instead.
 func (*ApproveDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{23}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ApproveDeviceRequest) GetDeviceId() string {
@@ -2060,7 +2730,7 @@ type ApproveDeviceResponse struct {
 
 func (x *ApproveDeviceResponse) Reset() {
 	*x = ApproveDeviceResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[24]
+	mi := &file_peachy_v1_chat_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2072,7 +2742,7 @@ func (x *ApproveDeviceResponse) String() string {
 func (*ApproveDeviceResponse) ProtoMessage() {}
 
 func (x *ApproveDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[24]
+	mi := &file_peachy_v1_chat_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2085,7 +2755,7 @@ func (x *ApproveDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveDeviceResponse.ProtoReflect.Descriptor instead.
 func (*ApproveDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{24}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *ApproveDeviceResponse) GetDevice() *Device {
@@ -2116,7 +2786,7 @@ type ReapproveDeviceRequest struct {
 
 func (x *ReapproveDeviceRequest) Reset() {
 	*x = ReapproveDeviceRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[25]
+	mi := &file_peachy_v1_chat_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2128,7 +2798,7 @@ func (x *ReapproveDeviceRequest) String() string {
 func (*ReapproveDeviceRequest) ProtoMessage() {}
 
 func (x *ReapproveDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[25]
+	mi := &file_peachy_v1_chat_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2141,7 +2811,7 @@ func (x *ReapproveDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReapproveDeviceRequest.ProtoReflect.Descriptor instead.
 func (*ReapproveDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{25}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ReapproveDeviceRequest) GetDeviceId() string {
@@ -2175,7 +2845,7 @@ type ReapproveDeviceResponse struct {
 
 func (x *ReapproveDeviceResponse) Reset() {
 	*x = ReapproveDeviceResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[26]
+	mi := &file_peachy_v1_chat_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2187,7 +2857,7 @@ func (x *ReapproveDeviceResponse) String() string {
 func (*ReapproveDeviceResponse) ProtoMessage() {}
 
 func (x *ReapproveDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[26]
+	mi := &file_peachy_v1_chat_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2200,7 +2870,7 @@ func (x *ReapproveDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReapproveDeviceResponse.ProtoReflect.Descriptor instead.
 func (*ReapproveDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{26}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ReapproveDeviceResponse) GetDevice() *Device {
@@ -2222,7 +2892,7 @@ type ClaimSoleDeviceRequest struct {
 
 func (x *ClaimSoleDeviceRequest) Reset() {
 	*x = ClaimSoleDeviceRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[27]
+	mi := &file_peachy_v1_chat_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2234,7 +2904,7 @@ func (x *ClaimSoleDeviceRequest) String() string {
 func (*ClaimSoleDeviceRequest) ProtoMessage() {}
 
 func (x *ClaimSoleDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[27]
+	mi := &file_peachy_v1_chat_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2247,7 +2917,7 @@ func (x *ClaimSoleDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimSoleDeviceRequest.ProtoReflect.Descriptor instead.
 func (*ClaimSoleDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{27}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ClaimSoleDeviceRequest) GetDeviceId() string {
@@ -2275,7 +2945,7 @@ type ClaimSoleDeviceResponse struct {
 
 func (x *ClaimSoleDeviceResponse) Reset() {
 	*x = ClaimSoleDeviceResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[28]
+	mi := &file_peachy_v1_chat_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2287,7 +2957,7 @@ func (x *ClaimSoleDeviceResponse) String() string {
 func (*ClaimSoleDeviceResponse) ProtoMessage() {}
 
 func (x *ClaimSoleDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[28]
+	mi := &file_peachy_v1_chat_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2300,7 +2970,7 @@ func (x *ClaimSoleDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimSoleDeviceResponse.ProtoReflect.Descriptor instead.
 func (*ClaimSoleDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{28}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ClaimSoleDeviceResponse) GetDevice() *Device {
@@ -2329,7 +2999,7 @@ type RegistrationLockChallenge struct {
 
 func (x *RegistrationLockChallenge) Reset() {
 	*x = RegistrationLockChallenge{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[29]
+	mi := &file_peachy_v1_chat_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2341,7 +3011,7 @@ func (x *RegistrationLockChallenge) String() string {
 func (*RegistrationLockChallenge) ProtoMessage() {}
 
 func (x *RegistrationLockChallenge) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[29]
+	mi := &file_peachy_v1_chat_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2354,7 +3024,7 @@ func (x *RegistrationLockChallenge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegistrationLockChallenge.ProtoReflect.Descriptor instead.
 func (*RegistrationLockChallenge) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{29}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *RegistrationLockChallenge) GetTicket() string {
@@ -2388,7 +3058,7 @@ type MlsKeyPackage struct {
 
 func (x *MlsKeyPackage) Reset() {
 	*x = MlsKeyPackage{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[30]
+	mi := &file_peachy_v1_chat_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2400,7 +3070,7 @@ func (x *MlsKeyPackage) String() string {
 func (*MlsKeyPackage) ProtoMessage() {}
 
 func (x *MlsKeyPackage) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[30]
+	mi := &file_peachy_v1_chat_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2413,7 +3083,7 @@ func (x *MlsKeyPackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MlsKeyPackage.ProtoReflect.Descriptor instead.
 func (*MlsKeyPackage) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{30}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *MlsKeyPackage) GetCiphersuite() uint32 {
@@ -2455,7 +3125,7 @@ type PublishKeyPackagesRequest struct {
 
 func (x *PublishKeyPackagesRequest) Reset() {
 	*x = PublishKeyPackagesRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[31]
+	mi := &file_peachy_v1_chat_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2467,7 +3137,7 @@ func (x *PublishKeyPackagesRequest) String() string {
 func (*PublishKeyPackagesRequest) ProtoMessage() {}
 
 func (x *PublishKeyPackagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[31]
+	mi := &file_peachy_v1_chat_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2480,7 +3150,7 @@ func (x *PublishKeyPackagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishKeyPackagesRequest.ProtoReflect.Descriptor instead.
 func (*PublishKeyPackagesRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{31}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *PublishKeyPackagesRequest) GetDeviceId() string {
@@ -2510,7 +3180,7 @@ type PublishKeyPackagesResponse struct {
 
 func (x *PublishKeyPackagesResponse) Reset() {
 	*x = PublishKeyPackagesResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[32]
+	mi := &file_peachy_v1_chat_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2522,7 +3192,7 @@ func (x *PublishKeyPackagesResponse) String() string {
 func (*PublishKeyPackagesResponse) ProtoMessage() {}
 
 func (x *PublishKeyPackagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[32]
+	mi := &file_peachy_v1_chat_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2535,7 +3205,7 @@ func (x *PublishKeyPackagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishKeyPackagesResponse.ProtoReflect.Descriptor instead.
 func (*PublishKeyPackagesResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{32}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *PublishKeyPackagesResponse) GetPublished() uint32 {
@@ -2577,7 +3247,7 @@ type FetchKeyPackagesRequest struct {
 
 func (x *FetchKeyPackagesRequest) Reset() {
 	*x = FetchKeyPackagesRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[33]
+	mi := &file_peachy_v1_chat_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2589,7 +3259,7 @@ func (x *FetchKeyPackagesRequest) String() string {
 func (*FetchKeyPackagesRequest) ProtoMessage() {}
 
 func (x *FetchKeyPackagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[33]
+	mi := &file_peachy_v1_chat_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2602,7 +3272,7 @@ func (x *FetchKeyPackagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchKeyPackagesRequest.ProtoReflect.Descriptor instead.
 func (*FetchKeyPackagesRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{33}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *FetchKeyPackagesRequest) GetUserIds() []string {
@@ -2642,7 +3312,7 @@ type FetchedKeyPackage struct {
 
 func (x *FetchedKeyPackage) Reset() {
 	*x = FetchedKeyPackage{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[34]
+	mi := &file_peachy_v1_chat_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2654,7 +3324,7 @@ func (x *FetchedKeyPackage) String() string {
 func (*FetchedKeyPackage) ProtoMessage() {}
 
 func (x *FetchedKeyPackage) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[34]
+	mi := &file_peachy_v1_chat_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2667,7 +3337,7 @@ func (x *FetchedKeyPackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchedKeyPackage.ProtoReflect.Descriptor instead.
 func (*FetchedKeyPackage) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{34}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *FetchedKeyPackage) GetUserId() string {
@@ -2723,7 +3393,7 @@ type FetchKeyPackagesResponse struct {
 
 func (x *FetchKeyPackagesResponse) Reset() {
 	*x = FetchKeyPackagesResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[35]
+	mi := &file_peachy_v1_chat_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2735,7 +3405,7 @@ func (x *FetchKeyPackagesResponse) String() string {
 func (*FetchKeyPackagesResponse) ProtoMessage() {}
 
 func (x *FetchKeyPackagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[35]
+	mi := &file_peachy_v1_chat_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2748,7 +3418,7 @@ func (x *FetchKeyPackagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchKeyPackagesResponse.ProtoReflect.Descriptor instead.
 func (*FetchKeyPackagesResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{35}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *FetchKeyPackagesResponse) GetKeyPackages() []*FetchedKeyPackage {
@@ -2775,7 +3445,7 @@ type SetAccessKeyRequest struct {
 
 func (x *SetAccessKeyRequest) Reset() {
 	*x = SetAccessKeyRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[36]
+	mi := &file_peachy_v1_chat_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2787,7 +3457,7 @@ func (x *SetAccessKeyRequest) String() string {
 func (*SetAccessKeyRequest) ProtoMessage() {}
 
 func (x *SetAccessKeyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[36]
+	mi := &file_peachy_v1_chat_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2800,7 +3470,7 @@ func (x *SetAccessKeyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetAccessKeyRequest.ProtoReflect.Descriptor instead.
 func (*SetAccessKeyRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{36}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *SetAccessKeyRequest) GetAccessKey() []byte {
@@ -2818,7 +3488,7 @@ type SetAccessKeyResponse struct {
 
 func (x *SetAccessKeyResponse) Reset() {
 	*x = SetAccessKeyResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[37]
+	mi := &file_peachy_v1_chat_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2830,7 +3500,7 @@ func (x *SetAccessKeyResponse) String() string {
 func (*SetAccessKeyResponse) ProtoMessage() {}
 
 func (x *SetAccessKeyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[37]
+	mi := &file_peachy_v1_chat_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2843,7 +3513,7 @@ func (x *SetAccessKeyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetAccessKeyResponse.ProtoReflect.Descriptor instead.
 func (*SetAccessKeyResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{37}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{39}
 }
 
 type FetchKeyPackagesAnonymousRequest struct {
@@ -2858,7 +3528,7 @@ type FetchKeyPackagesAnonymousRequest struct {
 
 func (x *FetchKeyPackagesAnonymousRequest) Reset() {
 	*x = FetchKeyPackagesAnonymousRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[38]
+	mi := &file_peachy_v1_chat_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2870,7 +3540,7 @@ func (x *FetchKeyPackagesAnonymousRequest) String() string {
 func (*FetchKeyPackagesAnonymousRequest) ProtoMessage() {}
 
 func (x *FetchKeyPackagesAnonymousRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[38]
+	mi := &file_peachy_v1_chat_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2883,7 +3553,7 @@ func (x *FetchKeyPackagesAnonymousRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchKeyPackagesAnonymousRequest.ProtoReflect.Descriptor instead.
 func (*FetchKeyPackagesAnonymousRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{38}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *FetchKeyPackagesAnonymousRequest) GetUserId() string {
@@ -2917,7 +3587,7 @@ type FetchKeyPackagesAnonymousResponse struct {
 
 func (x *FetchKeyPackagesAnonymousResponse) Reset() {
 	*x = FetchKeyPackagesAnonymousResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[39]
+	mi := &file_peachy_v1_chat_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2929,7 +3599,7 @@ func (x *FetchKeyPackagesAnonymousResponse) String() string {
 func (*FetchKeyPackagesAnonymousResponse) ProtoMessage() {}
 
 func (x *FetchKeyPackagesAnonymousResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[39]
+	mi := &file_peachy_v1_chat_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2942,7 +3612,7 @@ func (x *FetchKeyPackagesAnonymousResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use FetchKeyPackagesAnonymousResponse.ProtoReflect.Descriptor instead.
 func (*FetchKeyPackagesAnonymousResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{39}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *FetchKeyPackagesAnonymousResponse) GetKeyPackages() []*FetchedKeyPackage {
@@ -2959,6 +3629,149 @@ func (x *FetchKeyPackagesAnonymousResponse) GetDevicesWithoutPackages() []string
 	return nil
 }
 
+type ListPeopleDevicesRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// At most 128 accounts.
+	UserIds       []string `protobuf:"bytes,1,rep,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPeopleDevicesRequest) Reset() {
+	*x = ListPeopleDevicesRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPeopleDevicesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPeopleDevicesRequest) ProtoMessage() {}
+
+func (x *ListPeopleDevicesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPeopleDevicesRequest.ProtoReflect.Descriptor instead.
+func (*ListPeopleDevicesRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *ListPeopleDevicesRequest) GetUserIds() []string {
+	if x != nil {
+		return x.UserIds
+	}
+	return nil
+}
+
+// One entry per account named, in the order named. A bot, an unknown account and
+// an account with no listed device all answer no devices.
+type ListPeopleDevicesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	People        []*PersonDevices       `protobuf:"bytes,1,rep,name=people,proto3" json:"people,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPeopleDevicesResponse) Reset() {
+	*x = ListPeopleDevicesResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPeopleDevicesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPeopleDevicesResponse) ProtoMessage() {}
+
+func (x *ListPeopleDevicesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPeopleDevicesResponse.ProtoReflect.Descriptor instead.
+func (*ListPeopleDevicesResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *ListPeopleDevicesResponse) GetPeople() []*PersonDevices {
+	if x != nil {
+		return x.People
+	}
+	return nil
+}
+
+type PersonDevices struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	DeviceIds     []string               `protobuf:"bytes,2,rep,name=device_ids,json=deviceIds,proto3" json:"device_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PersonDevices) Reset() {
+	*x = PersonDevices{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PersonDevices) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PersonDevices) ProtoMessage() {}
+
+func (x *PersonDevices) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PersonDevices.ProtoReflect.Descriptor instead.
+func (*PersonDevices) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *PersonDevices) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *PersonDevices) GetDeviceIds() []string {
+	if x != nil {
+		return x.DeviceIds
+	}
+	return nil
+}
+
 type KeyPackagePoolStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2967,7 +3780,7 @@ type KeyPackagePoolStatusRequest struct {
 
 func (x *KeyPackagePoolStatusRequest) Reset() {
 	*x = KeyPackagePoolStatusRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[40]
+	mi := &file_peachy_v1_chat_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2979,7 +3792,7 @@ func (x *KeyPackagePoolStatusRequest) String() string {
 func (*KeyPackagePoolStatusRequest) ProtoMessage() {}
 
 func (x *KeyPackagePoolStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[40]
+	mi := &file_peachy_v1_chat_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2992,7 +3805,7 @@ func (x *KeyPackagePoolStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KeyPackagePoolStatusRequest.ProtoReflect.Descriptor instead.
 func (*KeyPackagePoolStatusRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{40}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{45}
 }
 
 type DeviceKeyPackagePool struct {
@@ -3009,7 +3822,7 @@ type DeviceKeyPackagePool struct {
 
 func (x *DeviceKeyPackagePool) Reset() {
 	*x = DeviceKeyPackagePool{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[41]
+	mi := &file_peachy_v1_chat_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3021,7 +3834,7 @@ func (x *DeviceKeyPackagePool) String() string {
 func (*DeviceKeyPackagePool) ProtoMessage() {}
 
 func (x *DeviceKeyPackagePool) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[41]
+	mi := &file_peachy_v1_chat_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3034,7 +3847,7 @@ func (x *DeviceKeyPackagePool) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeviceKeyPackagePool.ProtoReflect.Descriptor instead.
 func (*DeviceKeyPackagePool) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{41}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *DeviceKeyPackagePool) GetDeviceId() string {
@@ -3083,7 +3896,7 @@ type KeyPackagePoolStatusResponse struct {
 
 func (x *KeyPackagePoolStatusResponse) Reset() {
 	*x = KeyPackagePoolStatusResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[42]
+	mi := &file_peachy_v1_chat_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3095,7 +3908,7 @@ func (x *KeyPackagePoolStatusResponse) String() string {
 func (*KeyPackagePoolStatusResponse) ProtoMessage() {}
 
 func (x *KeyPackagePoolStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[42]
+	mi := &file_peachy_v1_chat_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3108,7 +3921,7 @@ func (x *KeyPackagePoolStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KeyPackagePoolStatusResponse.ProtoReflect.Descriptor instead.
 func (*KeyPackagePoolStatusResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{42}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *KeyPackagePoolStatusResponse) GetDevices() []*DeviceKeyPackagePool {
@@ -3141,7 +3954,7 @@ type MlsWelcome struct {
 
 func (x *MlsWelcome) Reset() {
 	*x = MlsWelcome{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[43]
+	mi := &file_peachy_v1_chat_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3153,7 +3966,7 @@ func (x *MlsWelcome) String() string {
 func (*MlsWelcome) ProtoMessage() {}
 
 func (x *MlsWelcome) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[43]
+	mi := &file_peachy_v1_chat_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3166,7 +3979,7 @@ func (x *MlsWelcome) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MlsWelcome.ProtoReflect.Descriptor instead.
 func (*MlsWelcome) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{43}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *MlsWelcome) GetRecipientDeviceId() string {
@@ -3223,14 +4036,20 @@ type SubmitCommitRequest struct {
 	// each account first appears in recipients, then in welcomes (see
 	// docs/delivery.md, Sending). Without a key for each, the call must carry a
 	// session.
-	AccessKeys    []*RecipientAccessKey `protobuf:"bytes,11,rep,name=access_keys,json=accessKeys,proto3" json:"access_keys,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	AccessKeys           []*RecipientAccessKey `protobuf:"bytes,11,rep,name=access_keys,json=accessKeys,proto3" json:"access_keys,omitempty"`
+	Stamp                []byte                `protobuf:"bytes,14,opt,name=stamp,proto3" json:"stamp,omitempty"`
+	StampSet             [][]byte              `protobuf:"bytes,15,rep,name=stamp_set,json=stampSet,proto3" json:"stamp_set,omitempty"`
+	EnrollCommunityId    string                `protobuf:"bytes,16,opt,name=enroll_community_id,json=enrollCommunityId,proto3" json:"enroll_community_id,omitempty"`
+	EnrollOrganizationId string                `protobuf:"bytes,17,opt,name=enroll_organization_id,json=enrollOrganizationId,proto3" json:"enroll_organization_id,omitempty"`
+	Scope                CommitScope           `protobuf:"varint,18,opt,name=scope,proto3,enum=peachy.v1.CommitScope" json:"scope,omitempty"`
+	Rewind               bool                  `protobuf:"varint,19,opt,name=rewind,proto3" json:"rewind,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *SubmitCommitRequest) Reset() {
 	*x = SubmitCommitRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[44]
+	mi := &file_peachy_v1_chat_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3242,7 +4061,7 @@ func (x *SubmitCommitRequest) String() string {
 func (*SubmitCommitRequest) ProtoMessage() {}
 
 func (x *SubmitCommitRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[44]
+	mi := &file_peachy_v1_chat_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3255,7 +4074,7 @@ func (x *SubmitCommitRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubmitCommitRequest.ProtoReflect.Descriptor instead.
 func (*SubmitCommitRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{44}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *SubmitCommitRequest) GetEpoch() uint64 {
@@ -3321,6 +4140,48 @@ func (x *SubmitCommitRequest) GetAccessKeys() []*RecipientAccessKey {
 	return nil
 }
 
+func (x *SubmitCommitRequest) GetStamp() []byte {
+	if x != nil {
+		return x.Stamp
+	}
+	return nil
+}
+
+func (x *SubmitCommitRequest) GetStampSet() [][]byte {
+	if x != nil {
+		return x.StampSet
+	}
+	return nil
+}
+
+func (x *SubmitCommitRequest) GetEnrollCommunityId() string {
+	if x != nil {
+		return x.EnrollCommunityId
+	}
+	return ""
+}
+
+func (x *SubmitCommitRequest) GetEnrollOrganizationId() string {
+	if x != nil {
+		return x.EnrollOrganizationId
+	}
+	return ""
+}
+
+func (x *SubmitCommitRequest) GetScope() CommitScope {
+	if x != nil {
+		return x.Scope
+	}
+	return CommitScope_COMMIT_SCOPE_UNSPECIFIED
+}
+
+func (x *SubmitCommitRequest) GetRewind() bool {
+	if x != nil {
+		return x.Rewind
+	}
+	return false
+}
+
 type SubmitCommitResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Equal to epoch.
@@ -3339,7 +4200,7 @@ type SubmitCommitResponse struct {
 
 func (x *SubmitCommitResponse) Reset() {
 	*x = SubmitCommitResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[45]
+	mi := &file_peachy_v1_chat_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3351,7 +4212,7 @@ func (x *SubmitCommitResponse) String() string {
 func (*SubmitCommitResponse) ProtoMessage() {}
 
 func (x *SubmitCommitResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[45]
+	mi := &file_peachy_v1_chat_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3364,7 +4225,7 @@ func (x *SubmitCommitResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubmitCommitResponse.ProtoReflect.Descriptor instead.
 func (*SubmitCommitResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{45}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *SubmitCommitResponse) GetSeq() uint64 {
@@ -3406,11 +4267,13 @@ func (x *SubmitCommitResponse) GetRetiredDeviceIds() []string {
 // component counting as 0. An empty answer means no minimum.
 type GetMinSupportedVersionRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// "ios", "mac", "android", "web" or "protocol"; anything else is
+	// "ios", "mac", "android", "web", "protocol" or "bot"; anything else is
 	// invalid_argument. For an app platform the answer is the official app's minimum,
 	// so a client that is not an official app should not act on it. A client of its
-	// own asks "protocol", which has no minimum and answers the protocol floor. See
-	// docs/delivery.md.
+	// own asks "protocol", which has no minimum and answers the protocol floor. "bot"
+	// answers the oldest bot runtime the server serves, a version compared with the
+	// x-peachy-sdk header a bot session sends. See docs/delivery.md and
+	// docs/bots.md.
 	Platform      string `protobuf:"bytes,1,opt,name=platform,proto3" json:"platform,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3418,7 +4281,7 @@ type GetMinSupportedVersionRequest struct {
 
 func (x *GetMinSupportedVersionRequest) Reset() {
 	*x = GetMinSupportedVersionRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[46]
+	mi := &file_peachy_v1_chat_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3430,7 +4293,7 @@ func (x *GetMinSupportedVersionRequest) String() string {
 func (*GetMinSupportedVersionRequest) ProtoMessage() {}
 
 func (x *GetMinSupportedVersionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[46]
+	mi := &file_peachy_v1_chat_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3443,7 +4306,7 @@ func (x *GetMinSupportedVersionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMinSupportedVersionRequest.ProtoReflect.Descriptor instead.
 func (*GetMinSupportedVersionRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{46}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *GetMinSupportedVersionRequest) GetPlatform() string {
@@ -3470,7 +4333,7 @@ type GetMinSupportedVersionResponse struct {
 
 func (x *GetMinSupportedVersionResponse) Reset() {
 	*x = GetMinSupportedVersionResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[47]
+	mi := &file_peachy_v1_chat_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3482,7 +4345,7 @@ func (x *GetMinSupportedVersionResponse) String() string {
 func (*GetMinSupportedVersionResponse) ProtoMessage() {}
 
 func (x *GetMinSupportedVersionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[47]
+	mi := &file_peachy_v1_chat_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3495,7 +4358,7 @@ func (x *GetMinSupportedVersionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMinSupportedVersionResponse.ProtoReflect.Descriptor instead.
 func (*GetMinSupportedVersionResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{47}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *GetMinSupportedVersionResponse) GetMinSupportedVersion() string {
@@ -3548,13 +4411,24 @@ type ProtocolFloor struct {
 	// server can turn a check on and never off; a name it does not know it ignores.
 	// See docs/delivery.md.
 	ClientRefusals []string `protobuf:"bytes,4,rep,name=client_refusals,json=clientRefusals,proto3" json:"client_refusals,omitempty"`
+	// The next scheduled retirement of a sealed format's version; unset when none is
+	// (none is today). A bot's runtime warns from 30 days before it.
+	NextFormatRetirement *FormatRetirement `protobuf:"bytes,5,opt,name=next_format_retirement,json=nextFormatRetirement,proto3" json:"next_format_retirement,omitempty"`
+	// The next raise of the bot minimum (GetMinSupportedVersion, platform "bot")
+	// the server has announced; unset when none is.
+	NextBotMinimum *BotMinimum `protobuf:"bytes,6,opt,name=next_bot_minimum,json=nextBotMinimum,proto3" json:"next_bot_minimum,omitempty"`
+	// For each named sealed format (docs/bots.md, Format versions), the oldest
+	// version the server and Peachy's apps still take. A format absent from the map
+	// has never been retired; the map may be empty (no format is retired today). The
+	// same for every caller.
+	FormatVersions map[string]uint32 `protobuf:"bytes,7,rep,name=format_versions,json=formatVersions,proto3" json:"format_versions,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ProtocolFloor) Reset() {
 	*x = ProtocolFloor{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[48]
+	mi := &file_peachy_v1_chat_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3566,7 +4440,7 @@ func (x *ProtocolFloor) String() string {
 func (*ProtocolFloor) ProtoMessage() {}
 
 func (x *ProtocolFloor) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[48]
+	mi := &file_peachy_v1_chat_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3579,7 +4453,7 @@ func (x *ProtocolFloor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProtocolFloor.ProtoReflect.Descriptor instead.
 func (*ProtocolFloor) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{48}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *ProtocolFloor) GetEnvelopeVersions() []uint32 {
@@ -3610,6 +4484,463 @@ func (x *ProtocolFloor) GetClientRefusals() []string {
 	return nil
 }
 
+func (x *ProtocolFloor) GetNextFormatRetirement() *FormatRetirement {
+	if x != nil {
+		return x.NextFormatRetirement
+	}
+	return nil
+}
+
+func (x *ProtocolFloor) GetNextBotMinimum() *BotMinimum {
+	if x != nil {
+		return x.NextBotMinimum
+	}
+	return nil
+}
+
+func (x *ProtocolFloor) GetFormatVersions() map[string]uint32 {
+	if x != nil {
+		return x.FormatVersions
+	}
+	return nil
+}
+
+// An announced raise of the bot minimum: from at on, a bot session whose runtime
+// is below version is to be refused (peachy-refusal: sdk-update-required). The
+// refusal itself follows GetMinSupportedVersion's answer for "bot".
+type BotMinimum struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Version       string                 `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	At            *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=at,proto3" json:"at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotMinimum) Reset() {
+	*x = BotMinimum{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotMinimum) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotMinimum) ProtoMessage() {}
+
+func (x *BotMinimum) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotMinimum.ProtoReflect.Descriptor instead.
+func (*BotMinimum) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *BotMinimum) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *BotMinimum) GetAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.At
+	}
+	return nil
+}
+
+// One scheduled retirement of a sealed format's version.
+type FormatRetirement struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Format string                 `protobuf:"bytes,1,opt,name=format,proto3" json:"format,omitempty"`
+	// Refused from at on, with every version below it.
+	Version       uint32                 `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	At            *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=at,proto3" json:"at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FormatRetirement) Reset() {
+	*x = FormatRetirement{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FormatRetirement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FormatRetirement) ProtoMessage() {}
+
+func (x *FormatRetirement) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FormatRetirement.ProtoReflect.Descriptor instead.
+func (*FormatRetirement) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *FormatRetirement) GetFormat() string {
+	if x != nil {
+		return x.Format
+	}
+	return ""
+}
+
+func (x *FormatRetirement) GetVersion() uint32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *FormatRetirement) GetAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.At
+	}
+	return nil
+}
+
+type GetRemoteConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRemoteConfigRequest) Reset() {
+	*x = GetRemoteConfigRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRemoteConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRemoteConfigRequest) ProtoMessage() {}
+
+func (x *GetRemoteConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRemoteConfigRequest.ProtoReflect.Descriptor instead.
+func (*GetRemoteConfigRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{56}
+}
+
+type GetRemoteConfigResponse struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Config *RemoteConfig          `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// The server's clock when it answered. A device keeps the skew for not_before.
+	ServerTime    *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRemoteConfigResponse) Reset() {
+	*x = GetRemoteConfigResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRemoteConfigResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRemoteConfigResponse) ProtoMessage() {}
+
+func (x *GetRemoteConfigResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRemoteConfigResponse.ProtoReflect.Descriptor instead.
+func (*GetRemoteConfigResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *GetRemoteConfigResponse) GetConfig() *RemoteConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+func (x *GetRemoteConfigResponse) GetServerTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ServerTime
+	}
+	return nil
+}
+
+// The remote flag document. A device evaluates it against the registry of flags
+// compiled into it: a name the registry lacks, or a kind that differs from the
+// registry's, is ignored and the compiled default stands. See docs/mls-core.md,
+// Remote flags.
+type RemoteConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// SHA-256 over the deterministic serialization of a RemoteConfig holding only
+	// flags, sorted by name. A client compares it to skip work; it is never sent back.
+	Digest []byte        `protobuf:"bytes,1,opt,name=digest,proto3" json:"digest,omitempty"`
+	Flags  []*RemoteFlag `protobuf:"bytes,2,rep,name=flags,proto3" json:"flags,omitempty"`
+	// How often to fetch again. A client clamps it to 600 through 21600 seconds.
+	RefreshSeconds uint32 `protobuf:"varint,3,opt,name=refresh_seconds,json=refreshSeconds,proto3" json:"refresh_seconds,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RemoteConfig) Reset() {
+	*x = RemoteConfig{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoteConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoteConfig) ProtoMessage() {}
+
+func (x *RemoteConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoteConfig.ProtoReflect.Descriptor instead.
+func (*RemoteConfig) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *RemoteConfig) GetDigest() []byte {
+	if x != nil {
+		return x.Digest
+	}
+	return nil
+}
+
+func (x *RemoteConfig) GetFlags() []*RemoteFlag {
+	if x != nil {
+		return x.Flags
+	}
+	return nil
+}
+
+func (x *RemoteConfig) GetRefreshSeconds() uint32 {
+	if x != nil {
+		return x.RefreshSeconds
+	}
+	return 0
+}
+
+// One rule, applied only when its name is in the device's registry with the same kind.
+type RemoteFlag struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ^[a-z0-9_.]{1,64}$
+	Name string         `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Kind RemoteFlagKind `protobuf:"varint,2,opt,name=kind,proto3,enum=peachy.v1.RemoteFlagKind" json:"kind,omitempty"`
+	// False: off for everyone.
+	On bool `protobuf:"varint,3,opt,name=on,proto3" json:"on,omitempty"`
+	// The share of accounts it is on for, when on; 1000000 is everyone. docs/mls-core.md gives the bucket.
+	PartsPerMillion uint32 `protobuf:"varint,4,opt,name=parts_per_million,json=partsPerMillion,proto3" json:"parts_per_million,omitempty"`
+	// Off below these builds, per platform.
+	MinBuilds []*PlatformBuild `protobuf:"bytes,5,rep,name=min_builds,json=minBuilds,proto3" json:"min_builds,omitempty"`
+	// Off on exactly these builds.
+	ExceptBuilds []*PlatformBuild `protobuf:"bytes,6,rep,name=except_builds,json=exceptBuilds,proto3" json:"except_builds,omitempty"`
+	// Non-empty: on only in these channels.
+	Channels []ReleaseChannel `protobuf:"varint,7,rep,packed,name=channels,proto3,enum=peachy.v1.ReleaseChannel" json:"channels,omitempty"`
+	// When set: off before this server time.
+	NotBefore     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=not_before,json=notBefore,proto3" json:"not_before,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemoteFlag) Reset() {
+	*x = RemoteFlag{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoteFlag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoteFlag) ProtoMessage() {}
+
+func (x *RemoteFlag) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoteFlag.ProtoReflect.Descriptor instead.
+func (*RemoteFlag) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *RemoteFlag) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *RemoteFlag) GetKind() RemoteFlagKind {
+	if x != nil {
+		return x.Kind
+	}
+	return RemoteFlagKind_REMOTE_FLAG_KIND_UNSPECIFIED
+}
+
+func (x *RemoteFlag) GetOn() bool {
+	if x != nil {
+		return x.On
+	}
+	return false
+}
+
+func (x *RemoteFlag) GetPartsPerMillion() uint32 {
+	if x != nil {
+		return x.PartsPerMillion
+	}
+	return 0
+}
+
+func (x *RemoteFlag) GetMinBuilds() []*PlatformBuild {
+	if x != nil {
+		return x.MinBuilds
+	}
+	return nil
+}
+
+func (x *RemoteFlag) GetExceptBuilds() []*PlatformBuild {
+	if x != nil {
+		return x.ExceptBuilds
+	}
+	return nil
+}
+
+func (x *RemoteFlag) GetChannels() []ReleaseChannel {
+	if x != nil {
+		return x.Channels
+	}
+	return nil
+}
+
+func (x *RemoteFlag) GetNotBefore() *timestamppb.Timestamp {
+	if x != nil {
+		return x.NotBefore
+	}
+	return nil
+}
+
+// A build of one platform.
+type PlatformBuild struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// "ios", "mac", "android" or "web".
+	Platform string `protobuf:"bytes,1,opt,name=platform,proto3" json:"platform,omitempty"`
+	// A native build number ("2400"), compared as an integer, or a web build stamp ("20261120.1300"), compared as a string.
+	Build         string `protobuf:"bytes,2,opt,name=build,proto3" json:"build,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlatformBuild) Reset() {
+	*x = PlatformBuild{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[60]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlatformBuild) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlatformBuild) ProtoMessage() {}
+
+func (x *PlatformBuild) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[60]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlatformBuild.ProtoReflect.Descriptor instead.
+func (*PlatformBuild) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{60}
+}
+
+func (x *PlatformBuild) GetPlatform() string {
+	if x != nil {
+		return x.Platform
+	}
+	return ""
+}
+
+func (x *PlatformBuild) GetBuild() string {
+	if x != nil {
+		return x.Build
+	}
+	return ""
+}
+
 type GetMeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -3618,7 +4949,7 @@ type GetMeRequest struct {
 
 func (x *GetMeRequest) Reset() {
 	*x = GetMeRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[49]
+	mi := &file_peachy_v1_chat_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3630,7 +4961,7 @@ func (x *GetMeRequest) String() string {
 func (*GetMeRequest) ProtoMessage() {}
 
 func (x *GetMeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[49]
+	mi := &file_peachy_v1_chat_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3643,7 +4974,7 @@ func (x *GetMeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMeRequest.ProtoReflect.Descriptor instead.
 func (*GetMeRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{49}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{61}
 }
 
 type GetMeResponse struct {
@@ -3652,14 +4983,29 @@ type GetMeResponse struct {
 	// Where sealed objects are served from, with no trailing slash. A group photo is
 	// referenced from the group's own MLS state by object key; a member downloads it
 	// from <media_base_url>/<object_key>.
-	MediaBaseUrl  string `protobuf:"bytes,3,opt,name=media_base_url,json=mediaBaseUrl,proto3" json:"media_base_url,omitempty"`
+	MediaBaseUrl string `protobuf:"bytes,3,opt,name=media_base_url,json=mediaBaseUrl,proto3" json:"media_base_url,omitempty"`
+	// What this account may start, by gate name. For this protocol: "bots.read"
+	// (this client may write formats only clients that read bots read),
+	// "bots.mentions" (a chat of its own with a bot) and "bots.reading" (adding a
+	// bot to a chat). Other names gate rpcs outside this protocol; a client ignores
+	// names it does not know. A client offers what a gate starts only while the gate
+	// is listed, and the server refuses the gate's doors too. Responding to
+	// a bot (Remove, Leave, Report, Block) is never gated. Empty while bots are
+	// paused, and for a client the server does not serve bots to. See docs/bots.md,
+	// Gates.
+	FeatureGates []string `protobuf:"bytes,4,rep,name=feature_gates,json=featureGates,proto3" json:"feature_gates,omitempty"`
+	// True while Peachy has paused bots everywhere: a client offers no add and no
+	// new chat with a bot and draws every bot as paused, while Remove, Leave, Report
+	// and Block keep working. A change pokes STATE_DOMAIN_BOTS. Set only for a
+	// client the server serves bots to.
+	BotsPaused    bool `protobuf:"varint,5,opt,name=bots_paused,json=botsPaused,proto3" json:"bots_paused,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetMeResponse) Reset() {
 	*x = GetMeResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[50]
+	mi := &file_peachy_v1_chat_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3671,7 +5017,7 @@ func (x *GetMeResponse) String() string {
 func (*GetMeResponse) ProtoMessage() {}
 
 func (x *GetMeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[50]
+	mi := &file_peachy_v1_chat_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3684,7 +5030,7 @@ func (x *GetMeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMeResponse.ProtoReflect.Descriptor instead.
 func (*GetMeResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{50}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *GetMeResponse) GetUser() *User {
@@ -3701,6 +5047,160 @@ func (x *GetMeResponse) GetMediaBaseUrl() string {
 	return ""
 }
 
+func (x *GetMeResponse) GetFeatureGates() []string {
+	if x != nil {
+		return x.FeatureGates
+	}
+	return nil
+}
+
+func (x *GetMeResponse) GetBotsPaused() bool {
+	if x != nil {
+		return x.BotsPaused
+	}
+	return false
+}
+
+// A report. Blocking is not here (docs/account-store.md; the blocks the server
+// holds are in docs/metadata.md).
+type ReportUserRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The person or bot the report is about. Empty only for a concern about nothing
+	// in particular: then reason is required, and message_id and quoted_body must be
+	// empty.
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Optional free text from the reporter; the first 2000 characters are kept.
+	Reason string `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	// Optional: the sealed message being reported, by the id the reporter's device
+	// holds (a UUID). The server holds no copy of a sealed message and keeps no
+	// record of this id; naming one is what allows quoted_body.
+	MessageId string `protobuf:"bytes,4,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	// The reported message's words, as the reporter's device decrypted them, sent
+	// only when the reporter chooses to include them, and only beside message_id.
+	// The server cannot check them against the ciphertext.
+	QuotedBody string `protobuf:"bytes,5,opt,name=quoted_body,json=quotedBody,proto3" json:"quoted_body,omitempty"`
+	// On a report of a bot or of an organization's account: "spam", "harmful",
+	// "reads_more", "impersonation" or "other". Empty or unknown counts as "other".
+	// Ignored on a report of a person.
+	Category string `protobuf:"bytes,12,opt,name=category,proto3" json:"category,omitempty"`
+	// The latest MailboxEnvelope.report_token the reporter's device kept from the
+	// reported account, if any. The server checks it against the hash it kept and
+	// spends it. Only a report carrying a matching token can count toward an
+	// automatic hold on the reported account; without one, or with one that does
+	// not match or is not 32 bytes, the report is filed for a person to read.
+	ReportToken   []byte `protobuf:"bytes,20,opt,name=report_token,json=reportToken,proto3" json:"report_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportUserRequest) Reset() {
+	*x = ReportUserRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[63]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportUserRequest) ProtoMessage() {}
+
+func (x *ReportUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[63]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportUserRequest.ProtoReflect.Descriptor instead.
+func (*ReportUserRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{63}
+}
+
+func (x *ReportUserRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ReportUserRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *ReportUserRequest) GetMessageId() string {
+	if x != nil {
+		return x.MessageId
+	}
+	return ""
+}
+
+func (x *ReportUserRequest) GetQuotedBody() string {
+	if x != nil {
+		return x.QuotedBody
+	}
+	return ""
+}
+
+func (x *ReportUserRequest) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+func (x *ReportUserRequest) GetReportToken() []byte {
+	if x != nil {
+		return x.ReportToken
+	}
+	return nil
+}
+
+type ReportUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportUserResponse) Reset() {
+	*x = ReportUserResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[64]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportUserResponse) ProtoMessage() {}
+
+func (x *ReportUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[64]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportUserResponse.ProtoReflect.Descriptor instead.
+func (*ReportUserResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{64}
+}
+
 type GetUsersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserIds       []string               `protobuf:"bytes,1,rep,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
@@ -3711,7 +5211,7 @@ type GetUsersRequest struct {
 
 func (x *GetUsersRequest) Reset() {
 	*x = GetUsersRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[51]
+	mi := &file_peachy_v1_chat_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3723,7 +5223,7 @@ func (x *GetUsersRequest) String() string {
 func (*GetUsersRequest) ProtoMessage() {}
 
 func (x *GetUsersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[51]
+	mi := &file_peachy_v1_chat_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3736,7 +5236,7 @@ func (x *GetUsersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUsersRequest.ProtoReflect.Descriptor instead.
 func (*GetUsersRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{51}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *GetUsersRequest) GetUserIds() []string {
@@ -3763,7 +5263,7 @@ type GetUsersResponse struct {
 
 func (x *GetUsersResponse) Reset() {
 	*x = GetUsersResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[52]
+	mi := &file_peachy_v1_chat_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3775,7 +5275,7 @@ func (x *GetUsersResponse) String() string {
 func (*GetUsersResponse) ProtoMessage() {}
 
 func (x *GetUsersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[52]
+	mi := &file_peachy_v1_chat_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3788,7 +5288,7 @@ func (x *GetUsersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUsersResponse.ProtoReflect.Descriptor instead.
 func (*GetUsersResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{52}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *GetUsersResponse) GetUsers() []*User {
@@ -3815,7 +5315,7 @@ type ProfileAsk struct {
 
 func (x *ProfileAsk) Reset() {
 	*x = ProfileAsk{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[53]
+	mi := &file_peachy_v1_chat_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3827,7 +5327,7 @@ func (x *ProfileAsk) String() string {
 func (*ProfileAsk) ProtoMessage() {}
 
 func (x *ProfileAsk) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[53]
+	mi := &file_peachy_v1_chat_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3840,7 +5340,7 @@ func (x *ProfileAsk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProfileAsk.ProtoReflect.Descriptor instead.
 func (*ProfileAsk) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{53}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *ProfileAsk) GetUserId() string {
@@ -3867,7 +5367,7 @@ type SealedProfile struct {
 
 func (x *SealedProfile) Reset() {
 	*x = SealedProfile{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[54]
+	mi := &file_peachy_v1_chat_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3879,7 +5379,7 @@ func (x *SealedProfile) String() string {
 func (*SealedProfile) ProtoMessage() {}
 
 func (x *SealedProfile) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[54]
+	mi := &file_peachy_v1_chat_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3892,7 +5392,7 @@ func (x *SealedProfile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SealedProfile.ProtoReflect.Descriptor instead.
 func (*SealedProfile) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{54}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *SealedProfile) GetUserId() string {
@@ -3925,7 +5425,7 @@ type CreateUploadRequest struct {
 
 func (x *CreateUploadRequest) Reset() {
 	*x = CreateUploadRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[55]
+	mi := &file_peachy_v1_chat_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3937,7 +5437,7 @@ func (x *CreateUploadRequest) String() string {
 func (*CreateUploadRequest) ProtoMessage() {}
 
 func (x *CreateUploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[55]
+	mi := &file_peachy_v1_chat_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3950,7 +5450,7 @@ func (x *CreateUploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUploadRequest.ProtoReflect.Descriptor instead.
 func (*CreateUploadRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{55}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *CreateUploadRequest) GetKind() UploadKind {
@@ -4003,7 +5503,7 @@ type ResumableUpload struct {
 
 func (x *ResumableUpload) Reset() {
 	*x = ResumableUpload{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[56]
+	mi := &file_peachy_v1_chat_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4015,7 +5515,7 @@ func (x *ResumableUpload) String() string {
 func (*ResumableUpload) ProtoMessage() {}
 
 func (x *ResumableUpload) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[56]
+	mi := &file_peachy_v1_chat_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4028,7 +5528,7 @@ func (x *ResumableUpload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResumableUpload.ProtoReflect.Descriptor instead.
 func (*ResumableUpload) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{56}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *ResumableUpload) GetUploadId() string {
@@ -4099,7 +5599,7 @@ type CreateUploadResponse struct {
 
 func (x *CreateUploadResponse) Reset() {
 	*x = CreateUploadResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[57]
+	mi := &file_peachy_v1_chat_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4111,7 +5611,7 @@ func (x *CreateUploadResponse) String() string {
 func (*CreateUploadResponse) ProtoMessage() {}
 
 func (x *CreateUploadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[57]
+	mi := &file_peachy_v1_chat_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4124,7 +5624,7 @@ func (x *CreateUploadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUploadResponse.ProtoReflect.Descriptor instead.
 func (*CreateUploadResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{57}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *CreateUploadResponse) GetUploadUrl() string {
@@ -4171,7 +5671,7 @@ type AbandonUploadRequest struct {
 
 func (x *AbandonUploadRequest) Reset() {
 	*x = AbandonUploadRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[58]
+	mi := &file_peachy_v1_chat_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4183,7 +5683,7 @@ func (x *AbandonUploadRequest) String() string {
 func (*AbandonUploadRequest) ProtoMessage() {}
 
 func (x *AbandonUploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[58]
+	mi := &file_peachy_v1_chat_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4196,7 +5696,7 @@ func (x *AbandonUploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbandonUploadRequest.ProtoReflect.Descriptor instead.
 func (*AbandonUploadRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{58}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *AbandonUploadRequest) GetObjectKey() string {
@@ -4216,7 +5716,7 @@ type AbandonUploadResponse struct {
 
 func (x *AbandonUploadResponse) Reset() {
 	*x = AbandonUploadResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[59]
+	mi := &file_peachy_v1_chat_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4228,7 +5728,7 @@ func (x *AbandonUploadResponse) String() string {
 func (*AbandonUploadResponse) ProtoMessage() {}
 
 func (x *AbandonUploadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[59]
+	mi := &file_peachy_v1_chat_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4241,7 +5741,7 @@ func (x *AbandonUploadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbandonUploadResponse.ProtoReflect.Descriptor instead.
 func (*AbandonUploadResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{59}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *AbandonUploadResponse) GetAbandoned() bool {
@@ -4261,7 +5761,7 @@ type DeleteSealedObjectRequest struct {
 
 func (x *DeleteSealedObjectRequest) Reset() {
 	*x = DeleteSealedObjectRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[60]
+	mi := &file_peachy_v1_chat_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4273,7 +5773,7 @@ func (x *DeleteSealedObjectRequest) String() string {
 func (*DeleteSealedObjectRequest) ProtoMessage() {}
 
 func (x *DeleteSealedObjectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[60]
+	mi := &file_peachy_v1_chat_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4286,7 +5786,7 @@ func (x *DeleteSealedObjectRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSealedObjectRequest.ProtoReflect.Descriptor instead.
 func (*DeleteSealedObjectRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{60}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *DeleteSealedObjectRequest) GetObjectKey() string {
@@ -4311,7 +5811,7 @@ type DeleteSealedObjectResponse struct {
 
 func (x *DeleteSealedObjectResponse) Reset() {
 	*x = DeleteSealedObjectResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[61]
+	mi := &file_peachy_v1_chat_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4323,7 +5823,7 @@ func (x *DeleteSealedObjectResponse) String() string {
 func (*DeleteSealedObjectResponse) ProtoMessage() {}
 
 func (x *DeleteSealedObjectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[61]
+	mi := &file_peachy_v1_chat_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4336,7 +5836,7 @@ func (x *DeleteSealedObjectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSealedObjectResponse.ProtoReflect.Descriptor instead.
 func (*DeleteSealedObjectResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{61}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{75}
 }
 
 type CreateSealedMetaUploadRequest struct {
@@ -4354,7 +5854,7 @@ type CreateSealedMetaUploadRequest struct {
 
 func (x *CreateSealedMetaUploadRequest) Reset() {
 	*x = CreateSealedMetaUploadRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[62]
+	mi := &file_peachy_v1_chat_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4366,7 +5866,7 @@ func (x *CreateSealedMetaUploadRequest) String() string {
 func (*CreateSealedMetaUploadRequest) ProtoMessage() {}
 
 func (x *CreateSealedMetaUploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[62]
+	mi := &file_peachy_v1_chat_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4379,7 +5879,7 @@ func (x *CreateSealedMetaUploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSealedMetaUploadRequest.ProtoReflect.Descriptor instead.
 func (*CreateSealedMetaUploadRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{62}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *CreateSealedMetaUploadRequest) GetContentLength() int64 {
@@ -4405,7 +5905,7 @@ type GetUserByHandleRequest struct {
 
 func (x *GetUserByHandleRequest) Reset() {
 	*x = GetUserByHandleRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[63]
+	mi := &file_peachy_v1_chat_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4417,7 +5917,7 @@ func (x *GetUserByHandleRequest) String() string {
 func (*GetUserByHandleRequest) ProtoMessage() {}
 
 func (x *GetUserByHandleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[63]
+	mi := &file_peachy_v1_chat_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4430,7 +5930,7 @@ func (x *GetUserByHandleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByHandleRequest.ProtoReflect.Descriptor instead.
 func (*GetUserByHandleRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{63}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *GetUserByHandleRequest) GetHandleHash() []byte {
@@ -4449,7 +5949,7 @@ type GetUserByHandleResponse struct {
 
 func (x *GetUserByHandleResponse) Reset() {
 	*x = GetUserByHandleResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[64]
+	mi := &file_peachy_v1_chat_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4461,7 +5961,7 @@ func (x *GetUserByHandleResponse) String() string {
 func (*GetUserByHandleResponse) ProtoMessage() {}
 
 func (x *GetUserByHandleResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[64]
+	mi := &file_peachy_v1_chat_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4474,7 +5974,7 @@ func (x *GetUserByHandleResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByHandleResponse.ProtoReflect.Descriptor instead.
 func (*GetUserByHandleResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{64}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *GetUserByHandleResponse) GetUser() *User {
@@ -4492,15 +5992,21 @@ type MailboxEnvelope struct {
 	Payload []byte                 `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`
 	// When the server received the send. Orders messages across senders; the
 	// sender's own clock travels inside the ciphertext.
-	ReceivedAt    *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=received_at,json=receivedAt,proto3" json:"received_at,omitempty"`
-	CommitStamp   []byte                 `protobuf:"bytes,9,opt,name=commit_stamp,json=commitStamp,proto3" json:"commit_stamp,omitempty"`
+	ReceivedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=received_at,json=receivedAt,proto3" json:"received_at,omitempty"`
+	// Set only on an envelope from an identified send (one made with the sender's
+	// session rather than access keys): 32 opaque bytes, one per recipient account,
+	// the same on each of its devices. A device keeps the latest per sender and may
+	// hand it back in ReportUserRequest.report_token. The server keeps only a hash,
+	// bound to this envelope, the sender and the recipient. Empty on every other
+	// envelope.
+	ReportToken   []byte `protobuf:"bytes,11,opt,name=report_token,json=reportToken,proto3" json:"report_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *MailboxEnvelope) Reset() {
 	*x = MailboxEnvelope{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[65]
+	mi := &file_peachy_v1_chat_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4512,7 +6018,7 @@ func (x *MailboxEnvelope) String() string {
 func (*MailboxEnvelope) ProtoMessage() {}
 
 func (x *MailboxEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[65]
+	mi := &file_peachy_v1_chat_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4525,7 +6031,7 @@ func (x *MailboxEnvelope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxEnvelope.ProtoReflect.Descriptor instead.
 func (*MailboxEnvelope) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{65}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *MailboxEnvelope) GetId() string {
@@ -4556,9 +6062,9 @@ func (x *MailboxEnvelope) GetReceivedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *MailboxEnvelope) GetCommitStamp() []byte {
+func (x *MailboxEnvelope) GetReportToken() []byte {
 	if x != nil {
-		return x.CommitStamp
+		return x.ReportToken
 	}
 	return nil
 }
@@ -4577,7 +6083,7 @@ type SealedRecipient struct {
 
 func (x *SealedRecipient) Reset() {
 	*x = SealedRecipient{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[66]
+	mi := &file_peachy_v1_chat_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4589,7 +6095,7 @@ func (x *SealedRecipient) String() string {
 func (*SealedRecipient) ProtoMessage() {}
 
 func (x *SealedRecipient) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[66]
+	mi := &file_peachy_v1_chat_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4602,7 +6108,7 @@ func (x *SealedRecipient) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SealedRecipient.ProtoReflect.Descriptor instead.
 func (*SealedRecipient) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{66}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *SealedRecipient) GetUserId() string {
@@ -4631,7 +6137,7 @@ type RecipientAccessKey struct {
 
 func (x *RecipientAccessKey) Reset() {
 	*x = RecipientAccessKey{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[67]
+	mi := &file_peachy_v1_chat_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4643,7 +6149,7 @@ func (x *RecipientAccessKey) String() string {
 func (*RecipientAccessKey) ProtoMessage() {}
 
 func (x *RecipientAccessKey) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[67]
+	mi := &file_peachy_v1_chat_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4656,7 +6162,7 @@ func (x *RecipientAccessKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecipientAccessKey.ProtoReflect.Descriptor instead.
 func (*RecipientAccessKey) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{67}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *RecipientAccessKey) GetUserId() string {
@@ -4703,7 +6209,7 @@ type SendSealedRequest struct {
 
 func (x *SendSealedRequest) Reset() {
 	*x = SendSealedRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[68]
+	mi := &file_peachy_v1_chat_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4715,7 +6221,7 @@ func (x *SendSealedRequest) String() string {
 func (*SendSealedRequest) ProtoMessage() {}
 
 func (x *SendSealedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[68]
+	mi := &file_peachy_v1_chat_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4728,7 +6234,7 @@ func (x *SendSealedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSealedRequest.ProtoReflect.Descriptor instead.
 func (*SendSealedRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{68}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *SendSealedRequest) GetPayload() []byte {
@@ -4790,13 +6296,22 @@ type SendSealedResponse struct {
 	// the core's remove_stale_leaf, and forget each ten minutes after it was last
 	// listed. See docs/delivery.md.
 	RetiredDeviceIds []string `protobuf:"bytes,5,rep,name=retired_device_ids,json=retiredDeviceIds,proto3" json:"retired_device_ids,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Named devices this send left out: nothing was delivered to them, and the send
+	// succeeded for everyone else (docs/bots.md, Throttling). They are bot devices
+	// the server may not deliver to now (past a delivery limit or its mailbox cap, a
+	// bot that is paused or otherwise not active, one some person the send names may
+	// not reach yet, or every bot while bots are paused), and, on a bot's own send,
+	// the devices of accounts the bot may not reach. A person's device does nothing
+	// about them; a send to a bot alone is refused instead.
+	ThrottledDeviceIds []string   `protobuf:"bytes,6,rep,name=throttled_device_ids,json=throttledDeviceIds,proto3" json:"throttled_device_ids,omitempty"`
+	Placement          *Placement `protobuf:"bytes,7,opt,name=placement,proto3" json:"placement,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *SendSealedResponse) Reset() {
 	*x = SendSealedResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[69]
+	mi := &file_peachy_v1_chat_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4808,7 +6323,7 @@ func (x *SendSealedResponse) String() string {
 func (*SendSealedResponse) ProtoMessage() {}
 
 func (x *SendSealedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[69]
+	mi := &file_peachy_v1_chat_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4821,7 +6336,7 @@ func (x *SendSealedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSealedResponse.ProtoReflect.Descriptor instead.
 func (*SendSealedResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{69}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *SendSealedResponse) GetId() string {
@@ -4859,6 +6374,64 @@ func (x *SendSealedResponse) GetRetiredDeviceIds() []string {
 	return nil
 }
 
+func (x *SendSealedResponse) GetThrottledDeviceIds() []string {
+	if x != nil {
+		return x.ThrottledDeviceIds
+	}
+	return nil
+}
+
+func (x *SendSealedResponse) GetPlacement() *Placement {
+	if x != nil {
+		return x.Placement
+	}
+	return nil
+}
+
+type Placement struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DeviceIds     []string               `protobuf:"bytes,1,rep,name=device_ids,json=deviceIds,proto3" json:"device_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Placement) Reset() {
+	*x = Placement{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[84]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Placement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Placement) ProtoMessage() {}
+
+func (x *Placement) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[84]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Placement.ProtoReflect.Descriptor instead.
+func (*Placement) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{84}
+}
+
+func (x *Placement) GetDeviceIds() []string {
+	if x != nil {
+		return x.DeviceIds
+	}
+	return nil
+}
+
 type FetchMailboxRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The caller's own unrevoked device, registered under the calling session. Another device of the same account is permission_denied.
@@ -4871,7 +6444,7 @@ type FetchMailboxRequest struct {
 
 func (x *FetchMailboxRequest) Reset() {
 	*x = FetchMailboxRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[70]
+	mi := &file_peachy_v1_chat_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4883,7 +6456,7 @@ func (x *FetchMailboxRequest) String() string {
 func (*FetchMailboxRequest) ProtoMessage() {}
 
 func (x *FetchMailboxRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[70]
+	mi := &file_peachy_v1_chat_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4896,7 +6469,7 @@ func (x *FetchMailboxRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchMailboxRequest.ProtoReflect.Descriptor instead.
 func (*FetchMailboxRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{70}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *FetchMailboxRequest) GetDeviceId() string {
@@ -4928,14 +6501,15 @@ type FetchMailboxResponse struct {
 	ServerTime *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"`
 	// The server holds notifications for this session that are not in the mailbox.
 	// A client of this protocol alone may ignore it.
-	NoticesWaiting bool `protobuf:"varint,5,opt,name=notices_waiting,json=noticesWaiting,proto3" json:"notices_waiting,omitempty"`
+	NoticesWaiting bool   `protobuf:"varint,5,opt,name=notices_waiting,json=noticesWaiting,proto3" json:"notices_waiting,omitempty"`
+	AckedCount     uint64 `protobuf:"varint,6,opt,name=acked_count,json=ackedCount,proto3" json:"acked_count,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *FetchMailboxResponse) Reset() {
 	*x = FetchMailboxResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[71]
+	mi := &file_peachy_v1_chat_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4947,7 +6521,7 @@ func (x *FetchMailboxResponse) String() string {
 func (*FetchMailboxResponse) ProtoMessage() {}
 
 func (x *FetchMailboxResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[71]
+	mi := &file_peachy_v1_chat_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4960,7 +6534,7 @@ func (x *FetchMailboxResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchMailboxResponse.ProtoReflect.Descriptor instead.
 func (*FetchMailboxResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{71}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *FetchMailboxResponse) GetEnvelopes() []*MailboxEnvelope {
@@ -4998,6 +6572,13 @@ func (x *FetchMailboxResponse) GetNoticesWaiting() bool {
 	return false
 }
 
+func (x *FetchMailboxResponse) GetAckedCount() uint64 {
+	if x != nil {
+		return x.AckedCount
+	}
+	return 0
+}
+
 type AckMailboxRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// As FetchMailboxRequest.device_id: the device the calling session registered, and no other.
@@ -5010,7 +6591,7 @@ type AckMailboxRequest struct {
 
 func (x *AckMailboxRequest) Reset() {
 	*x = AckMailboxRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[72]
+	mi := &file_peachy_v1_chat_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5022,7 +6603,7 @@ func (x *AckMailboxRequest) String() string {
 func (*AckMailboxRequest) ProtoMessage() {}
 
 func (x *AckMailboxRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[72]
+	mi := &file_peachy_v1_chat_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5035,7 +6616,7 @@ func (x *AckMailboxRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AckMailboxRequest.ProtoReflect.Descriptor instead.
 func (*AckMailboxRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{72}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *AckMailboxRequest) GetDeviceId() string {
@@ -5054,13 +6635,14 @@ func (x *AckMailboxRequest) GetIds() []string {
 
 type AckMailboxResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	AckedCount    uint64                 `protobuf:"varint,1,opt,name=acked_count,json=ackedCount,proto3" json:"acked_count,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AckMailboxResponse) Reset() {
 	*x = AckMailboxResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[73]
+	mi := &file_peachy_v1_chat_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5072,7 +6654,7 @@ func (x *AckMailboxResponse) String() string {
 func (*AckMailboxResponse) ProtoMessage() {}
 
 func (x *AckMailboxResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[73]
+	mi := &file_peachy_v1_chat_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5085,7 +6667,14 @@ func (x *AckMailboxResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AckMailboxResponse.ProtoReflect.Descriptor instead.
 func (*AckMailboxResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{73}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{88}
+}
+
+func (x *AckMailboxResponse) GetAckedCount() uint64 {
+	if x != nil {
+		return x.AckedCount
+	}
+	return 0
 }
 
 type SendSelfNoteRequest struct {
@@ -5100,7 +6689,7 @@ type SendSelfNoteRequest struct {
 
 func (x *SendSelfNoteRequest) Reset() {
 	*x = SendSelfNoteRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[74]
+	mi := &file_peachy_v1_chat_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5112,7 +6701,7 @@ func (x *SendSelfNoteRequest) String() string {
 func (*SendSelfNoteRequest) ProtoMessage() {}
 
 func (x *SendSelfNoteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[74]
+	mi := &file_peachy_v1_chat_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5125,7 +6714,7 @@ func (x *SendSelfNoteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSelfNoteRequest.ProtoReflect.Descriptor instead.
 func (*SendSelfNoteRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{74}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *SendSelfNoteRequest) GetPayload() []byte {
@@ -5151,7 +6740,7 @@ type SendSelfNoteResponse struct {
 
 func (x *SendSelfNoteResponse) Reset() {
 	*x = SendSelfNoteResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[75]
+	mi := &file_peachy_v1_chat_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5163,7 +6752,7 @@ func (x *SendSelfNoteResponse) String() string {
 func (*SendSelfNoteResponse) ProtoMessage() {}
 
 func (x *SendSelfNoteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[75]
+	mi := &file_peachy_v1_chat_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5176,7 +6765,7 @@ func (x *SendSelfNoteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendSelfNoteResponse.ProtoReflect.Descriptor instead.
 func (*SendSelfNoteResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{75}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *SendSelfNoteResponse) GetId() string {
@@ -5199,7 +6788,7 @@ type StoreRecord struct {
 
 func (x *StoreRecord) Reset() {
 	*x = StoreRecord{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[76]
+	mi := &file_peachy_v1_chat_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5211,7 +6800,7 @@ func (x *StoreRecord) String() string {
 func (*StoreRecord) ProtoMessage() {}
 
 func (x *StoreRecord) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[76]
+	mi := &file_peachy_v1_chat_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5224,7 +6813,7 @@ func (x *StoreRecord) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreRecord.ProtoReflect.Descriptor instead.
 func (*StoreRecord) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{76}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *StoreRecord) GetId() []byte {
@@ -5253,7 +6842,7 @@ type ReadStoreRequest struct {
 
 func (x *ReadStoreRequest) Reset() {
 	*x = ReadStoreRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[77]
+	mi := &file_peachy_v1_chat_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5265,7 +6854,7 @@ func (x *ReadStoreRequest) String() string {
 func (*ReadStoreRequest) ProtoMessage() {}
 
 func (x *ReadStoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[77]
+	mi := &file_peachy_v1_chat_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5278,7 +6867,7 @@ func (x *ReadStoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadStoreRequest.ProtoReflect.Descriptor instead.
 func (*ReadStoreRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{77}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *ReadStoreRequest) GetSinceVersion() int64 {
@@ -5308,7 +6897,7 @@ type ReadStoreResponse struct {
 
 func (x *ReadStoreResponse) Reset() {
 	*x = ReadStoreResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[78]
+	mi := &file_peachy_v1_chat_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5320,7 +6909,7 @@ func (x *ReadStoreResponse) String() string {
 func (*ReadStoreResponse) ProtoMessage() {}
 
 func (x *ReadStoreResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[78]
+	mi := &file_peachy_v1_chat_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5333,7 +6922,7 @@ func (x *ReadStoreResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadStoreResponse.ProtoReflect.Descriptor instead.
 func (*ReadStoreResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{78}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *ReadStoreResponse) GetVersion() int64 {
@@ -5372,7 +6961,7 @@ type WriteStoreRequest struct {
 
 func (x *WriteStoreRequest) Reset() {
 	*x = WriteStoreRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[79]
+	mi := &file_peachy_v1_chat_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5384,7 +6973,7 @@ func (x *WriteStoreRequest) String() string {
 func (*WriteStoreRequest) ProtoMessage() {}
 
 func (x *WriteStoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[79]
+	mi := &file_peachy_v1_chat_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5397,7 +6986,7 @@ func (x *WriteStoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WriteStoreRequest.ProtoReflect.Descriptor instead.
 func (*WriteStoreRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{79}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *WriteStoreRequest) GetExpectedVersion() int64 {
@@ -5447,7 +7036,7 @@ type WriteStoreResponse struct {
 
 func (x *WriteStoreResponse) Reset() {
 	*x = WriteStoreResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[80]
+	mi := &file_peachy_v1_chat_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5459,7 +7048,7 @@ func (x *WriteStoreResponse) String() string {
 func (*WriteStoreResponse) ProtoMessage() {}
 
 func (x *WriteStoreResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[80]
+	mi := &file_peachy_v1_chat_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5472,7 +7061,7 @@ func (x *WriteStoreResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WriteStoreResponse.ProtoReflect.Descriptor instead.
 func (*WriteStoreResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{80}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *WriteStoreResponse) GetConflict() bool {
@@ -5499,7 +7088,7 @@ type FetchAccountKeyRequest struct {
 
 func (x *FetchAccountKeyRequest) Reset() {
 	*x = FetchAccountKeyRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[81]
+	mi := &file_peachy_v1_chat_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5511,7 +7100,7 @@ func (x *FetchAccountKeyRequest) String() string {
 func (*FetchAccountKeyRequest) ProtoMessage() {}
 
 func (x *FetchAccountKeyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[81]
+	mi := &file_peachy_v1_chat_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5524,7 +7113,7 @@ func (x *FetchAccountKeyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchAccountKeyRequest.ProtoReflect.Descriptor instead.
 func (*FetchAccountKeyRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{81}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *FetchAccountKeyRequest) GetDeviceId() string {
@@ -5547,7 +7136,7 @@ type FetchAccountKeyResponse struct {
 
 func (x *FetchAccountKeyResponse) Reset() {
 	*x = FetchAccountKeyResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[82]
+	mi := &file_peachy_v1_chat_proto_msgTypes[97]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5559,7 +7148,7 @@ func (x *FetchAccountKeyResponse) String() string {
 func (*FetchAccountKeyResponse) ProtoMessage() {}
 
 func (x *FetchAccountKeyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[82]
+	mi := &file_peachy_v1_chat_proto_msgTypes[97]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5572,7 +7161,7 @@ func (x *FetchAccountKeyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchAccountKeyResponse.ProtoReflect.Descriptor instead.
 func (*FetchAccountKeyResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{82}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *FetchAccountKeyResponse) GetBox() []byte {
@@ -5609,7 +7198,7 @@ type EphemeralEvent struct {
 
 func (x *EphemeralEvent) Reset() {
 	*x = EphemeralEvent{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[83]
+	mi := &file_peachy_v1_chat_proto_msgTypes[98]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5621,7 +7210,7 @@ func (x *EphemeralEvent) String() string {
 func (*EphemeralEvent) ProtoMessage() {}
 
 func (x *EphemeralEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[83]
+	mi := &file_peachy_v1_chat_proto_msgTypes[98]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5634,7 +7223,7 @@ func (x *EphemeralEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EphemeralEvent.ProtoReflect.Descriptor instead.
 func (*EphemeralEvent) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{83}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *EphemeralEvent) GetPayload() []byte {
@@ -5656,7 +7245,7 @@ type StreamEventsRequest struct {
 
 func (x *StreamEventsRequest) Reset() {
 	*x = StreamEventsRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[84]
+	mi := &file_peachy_v1_chat_proto_msgTypes[99]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5668,7 +7257,7 @@ func (x *StreamEventsRequest) String() string {
 func (*StreamEventsRequest) ProtoMessage() {}
 
 func (x *StreamEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[84]
+	mi := &file_peachy_v1_chat_proto_msgTypes[99]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5681,7 +7270,7 @@ func (x *StreamEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamEventsRequest.ProtoReflect.Descriptor instead.
 func (*StreamEventsRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{84}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *StreamEventsRequest) GetMailboxDeviceId() string {
@@ -5704,7 +7293,7 @@ type BeatStreamRequest struct {
 
 func (x *BeatStreamRequest) Reset() {
 	*x = BeatStreamRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[85]
+	mi := &file_peachy_v1_chat_proto_msgTypes[100]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5716,7 +7305,7 @@ func (x *BeatStreamRequest) String() string {
 func (*BeatStreamRequest) ProtoMessage() {}
 
 func (x *BeatStreamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[85]
+	mi := &file_peachy_v1_chat_proto_msgTypes[100]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5729,7 +7318,7 @@ func (x *BeatStreamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BeatStreamRequest.ProtoReflect.Descriptor instead.
 func (*BeatStreamRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{85}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *BeatStreamRequest) GetNonce() string {
@@ -5749,7 +7338,7 @@ type BeatStreamResponse struct {
 
 func (x *BeatStreamResponse) Reset() {
 	*x = BeatStreamResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[86]
+	mi := &file_peachy_v1_chat_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5761,7 +7350,7 @@ func (x *BeatStreamResponse) String() string {
 func (*BeatStreamResponse) ProtoMessage() {}
 
 func (x *BeatStreamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[86]
+	mi := &file_peachy_v1_chat_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5774,7 +7363,7 @@ func (x *BeatStreamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BeatStreamResponse.ProtoReflect.Descriptor instead.
 func (*BeatStreamResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{86}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *BeatStreamResponse) GetStreaming() bool {
@@ -5794,7 +7383,7 @@ type StreamBeat struct {
 
 func (x *StreamBeat) Reset() {
 	*x = StreamBeat{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[87]
+	mi := &file_peachy_v1_chat_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5806,7 +7395,7 @@ func (x *StreamBeat) String() string {
 func (*StreamBeat) ProtoMessage() {}
 
 func (x *StreamBeat) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[87]
+	mi := &file_peachy_v1_chat_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5819,7 +7408,7 @@ func (x *StreamBeat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamBeat.ProtoReflect.Descriptor instead.
 func (*StreamBeat) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{87}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *StreamBeat) GetNonce() string {
@@ -5860,7 +7449,7 @@ type StreamEventsResponse struct {
 
 func (x *StreamEventsResponse) Reset() {
 	*x = StreamEventsResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[88]
+	mi := &file_peachy_v1_chat_proto_msgTypes[103]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5872,7 +7461,7 @@ func (x *StreamEventsResponse) String() string {
 func (*StreamEventsResponse) ProtoMessage() {}
 
 func (x *StreamEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[88]
+	mi := &file_peachy_v1_chat_proto_msgTypes[103]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5885,7 +7474,7 @@ func (x *StreamEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamEventsResponse.ProtoReflect.Descriptor instead.
 func (*StreamEventsResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{88}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{103}
 }
 
 func (x *StreamEventsResponse) GetStateChanged() *StateChangedEvent {
@@ -5940,7 +7529,7 @@ type StateVersions struct {
 
 func (x *StateVersions) Reset() {
 	*x = StateVersions{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[89]
+	mi := &file_peachy_v1_chat_proto_msgTypes[104]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5952,7 +7541,7 @@ func (x *StateVersions) String() string {
 func (*StateVersions) ProtoMessage() {}
 
 func (x *StateVersions) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[89]
+	mi := &file_peachy_v1_chat_proto_msgTypes[104]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5965,7 +7554,7 @@ func (x *StateVersions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateVersions.ProtoReflect.Descriptor instead.
 func (*StateVersions) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{89}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *StateVersions) GetDomains() []*StateDomainVersion {
@@ -5987,7 +7576,7 @@ type StateDomainVersion struct {
 
 func (x *StateDomainVersion) Reset() {
 	*x = StateDomainVersion{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[90]
+	mi := &file_peachy_v1_chat_proto_msgTypes[105]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5999,7 +7588,7 @@ func (x *StateDomainVersion) String() string {
 func (*StateDomainVersion) ProtoMessage() {}
 
 func (x *StateDomainVersion) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[90]
+	mi := &file_peachy_v1_chat_proto_msgTypes[105]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6012,7 +7601,7 @@ func (x *StateDomainVersion) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateDomainVersion.ProtoReflect.Descriptor instead.
 func (*StateDomainVersion) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{90}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *StateDomainVersion) GetDomain() StateDomain {
@@ -6039,7 +7628,7 @@ type ReconnectHint struct {
 
 func (x *ReconnectHint) Reset() {
 	*x = ReconnectHint{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[91]
+	mi := &file_peachy_v1_chat_proto_msgTypes[106]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6051,7 +7640,7 @@ func (x *ReconnectHint) String() string {
 func (*ReconnectHint) ProtoMessage() {}
 
 func (x *ReconnectHint) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[91]
+	mi := &file_peachy_v1_chat_proto_msgTypes[106]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6064,7 +7653,7 @@ func (x *ReconnectHint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReconnectHint.ProtoReflect.Descriptor instead.
 func (*ReconnectHint) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{91}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *ReconnectHint) GetAfterMs() uint32 {
@@ -6086,7 +7675,7 @@ type StateChangedEvent struct {
 
 func (x *StateChangedEvent) Reset() {
 	*x = StateChangedEvent{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[92]
+	mi := &file_peachy_v1_chat_proto_msgTypes[107]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6098,7 +7687,7 @@ func (x *StateChangedEvent) String() string {
 func (*StateChangedEvent) ProtoMessage() {}
 
 func (x *StateChangedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[92]
+	mi := &file_peachy_v1_chat_proto_msgTypes[107]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6111,7 +7700,7 @@ func (x *StateChangedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateChangedEvent.ProtoReflect.Descriptor instead.
 func (*StateChangedEvent) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{92}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *StateChangedEvent) GetDomains() []StateDomain {
@@ -6140,7 +7729,7 @@ type CreateHandleRequest struct {
 
 func (x *CreateHandleRequest) Reset() {
 	*x = CreateHandleRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[93]
+	mi := &file_peachy_v1_chat_proto_msgTypes[108]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6152,7 +7741,7 @@ func (x *CreateHandleRequest) String() string {
 func (*CreateHandleRequest) ProtoMessage() {}
 
 func (x *CreateHandleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[93]
+	mi := &file_peachy_v1_chat_proto_msgTypes[108]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6165,7 +7754,7 @@ func (x *CreateHandleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateHandleRequest.ProtoReflect.Descriptor instead.
 func (*CreateHandleRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{93}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *CreateHandleRequest) GetHandle() []byte {
@@ -6190,7 +7779,7 @@ type CreateHandleResponse struct {
 
 func (x *CreateHandleResponse) Reset() {
 	*x = CreateHandleResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[94]
+	mi := &file_peachy_v1_chat_proto_msgTypes[109]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6202,7 +7791,7 @@ func (x *CreateHandleResponse) String() string {
 func (*CreateHandleResponse) ProtoMessage() {}
 
 func (x *CreateHandleResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[94]
+	mi := &file_peachy_v1_chat_proto_msgTypes[109]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6215,7 +7804,7 @@ func (x *CreateHandleResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateHandleResponse.ProtoReflect.Descriptor instead.
 func (*CreateHandleResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{94}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{109}
 }
 
 type FetchVerifierAtRequest struct {
@@ -6230,7 +7819,7 @@ type FetchVerifierAtRequest struct {
 
 func (x *FetchVerifierAtRequest) Reset() {
 	*x = FetchVerifierAtRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[95]
+	mi := &file_peachy_v1_chat_proto_msgTypes[110]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6242,7 +7831,7 @@ func (x *FetchVerifierAtRequest) String() string {
 func (*FetchVerifierAtRequest) ProtoMessage() {}
 
 func (x *FetchVerifierAtRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[95]
+	mi := &file_peachy_v1_chat_proto_msgTypes[110]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6255,7 +7844,7 @@ func (x *FetchVerifierAtRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchVerifierAtRequest.ProtoReflect.Descriptor instead.
 func (*FetchVerifierAtRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{95}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *FetchVerifierAtRequest) GetHandle() []byte {
@@ -6287,7 +7876,7 @@ type FetchVerifierAtResponse struct {
 
 func (x *FetchVerifierAtResponse) Reset() {
 	*x = FetchVerifierAtResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[96]
+	mi := &file_peachy_v1_chat_proto_msgTypes[111]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6299,7 +7888,7 @@ func (x *FetchVerifierAtResponse) String() string {
 func (*FetchVerifierAtResponse) ProtoMessage() {}
 
 func (x *FetchVerifierAtResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[96]
+	mi := &file_peachy_v1_chat_proto_msgTypes[111]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6312,7 +7901,7 @@ func (x *FetchVerifierAtResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchVerifierAtResponse.ProtoReflect.Descriptor instead.
 func (*FetchVerifierAtResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{96}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *FetchVerifierAtResponse) GetVerifier() []byte {
@@ -6345,7 +7934,7 @@ type FetchConversationHeadRequest struct {
 
 func (x *FetchConversationHeadRequest) Reset() {
 	*x = FetchConversationHeadRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[97]
+	mi := &file_peachy_v1_chat_proto_msgTypes[112]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6357,7 +7946,7 @@ func (x *FetchConversationHeadRequest) String() string {
 func (*FetchConversationHeadRequest) ProtoMessage() {}
 
 func (x *FetchConversationHeadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[97]
+	mi := &file_peachy_v1_chat_proto_msgTypes[112]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6370,7 +7959,7 @@ func (x *FetchConversationHeadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchConversationHeadRequest.ProtoReflect.Descriptor instead.
 func (*FetchConversationHeadRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{97}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *FetchConversationHeadRequest) GetHandles() [][]byte {
@@ -6401,14 +7990,15 @@ type ConversationHead struct {
 	Epoch  uint64                 `protobuf:"varint,2,opt,name=epoch,proto3" json:"epoch,omitempty"`
 	// SHA-256 of this epoch's send key. A member compares it with its own send key's
 	// hash to tell whether its tree is the one the server accepted.
-	Verifier      []byte `protobuf:"bytes,3,opt,name=verifier,proto3" json:"verifier,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Verifier       []byte `protobuf:"bytes,3,opt,name=verifier,proto3" json:"verifier,omitempty"`
+	StampSetDigest []byte `protobuf:"bytes,4,opt,name=stamp_set_digest,json=stampSetDigest,proto3" json:"stamp_set_digest,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ConversationHead) Reset() {
 	*x = ConversationHead{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[98]
+	mi := &file_peachy_v1_chat_proto_msgTypes[113]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6420,7 +8010,7 @@ func (x *ConversationHead) String() string {
 func (*ConversationHead) ProtoMessage() {}
 
 func (x *ConversationHead) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[98]
+	mi := &file_peachy_v1_chat_proto_msgTypes[113]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6433,7 +8023,7 @@ func (x *ConversationHead) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConversationHead.ProtoReflect.Descriptor instead.
 func (*ConversationHead) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{98}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *ConversationHead) GetHandle() []byte {
@@ -6457,6 +8047,13 @@ func (x *ConversationHead) GetVerifier() []byte {
 	return nil
 }
 
+func (x *ConversationHead) GetStampSetDigest() []byte {
+	if x != nil {
+		return x.StampSetDigest
+	}
+	return nil
+}
+
 type FetchConversationHeadResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// One per known handle; an unknown handle is absent.
@@ -6469,7 +8066,7 @@ type FetchConversationHeadResponse struct {
 
 func (x *FetchConversationHeadResponse) Reset() {
 	*x = FetchConversationHeadResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[99]
+	mi := &file_peachy_v1_chat_proto_msgTypes[114]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6481,7 +8078,7 @@ func (x *FetchConversationHeadResponse) String() string {
 func (*FetchConversationHeadResponse) ProtoMessage() {}
 
 func (x *FetchConversationHeadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[99]
+	mi := &file_peachy_v1_chat_proto_msgTypes[114]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6494,7 +8091,7 @@ func (x *FetchConversationHeadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchConversationHeadResponse.ProtoReflect.Descriptor instead.
 func (*FetchConversationHeadResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{99}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *FetchConversationHeadResponse) GetHeads() []*ConversationHead {
@@ -6529,7 +8126,7 @@ type CallTokenKey struct {
 
 func (x *CallTokenKey) Reset() {
 	*x = CallTokenKey{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[100]
+	mi := &file_peachy_v1_chat_proto_msgTypes[115]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6541,7 +8138,7 @@ func (x *CallTokenKey) String() string {
 func (*CallTokenKey) ProtoMessage() {}
 
 func (x *CallTokenKey) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[100]
+	mi := &file_peachy_v1_chat_proto_msgTypes[115]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6554,7 +8151,7 @@ func (x *CallTokenKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallTokenKey.ProtoReflect.Descriptor instead.
 func (*CallTokenKey) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{100}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *CallTokenKey) GetPurpose() CallTokenPurpose {
@@ -6607,7 +8204,7 @@ type GetCallTokenKeysRequest struct {
 
 func (x *GetCallTokenKeysRequest) Reset() {
 	*x = GetCallTokenKeysRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[101]
+	mi := &file_peachy_v1_chat_proto_msgTypes[116]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6619,7 +8216,7 @@ func (x *GetCallTokenKeysRequest) String() string {
 func (*GetCallTokenKeysRequest) ProtoMessage() {}
 
 func (x *GetCallTokenKeysRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[101]
+	mi := &file_peachy_v1_chat_proto_msgTypes[116]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6632,7 +8229,7 @@ func (x *GetCallTokenKeysRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallTokenKeysRequest.ProtoReflect.Descriptor instead.
 func (*GetCallTokenKeysRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{101}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{116}
 }
 
 type GetCallTokenKeysResponse struct {
@@ -6644,7 +8241,7 @@ type GetCallTokenKeysResponse struct {
 
 func (x *GetCallTokenKeysResponse) Reset() {
 	*x = GetCallTokenKeysResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[102]
+	mi := &file_peachy_v1_chat_proto_msgTypes[117]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6656,7 +8253,7 @@ func (x *GetCallTokenKeysResponse) String() string {
 func (*GetCallTokenKeysResponse) ProtoMessage() {}
 
 func (x *GetCallTokenKeysResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[102]
+	mi := &file_peachy_v1_chat_proto_msgTypes[117]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6669,7 +8266,7 @@ func (x *GetCallTokenKeysResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallTokenKeysResponse.ProtoReflect.Descriptor instead.
 func (*GetCallTokenKeysResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{102}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *GetCallTokenKeysResponse) GetKeys() []*CallTokenKey {
@@ -6692,7 +8289,7 @@ type IssueCallTokensRequest struct {
 
 func (x *IssueCallTokensRequest) Reset() {
 	*x = IssueCallTokensRequest{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[103]
+	mi := &file_peachy_v1_chat_proto_msgTypes[118]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6704,7 +8301,7 @@ func (x *IssueCallTokensRequest) String() string {
 func (*IssueCallTokensRequest) ProtoMessage() {}
 
 func (x *IssueCallTokensRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[103]
+	mi := &file_peachy_v1_chat_proto_msgTypes[118]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6717,7 +8314,7 @@ func (x *IssueCallTokensRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IssueCallTokensRequest.ProtoReflect.Descriptor instead.
 func (*IssueCallTokensRequest) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{103}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *IssueCallTokensRequest) GetPurpose() CallTokenPurpose {
@@ -6751,7 +8348,7 @@ type IssueCallTokensResponse struct {
 
 func (x *IssueCallTokensResponse) Reset() {
 	*x = IssueCallTokensResponse{}
-	mi := &file_peachy_v1_chat_proto_msgTypes[104]
+	mi := &file_peachy_v1_chat_proto_msgTypes[119]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6763,7 +8360,7 @@ func (x *IssueCallTokensResponse) String() string {
 func (*IssueCallTokensResponse) ProtoMessage() {}
 
 func (x *IssueCallTokensResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_peachy_v1_chat_proto_msgTypes[104]
+	mi := &file_peachy_v1_chat_proto_msgTypes[119]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6776,7 +8373,7 @@ func (x *IssueCallTokensResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IssueCallTokensResponse.ProtoReflect.Descriptor instead.
 func (*IssueCallTokensResponse) Descriptor() ([]byte, []int) {
-	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{104}
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *IssueCallTokensResponse) GetBlindSignatures() [][]byte {
@@ -6786,11 +8383,1085 @@ func (x *IssueCallTokensResponse) GetBlindSignatures() [][]byte {
 	return nil
 }
 
+// A bot as its User row carries it: enough to draw its name line without a GetBot.
+type BotSummary struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	OwnerKind BotOwnerKind           `protobuf:"varint,1,opt,name=owner_kind,json=ownerKind,proto3,enum=peachy.v1.BotOwnerKind" json:"owner_kind,omitempty"`
+	// As Bot.owner_id.
+	OwnerId     string `protobuf:"bytes,2,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	OwnerName   string `protobuf:"bytes,3,opt,name=owner_name,json=ownerName,proto3" json:"owner_name,omitempty"`
+	OwnerHandle string `protobuf:"bytes,4,opt,name=owner_handle,json=ownerHandle,proto3" json:"owner_handle,omitempty"`
+	// As Bot.verified.
+	Verified bool      `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty"`
+	Status   BotStatus `protobuf:"varint,7,opt,name=status,proto3,enum=peachy.v1.BotStatus" json:"status,omitempty"`
+	// As Bot.development.
+	Development bool `protobuf:"varint,8,opt,name=development,proto3" json:"development,omitempty"`
+	// As Bot.owner_avatar_url.
+	OwnerAvatarUrl string `protobuf:"bytes,9,opt,name=owner_avatar_url,json=ownerAvatarUrl,proto3" json:"owner_avatar_url,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *BotSummary) Reset() {
+	*x = BotSummary{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[120]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotSummary) ProtoMessage() {}
+
+func (x *BotSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[120]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotSummary.ProtoReflect.Descriptor instead.
+func (*BotSummary) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{120}
+}
+
+func (x *BotSummary) GetOwnerKind() BotOwnerKind {
+	if x != nil {
+		return x.OwnerKind
+	}
+	return BotOwnerKind_BOT_OWNER_KIND_UNSPECIFIED
+}
+
+func (x *BotSummary) GetOwnerId() string {
+	if x != nil {
+		return x.OwnerId
+	}
+	return ""
+}
+
+func (x *BotSummary) GetOwnerName() string {
+	if x != nil {
+		return x.OwnerName
+	}
+	return ""
+}
+
+func (x *BotSummary) GetOwnerHandle() string {
+	if x != nil {
+		return x.OwnerHandle
+	}
+	return ""
+}
+
+func (x *BotSummary) GetVerified() bool {
+	if x != nil {
+		return x.Verified
+	}
+	return false
+}
+
+func (x *BotSummary) GetStatus() BotStatus {
+	if x != nil {
+		return x.Status
+	}
+	return BotStatus_BOT_STATUS_UNSPECIFIED
+}
+
+func (x *BotSummary) GetDevelopment() bool {
+	if x != nil {
+		return x.Development
+	}
+	return false
+}
+
+func (x *BotSummary) GetOwnerAvatarUrl() string {
+	if x != nil {
+		return x.OwnerAvatarUrl
+	}
+	return ""
+}
+
+// One command a bot offers in the @ picker, e.g. "/plan <where>".
+type BotCommand struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// [a-z0-9_]{1,32}, without the slash.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// What the command takes, drawn after the name.
+	Blanks      string `protobuf:"bytes,2,opt,name=blanks,proto3" json:"blanks,omitempty"`
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Offered in a person's own chat with the bot.
+	WorksInDm     bool `protobuf:"varint,5,opt,name=works_in_dm,json=worksInDm,proto3" json:"works_in_dm,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotCommand) Reset() {
+	*x = BotCommand{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[121]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotCommand) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotCommand) ProtoMessage() {}
+
+func (x *BotCommand) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[121]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotCommand.ProtoReflect.Descriptor instead.
+func (*BotCommand) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{121}
+}
+
+func (x *BotCommand) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *BotCommand) GetBlanks() string {
+	if x != nil {
+		return x.Blanks
+	}
+	return ""
+}
+
+func (x *BotCommand) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *BotCommand) GetWorksInDm() bool {
+	if x != nil {
+		return x.WorksInDm
+	}
+	return false
+}
+
+// Who may reach the bot. The server enforces first contact (it hands the bot's
+// key packages only to accounts its reach admits); the bot's runtime checks it
+// again on every invitation and message.
+type BotReach struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Anyone may reach it. Always false for a development bot.
+	Anyone bool `protobuf:"varint,1,opt,name=anyone,proto3" json:"anyone,omitempty"`
+	// The owner's words for who may reach it.
+	Summary       string `protobuf:"bytes,3,opt,name=summary,proto3" json:"summary,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotReach) Reset() {
+	*x = BotReach{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[122]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotReach) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotReach) ProtoMessage() {}
+
+func (x *BotReach) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[122]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotReach.ProtoReflect.Descriptor instead.
+func (*BotReach) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{122}
+}
+
+func (x *BotReach) GetAnyone() bool {
+	if x != nil {
+		return x.Anyone
+	}
+	return false
+}
+
+func (x *BotReach) GetSummary() string {
+	if x != nil {
+		return x.Summary
+	}
+	return ""
+}
+
+// A bot's public listing, drawn on its page and in pickers. destination,
+// retention and policy_url are its privacy label, in the owner's words, drawn as
+// such; a development bot has none.
+type BotListing struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Handle   string                 `protobuf:"bytes,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Name     string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Tagline  string                 `protobuf:"bytes,3,opt,name=tagline,proto3" json:"tagline,omitempty"`
+	About    string                 `protobuf:"bytes,4,opt,name=about,proto3" json:"about,omitempty"`
+	Commands []*BotCommand          `protobuf:"bytes,6,rep,name=commands,proto3" json:"commands,omitempty"`
+	// Where messages go.
+	Destination string `protobuf:"bytes,9,opt,name=destination,proto3" json:"destination,omitempty"`
+	// How long it keeps them.
+	Retention       string     `protobuf:"bytes,10,opt,name=retention,proto3" json:"retention,omitempty"`
+	PolicyUrl       string     `protobuf:"bytes,11,opt,name=policy_url,json=policyUrl,proto3" json:"policy_url,omitempty"`
+	GrantsRequested []BotGrant `protobuf:"varint,12,rep,packed,name=grants_requested,json=grantsRequested,proto3,enum=peachy.v1.BotGrant" json:"grants_requested,omitempty"`
+	// The requested grants an add cannot turn off; a subset of grants_requested.
+	GrantsRequired []BotGrant `protobuf:"varint,13,rep,packed,name=grants_required,json=grantsRequired,proto3,enum=peachy.v1.BotGrant" json:"grants_required,omitempty"`
+	Reach          *BotReach  `protobuf:"bytes,14,opt,name=reach,proto3" json:"reach,omitempty"`
+	// Listed in the directory and search.
+	Listed        bool `protobuf:"varint,15,opt,name=listed,proto3" json:"listed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotListing) Reset() {
+	*x = BotListing{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[123]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotListing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotListing) ProtoMessage() {}
+
+func (x *BotListing) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[123]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotListing.ProtoReflect.Descriptor instead.
+func (*BotListing) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{123}
+}
+
+func (x *BotListing) GetHandle() string {
+	if x != nil {
+		return x.Handle
+	}
+	return ""
+}
+
+func (x *BotListing) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *BotListing) GetTagline() string {
+	if x != nil {
+		return x.Tagline
+	}
+	return ""
+}
+
+func (x *BotListing) GetAbout() string {
+	if x != nil {
+		return x.About
+	}
+	return ""
+}
+
+func (x *BotListing) GetCommands() []*BotCommand {
+	if x != nil {
+		return x.Commands
+	}
+	return nil
+}
+
+func (x *BotListing) GetDestination() string {
+	if x != nil {
+		return x.Destination
+	}
+	return ""
+}
+
+func (x *BotListing) GetRetention() string {
+	if x != nil {
+		return x.Retention
+	}
+	return ""
+}
+
+func (x *BotListing) GetPolicyUrl() string {
+	if x != nil {
+		return x.PolicyUrl
+	}
+	return ""
+}
+
+func (x *BotListing) GetGrantsRequested() []BotGrant {
+	if x != nil {
+		return x.GrantsRequested
+	}
+	return nil
+}
+
+func (x *BotListing) GetGrantsRequired() []BotGrant {
+	if x != nil {
+		return x.GrantsRequired
+	}
+	return nil
+}
+
+func (x *BotListing) GetReach() *BotReach {
+	if x != nil {
+		return x.Reach
+	}
+	return nil
+}
+
+func (x *BotListing) GetListed() bool {
+	if x != nil {
+		return x.Listed
+	}
+	return false
+}
+
+// A bot device the server revoked, and when.
+type RevokedBotDevice struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DeviceId      string                 `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	RevokedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=revoked_at,json=revokedAt,proto3" json:"revoked_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokedBotDevice) Reset() {
+	*x = RevokedBotDevice{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[124]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokedBotDevice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokedBotDevice) ProtoMessage() {}
+
+func (x *RevokedBotDevice) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[124]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokedBotDevice.ProtoReflect.Descriptor instead.
+func (*RevokedBotDevice) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{124}
+}
+
+func (x *RevokedBotDevice) GetDeviceId() string {
+	if x != nil {
+		return x.DeviceId
+	}
+	return ""
+}
+
+func (x *RevokedBotDevice) GetRevokedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.RevokedAt
+	}
+	return nil
+}
+
+// What only the bot's own session, and whoever runs the bot, is given.
+type BotOwnerView struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The account and organization ids the reach names, resolved when the listing
+	// was saved; empty while anyone may reach it. For a development bot, those who
+	// run it and its accepted testers. The bot checks an inviter or a sender against
+	// these.
+	ReachActorIds []string `protobuf:"bytes,10,rep,name=reach_actor_ids,json=reachActorIds,proto3" json:"reach_actor_ids,omitempty"`
+	// As GetMeResponse.media_base_url, which a bot's session cannot call.
+	MediaBaseUrl  string `protobuf:"bytes,18,opt,name=media_base_url,json=mediaBaseUrl,proto3" json:"media_base_url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotOwnerView) Reset() {
+	*x = BotOwnerView{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[125]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotOwnerView) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotOwnerView) ProtoMessage() {}
+
+func (x *BotOwnerView) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[125]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotOwnerView.ProtoReflect.Descriptor instead.
+func (*BotOwnerView) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{125}
+}
+
+func (x *BotOwnerView) GetReachActorIds() []string {
+	if x != nil {
+		return x.ReachActorIds
+	}
+	return nil
+}
+
+func (x *BotOwnerView) GetMediaBaseUrl() string {
+	if x != nil {
+		return x.MediaBaseUrl
+	}
+	return ""
+}
+
+// A bot's card (GetBot). See docs/bots.md.
+type Bot struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The bot's public row, of kind USER_KIND_BOT.
+	User    *User       `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Listing *BotListing `protobuf:"bytes,2,opt,name=listing,proto3" json:"listing,omitempty"`
+	// Who owns it: the server's word. No credential or signature carries it.
+	OwnerKind BotOwnerKind `protobuf:"varint,3,opt,name=owner_kind,json=ownerKind,proto3,enum=peachy.v1.BotOwnerKind" json:"owner_kind,omitempty"`
+	// The owning person's account id, or the organization's id.
+	OwnerId     string `protobuf:"bytes,4,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	OwnerName   string `protobuf:"bytes,5,opt,name=owner_name,json=ownerName,proto3" json:"owner_name,omitempty"`
+	OwnerHandle string `protobuf:"bytes,6,opt,name=owner_handle,json=ownerHandle,proto3" json:"owner_handle,omitempty"`
+	// Peachy verified the owner.
+	Verified bool `protobuf:"varint,7,opt,name=verified,proto3" json:"verified,omitempty"`
+	// Bumped whenever something a person agreed to changes: the privacy label, the
+	// requested or required grants, or the owner. A device asks again before its
+	// next send to the bot.
+	LabelVersion uint32 `protobuf:"varint,8,opt,name=label_version,json=labelVersion,proto3" json:"label_version,omitempty"`
+	// Unset reads as active.
+	Status BotStatus `protobuf:"varint,9,opt,name=status,proto3,enum=peachy.v1.BotStatus" json:"status,omitempty"`
+	// Every device of the bot revoked while its credential could still verify,
+	// newest first. Members' devices remove its leaf.
+	RevokedDevices []*RevokedBotDevice `protobuf:"bytes,11,rep,name=revoked_devices,json=revokedDevices,proto3" json:"revoked_devices,omitempty"`
+	// Unset unless the caller is the bot's own session or runs the bot.
+	OwnerView *BotOwnerView `protobuf:"bytes,13,opt,name=owner_view,json=ownerView,proto3" json:"owner_view,omitempty"`
+	// A development bot: no privacy label, never listed or searched, and reachable
+	// only by those who run it and up to 10 testers who accepted. Drawn as in
+	// development wherever it is named.
+	Development bool `protobuf:"varint,14,opt,name=development,proto3" json:"development,omitempty"`
+	// While an owner change waits, the next owner; the owner fields above still
+	// name the current one. A device takes pending_owner as the owner from
+	// effective_at on, from what it already holds and without a fetch.
+	PendingOwner *BotPendingOwner `protobuf:"bytes,15,opt,name=pending_owner,json=pendingOwner,proto3" json:"pending_owner,omitempty"`
+	// When pending_owner takes over. Once it has, pending_owner is unset and this
+	// stays: when the current owner took over. Unset for a bot that never changed
+	// owners.
+	EffectiveAt *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=effective_at,json=effectiveAt,proto3" json:"effective_at,omitempty"`
+	// The owner's public photo (a person's avatar or an organization's logo),
+	// served like User.avatar_url. Empty when none is shown.
+	OwnerAvatarUrl string `protobuf:"bytes,17,opt,name=owner_avatar_url,json=ownerAvatarUrl,proto3" json:"owner_avatar_url,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *Bot) Reset() {
+	*x = Bot{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[126]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Bot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Bot) ProtoMessage() {}
+
+func (x *Bot) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[126]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Bot.ProtoReflect.Descriptor instead.
+func (*Bot) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{126}
+}
+
+func (x *Bot) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+func (x *Bot) GetListing() *BotListing {
+	if x != nil {
+		return x.Listing
+	}
+	return nil
+}
+
+func (x *Bot) GetOwnerKind() BotOwnerKind {
+	if x != nil {
+		return x.OwnerKind
+	}
+	return BotOwnerKind_BOT_OWNER_KIND_UNSPECIFIED
+}
+
+func (x *Bot) GetOwnerId() string {
+	if x != nil {
+		return x.OwnerId
+	}
+	return ""
+}
+
+func (x *Bot) GetOwnerName() string {
+	if x != nil {
+		return x.OwnerName
+	}
+	return ""
+}
+
+func (x *Bot) GetOwnerHandle() string {
+	if x != nil {
+		return x.OwnerHandle
+	}
+	return ""
+}
+
+func (x *Bot) GetVerified() bool {
+	if x != nil {
+		return x.Verified
+	}
+	return false
+}
+
+func (x *Bot) GetLabelVersion() uint32 {
+	if x != nil {
+		return x.LabelVersion
+	}
+	return 0
+}
+
+func (x *Bot) GetStatus() BotStatus {
+	if x != nil {
+		return x.Status
+	}
+	return BotStatus_BOT_STATUS_UNSPECIFIED
+}
+
+func (x *Bot) GetRevokedDevices() []*RevokedBotDevice {
+	if x != nil {
+		return x.RevokedDevices
+	}
+	return nil
+}
+
+func (x *Bot) GetOwnerView() *BotOwnerView {
+	if x != nil {
+		return x.OwnerView
+	}
+	return nil
+}
+
+func (x *Bot) GetDevelopment() bool {
+	if x != nil {
+		return x.Development
+	}
+	return false
+}
+
+func (x *Bot) GetPendingOwner() *BotPendingOwner {
+	if x != nil {
+		return x.PendingOwner
+	}
+	return nil
+}
+
+func (x *Bot) GetEffectiveAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveAt
+	}
+	return nil
+}
+
+func (x *Bot) GetOwnerAvatarUrl() string {
+	if x != nil {
+		return x.OwnerAvatarUrl
+	}
+	return ""
+}
+
+// The owner a waiting change hands the bot to, described as Bot describes its current owner.
+type BotPendingOwner struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OwnerKind     BotOwnerKind           `protobuf:"varint,1,opt,name=owner_kind,json=ownerKind,proto3,enum=peachy.v1.BotOwnerKind" json:"owner_kind,omitempty"`
+	OwnerId       string                 `protobuf:"bytes,2,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	OwnerName     string                 `protobuf:"bytes,3,opt,name=owner_name,json=ownerName,proto3" json:"owner_name,omitempty"`
+	OwnerHandle   string                 `protobuf:"bytes,4,opt,name=owner_handle,json=ownerHandle,proto3" json:"owner_handle,omitempty"`
+	Verified      bool                   `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BotPendingOwner) Reset() {
+	*x = BotPendingOwner{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[127]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BotPendingOwner) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BotPendingOwner) ProtoMessage() {}
+
+func (x *BotPendingOwner) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[127]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BotPendingOwner.ProtoReflect.Descriptor instead.
+func (*BotPendingOwner) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{127}
+}
+
+func (x *BotPendingOwner) GetOwnerKind() BotOwnerKind {
+	if x != nil {
+		return x.OwnerKind
+	}
+	return BotOwnerKind_BOT_OWNER_KIND_UNSPECIFIED
+}
+
+func (x *BotPendingOwner) GetOwnerId() string {
+	if x != nil {
+		return x.OwnerId
+	}
+	return ""
+}
+
+func (x *BotPendingOwner) GetOwnerName() string {
+	if x != nil {
+		return x.OwnerName
+	}
+	return ""
+}
+
+func (x *BotPendingOwner) GetOwnerHandle() string {
+	if x != nil {
+		return x.OwnerHandle
+	}
+	return ""
+}
+
+func (x *BotPendingOwner) GetVerified() bool {
+	if x != nil {
+		return x.Verified
+	}
+	return false
+}
+
+// bot_id, handle, or both. With both, the card answers only when handle is that
+// bot's own handle now, and is not_found otherwise.
+type GetBotRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The bot's account id.
+	BotId         string `protobuf:"bytes,1,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	Handle        string `protobuf:"bytes,2,opt,name=handle,proto3" json:"handle,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetBotRequest) Reset() {
+	*x = GetBotRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[128]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetBotRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBotRequest) ProtoMessage() {}
+
+func (x *GetBotRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[128]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBotRequest.ProtoReflect.Descriptor instead.
+func (*GetBotRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{128}
+}
+
+func (x *GetBotRequest) GetBotId() string {
+	if x != nil {
+		return x.BotId
+	}
+	return ""
+}
+
+func (x *GetBotRequest) GetHandle() string {
+	if x != nil {
+		return x.Handle
+	}
+	return ""
+}
+
+type GetBotResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Bot           *Bot                   `protobuf:"bytes,1,opt,name=bot,proto3" json:"bot,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetBotResponse) Reset() {
+	*x = GetBotResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[129]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetBotResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBotResponse) ProtoMessage() {}
+
+func (x *GetBotResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[129]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBotResponse.ProtoReflect.Descriptor instead.
+func (*GetBotResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{129}
+}
+
+func (x *GetBotResponse) GetBot() *Bot {
+	if x != nil {
+		return x.Bot
+	}
+	return nil
+}
+
+type RedeemBotConnectCodeRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The one-time connect code the bot's owner made.
+	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	// The bot runtime's version.
+	SdkVersion string `protobuf:"bytes,2,opt,name=sdk_version,json=sdkVersion,proto3" json:"sdk_version,omitempty"`
+	// The bot the runtime's store already holds, when it links that bot again. A
+	// code for another bot is then refused before anything is revoked, and stays
+	// unused. Empty for a first link.
+	ExpectedBotId string `protobuf:"bytes,3,opt,name=expected_bot_id,json=expectedBotId,proto3" json:"expected_bot_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RedeemBotConnectCodeRequest) Reset() {
+	*x = RedeemBotConnectCodeRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[130]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemBotConnectCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemBotConnectCodeRequest) ProtoMessage() {}
+
+func (x *RedeemBotConnectCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[130]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemBotConnectCodeRequest.ProtoReflect.Descriptor instead.
+func (*RedeemBotConnectCodeRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{130}
+}
+
+func (x *RedeemBotConnectCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *RedeemBotConnectCodeRequest) GetSdkVersion() string {
+	if x != nil {
+		return x.SdkVersion
+	}
+	return ""
+}
+
+func (x *RedeemBotConnectCodeRequest) GetExpectedBotId() string {
+	if x != nil {
+		return x.ExpectedBotId
+	}
+	return ""
+}
+
+type RedeemBotConnectCodeResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The bot's bearer token, starting "pbt_". Returned once; the server keeps only
+	// a hash.
+	BotToken string `protobuf:"bytes,1,opt,name=bot_token,json=botToken,proto3" json:"bot_token,omitempty"`
+	// The bot's account id.
+	BotId         string `protobuf:"bytes,2,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	Handle        string `protobuf:"bytes,3,opt,name=handle,proto3" json:"handle,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RedeemBotConnectCodeResponse) Reset() {
+	*x = RedeemBotConnectCodeResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[131]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemBotConnectCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemBotConnectCodeResponse) ProtoMessage() {}
+
+func (x *RedeemBotConnectCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[131]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemBotConnectCodeResponse.ProtoReflect.Descriptor instead.
+func (*RedeemBotConnectCodeResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{131}
+}
+
+func (x *RedeemBotConnectCodeResponse) GetBotToken() string {
+	if x != nil {
+		return x.BotToken
+	}
+	return ""
+}
+
+func (x *RedeemBotConnectCodeResponse) GetBotId() string {
+	if x != nil {
+		return x.BotId
+	}
+	return ""
+}
+
+func (x *RedeemBotConnectCodeResponse) GetHandle() string {
+	if x != nil {
+		return x.Handle
+	}
+	return ""
+}
+
+type ReportBotCommitRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	BotId string                 `protobuf:"bytes,1,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	// The core's deny code for the refusal (docs/bots.md, The core's bot rules).
+	DenyCode uint32 `protobuf:"varint,2,opt,name=deny_code,json=denyCode,proto3" json:"deny_code,omitempty"`
+	// The conversation's handle, 32 bytes.
+	Handle []byte `protobuf:"bytes,3,opt,name=handle,proto3" json:"handle,omitempty"`
+	// The epoch the refused commit was sent at.
+	Epoch         uint64 `protobuf:"varint,4,opt,name=epoch,proto3" json:"epoch,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportBotCommitRequest) Reset() {
+	*x = ReportBotCommitRequest{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[132]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportBotCommitRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportBotCommitRequest) ProtoMessage() {}
+
+func (x *ReportBotCommitRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[132]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportBotCommitRequest.ProtoReflect.Descriptor instead.
+func (*ReportBotCommitRequest) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{132}
+}
+
+func (x *ReportBotCommitRequest) GetBotId() string {
+	if x != nil {
+		return x.BotId
+	}
+	return ""
+}
+
+func (x *ReportBotCommitRequest) GetDenyCode() uint32 {
+	if x != nil {
+		return x.DenyCode
+	}
+	return 0
+}
+
+func (x *ReportBotCommitRequest) GetHandle() []byte {
+	if x != nil {
+		return x.Handle
+	}
+	return nil
+}
+
+func (x *ReportBotCommitRequest) GetEpoch() uint64 {
+	if x != nil {
+		return x.Epoch
+	}
+	return 0
+}
+
+type ReportBotCommitResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportBotCommitResponse) Reset() {
+	*x = ReportBotCommitResponse{}
+	mi := &file_peachy_v1_chat_proto_msgTypes[133]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportBotCommitResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportBotCommitResponse) ProtoMessage() {}
+
+func (x *ReportBotCommitResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_peachy_v1_chat_proto_msgTypes[133]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportBotCommitResponse.ProtoReflect.Descriptor instead.
+func (*ReportBotCommitResponse) Descriptor() ([]byte, []int) {
+	return file_peachy_v1_chat_proto_rawDescGZIP(), []int{133}
+}
+
 var File_peachy_v1_chat_proto protoreflect.FileDescriptor
 
 const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\n" +
-	"\x14peachy/v1/chat.proto\x12\tpeachy.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15peachy/v1/state.proto\"\xc4\x02\n" +
+	"\x14peachy/v1/chat.proto\x12\tpeachy.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15peachy/v1/state.proto\"\xda\x03\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05phone\x18\x02 \x01(\tR\x05phone\x12!\n" +
@@ -6804,11 +9475,34 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\tcover_url\x18\v \x01(\tR\bcoverUrl\x12\x1b\n" +
 	"\tpublic_id\x18\f \x01(\tR\bpublicId\x12\x1f\n" +
 	"\vpublic_name\x18\r \x01(\tR\n" +
-	"publicNameJ\x04\b\a\x10\bJ\x04\b\t\x10\v\"5\n" +
+	"publicName\x12'\n" +
+	"\x04kind\x18\x0e \x01(\x0e2\x13.peachy.v1.UserKindR\x04kind\x12'\n" +
+	"\x03bot\x18\x0f \x01(\v2\x15.peachy.v1.BotSummaryR\x03bot\x12B\n" +
+	"\forganization\x18\x14 \x01(\v2\x1e.peachy.v1.AccountOrganizationR\forganizationJ\x04\b\a\x10\bJ\x04\b\t\x10\v\"\xb6\x01\n" +
+	"\x13AccountOrganization\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
+	"\x06handle\x18\x03 \x01(\tR\x06handle\x12\x19\n" +
+	"\blogo_url\x18\x04 \x01(\tR\alogoUrl\x12\x1a\n" +
+	"\bverified\x18\x05 \x01(\bR\bverified\x12\x16\n" +
+	"\x06sealed\x18\x06 \x01(\bR\x06sealed\x12\x14\n" +
+	"\x05first\x18\a \x01(\bR\x05first\"\x83\x02\n" +
 	"\x1dStartPhoneVerificationRequest\x12\x14\n" +
-	"\x05phone\x18\x01 \x01(\tR\x05phone\"6\n" +
+	"\x05phone\x18\x01 \x01(\tR\x05phone\x12%\n" +
+	"\x0eanswers_checks\x18\x03 \x01(\bR\ranswersChecks\x129\n" +
+	"\n" +
+	"push_token\x18\x04 \x01(\v2\x1a.peachy.v1.SignupPushTokenR\tpushToken\x12%\n" +
+	"\x0epush_challenge\x18\x05 \x01(\tR\rpushChallenge\x12\x18\n" +
+	"\acaptcha\x18\x06 \x01(\tR\acaptcha\x12#\n" +
+	"\rcaptcha_nonce\x18\a \x01(\fR\fcaptchaNonceJ\x04\b\x02\x10\x03\"x\n" +
+	"\x0fSignupPushToken\x12\x1d\n" +
+	"\n" +
+	"apns_token\x18\x01 \x01(\tR\tapnsToken\x12)\n" +
+	"\x10apns_environment\x18\x02 \x01(\tR\x0fapnsEnvironment\x12\x1b\n" +
+	"\tfcm_token\x18\x03 \x01(\tR\bfcmToken\"d\n" +
 	"\x1eStartPhoneVerificationResponse\x12\x14\n" +
-	"\x05phone\x18\x01 \x01(\tR\x05phone\"\x86\x01\n" +
+	"\x05phone\x18\x01 \x01(\tR\x05phone\x12,\n" +
+	"\x05check\x18\x02 \x01(\x0e2\x16.peachy.v1.SignupCheckR\x05check\"\x86\x01\n" +
 	"\x12VerifyPhoneRequest\x12\x14\n" +
 	"\x05phone\x18\x01 \x01(\tR\x05phone\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12!\n" +
@@ -6894,7 +9588,7 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x0fdevice_link_key\x18\a \x01(\fR\rdeviceLinkKey\x129\n" +
 	"\x19device_link_key_signature\x18\b \x01(\fR\x16deviceLinkKeySignatureB\x06\n" +
 	"\x04step\"\x18\n" +
-	"\x16StepDeviceLinkResponse\"\xd3\x02\n" +
+	"\x16StepDeviceLinkResponse\"\x87\x03\n" +
 	"\x15RegisterDeviceRequest\x12\x1d\n" +
 	"\n" +
 	"install_id\x18\x01 \x01(\tR\tinstallId\x12\x1a\n" +
@@ -6907,7 +9601,8 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x03mls\x18\b \x01(\bR\x03mls\x121\n" +
 	"\x15starts_over_if_copied\x18\t \x01(\bR\x12startsOverIfCopied\x12\x1b\n" +
 	"\tkey_proof\x18\n" +
-	" \x01(\fR\bkeyProofJ\x04\b\x04\x10\x05\"\xf2\x02\n" +
+	" \x01(\fR\bkeyProof\x12,\n" +
+	"\x12restore_lock_token\x18\v \x01(\fR\x10restoreLockTokenJ\x04\b\x04\x10\x05J\x04\b\f\x10\r\"\xf8\x02\n" +
 	"\x16RegisterDeviceResponse\x12)\n" +
 	"\x06device\x18\x01 \x01(\v2\x11.peachy.v1.DeviceR\x06device\x12\x1e\n" +
 	"\n" +
@@ -6917,7 +9612,7 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x12became_sole_device\x18\x04 \x01(\bR\x10becameSoleDevice\x12!\n" +
 	"\fpin_restored\x18\x05 \x01(\bR\vpinRestored\x12<\n" +
 	"\x1bpin_restore_signed_out_keys\x18\x06 \x03(\fR\x17pinRestoreSignedOutKeys\x12L\n" +
-	"#pin_restore_signed_out_certificates\x18\a \x03(\fR\x1fpinRestoreSignedOutCertificates\"\x14\n" +
+	"#pin_restore_signed_out_certificates\x18\a \x03(\fR\x1fpinRestoreSignedOutCertificatesJ\x04\b\b\x10\t\"\x14\n" +
 	"\x12ListDevicesRequest\"B\n" +
 	"\x13ListDevicesResponse\x12+\n" +
 	"\adevices\x18\x01 \x03(\v2\x11.peachy.v1.DeviceR\adevices\"q\n" +
@@ -6956,18 +9651,18 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"keyPackage\x12&\n" +
 	"\x0fkey_package_ref\x18\x03 \x01(\fR\rkeyPackageRef\x12\x1f\n" +
 	"\vlast_resort\x18\x04 \x01(\bR\n" +
-	"lastResort\"u\n" +
+	"lastResort\"{\n" +
 	"\x19PublishKeyPackagesRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12;\n" +
-	"\fkey_packages\x18\x02 \x03(\v2\x18.peachy.v1.MlsKeyPackageR\vkeyPackages\"\x80\x01\n" +
+	"\fkey_packages\x18\x02 \x03(\v2\x18.peachy.v1.MlsKeyPackageR\vkeyPackagesJ\x04\b\x03\x10\x05\"\x80\x01\n" +
 	"\x1aPublishKeyPackagesResponse\x12\x1c\n" +
 	"\tpublished\x18\x01 \x01(\rR\tpublished\x12\x1c\n" +
 	"\tavailable\x18\x02 \x01(\rR\tavailable\x12&\n" +
-	"\x0fhas_last_resort\x18\x03 \x01(\bR\rhasLastResort\"\x8a\x01\n" +
+	"\x0fhas_last_resort\x18\x03 \x01(\bR\rhasLastResort\"\x90\x01\n" +
 	"\x17FetchKeyPackagesRequest\x12\x19\n" +
 	"\buser_ids\x18\x01 \x03(\tR\auserIds\x12&\n" +
 	"\x0fskip_device_ids\x18\x04 \x03(\tR\rskipDeviceIds\x12&\n" +
-	"\x0fonly_device_ids\x18\x05 \x03(\tR\ronlyDeviceIdsJ\x04\b\x02\x10\x04\"\xe4\x01\n" +
+	"\x0fonly_device_ids\x18\x05 \x03(\tR\ronlyDeviceIdsJ\x04\b\x02\x10\x04J\x04\b\x06\x10\a\"\xe4\x01\n" +
 	"\x11FetchedKeyPackage\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tdevice_id\x18\x02 \x01(\tR\bdeviceId\x12 \n" +
@@ -6975,7 +9670,7 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\vkey_package\x18\x04 \x01(\fR\n" +
 	"keyPackage\x12&\n" +
 	"\x0fkey_package_ref\x18\x05 \x01(\fR\rkeyPackageRef\x12(\n" +
-	"\x10used_last_resort\x18\x06 \x01(\bR\x0eusedLastResortJ\x04\b\a\x10\b\"\x95\x01\n" +
+	"\x10used_last_resort\x18\x06 \x01(\bR\x0eusedLastResortJ\x04\b\a\x10\t\"\x95\x01\n" +
 	"\x18FetchKeyPackagesResponse\x12?\n" +
 	"\fkey_packages\x18\x01 \x03(\v2\x1c.peachy.v1.FetchedKeyPackageR\vkeyPackages\x128\n" +
 	"\x18devices_without_packages\x18\x02 \x03(\tR\x16devicesWithoutPackages\"4\n" +
@@ -6990,7 +9685,15 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x0fonly_device_ids\x18\x03 \x03(\tR\ronlyDeviceIds\"\x9e\x01\n" +
 	"!FetchKeyPackagesAnonymousResponse\x12?\n" +
 	"\fkey_packages\x18\x01 \x03(\v2\x1c.peachy.v1.FetchedKeyPackageR\vkeyPackages\x128\n" +
-	"\x18devices_without_packages\x18\x02 \x03(\tR\x16devicesWithoutPackages\"\x1d\n" +
+	"\x18devices_without_packages\x18\x02 \x03(\tR\x16devicesWithoutPackages\"5\n" +
+	"\x18ListPeopleDevicesRequest\x12\x19\n" +
+	"\buser_ids\x18\x01 \x03(\tR\auserIds\"M\n" +
+	"\x19ListPeopleDevicesResponse\x120\n" +
+	"\x06people\x18\x01 \x03(\v2\x18.peachy.v1.PersonDevicesR\x06people\"G\n" +
+	"\rPersonDevices\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
+	"\n" +
+	"device_ids\x18\x02 \x03(\tR\tdeviceIds\"\x1d\n" +
 	"\x1bKeyPackagePoolStatusRequest\"\xa7\x01\n" +
 	"\x14DeviceKeyPackagePool\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x1a\n" +
@@ -7005,7 +9708,7 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"MlsWelcome\x12.\n" +
 	"\x13recipient_device_id\x18\x01 \x01(\tR\x11recipientDeviceId\x12\x18\n" +
 	"\awelcome\x18\x02 \x01(\fR\awelcome\x12*\n" +
-	"\x11recipient_user_id\x18\x03 \x01(\tR\x0frecipientUserId\"\x80\x03\n" +
+	"\x11recipient_user_id\x18\x03 \x01(\tR\x0frecipientUserId\"\xdf\x04\n" +
 	"\x13SubmitCommitRequest\x12\x14\n" +
 	"\x05epoch\x18\x03 \x01(\x04R\x05epoch\x12\x16\n" +
 	"\x06commit\x18\x04 \x01(\fR\x06commit\x121\n" +
@@ -7019,7 +9722,13 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	" \x03(\v2\x1a.peachy.v1.SealedRecipientR\n" +
 	"recipients\x12>\n" +
 	"\vaccess_keys\x18\v \x03(\v2\x1d.peachy.v1.RecipientAccessKeyR\n" +
-	"accessKeysJ\x04\b\x01\x10\x03J\x04\b\f\x10\x0e\"\xe0\x01\n" +
+	"accessKeys\x12\x14\n" +
+	"\x05stamp\x18\x0e \x01(\fR\x05stamp\x12\x1b\n" +
+	"\tstamp_set\x18\x0f \x03(\fR\bstampSet\x12.\n" +
+	"\x13enroll_community_id\x18\x10 \x01(\tR\x11enrollCommunityId\x124\n" +
+	"\x16enroll_organization_id\x18\x11 \x01(\tR\x14enrollOrganizationId\x12,\n" +
+	"\x05scope\x18\x12 \x01(\x0e2\x16.peachy.v1.CommitScopeR\x05scope\x12\x16\n" +
+	"\x06rewind\x18\x13 \x01(\bR\x06rewindJ\x04\b\x01\x10\x03J\x04\b\f\x10\x0e\"\xe0\x01\n" +
 	"\x14SubmitCommitResponse\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x04R\x03seq\x12\x14\n" +
 	"\x05epoch\x18\x02 \x01(\x04R\x05epoch\x12(\n" +
@@ -7034,16 +9743,67 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\vserver_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"serverTime\x124\n" +
 	"\bprotocol\x18\x04 \x01(\v2\x18.peachy.v1.ProtocolFloorR\bprotocol\x126\n" +
-	"\x17account_client_refusals\x18\x05 \x03(\tR\x15accountClientRefusals\"\xec\x01\n" +
+	"\x17account_client_refusals\x18\x05 \x03(\tR\x15accountClientRefusals\"\x9a\x04\n" +
 	"\rProtocolFloor\x12+\n" +
 	"\x11envelope_versions\x18\x01 \x03(\rR\x10envelopeVersions\x12A\n" +
 	"\x1dnext_refused_envelope_version\x18\x02 \x01(\rR\x1anextRefusedEnvelopeVersion\x12B\n" +
 	"\x0fnext_refused_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\rnextRefusedAt\x12'\n" +
-	"\x0fclient_refusals\x18\x04 \x03(\tR\x0eclientRefusals\"\x0e\n" +
-	"\fGetMeRequest\"`\n" +
+	"\x0fclient_refusals\x18\x04 \x03(\tR\x0eclientRefusals\x12Q\n" +
+	"\x16next_format_retirement\x18\x05 \x01(\v2\x1b.peachy.v1.FormatRetirementR\x14nextFormatRetirement\x12?\n" +
+	"\x10next_bot_minimum\x18\x06 \x01(\v2\x15.peachy.v1.BotMinimumR\x0enextBotMinimum\x12U\n" +
+	"\x0fformat_versions\x18\a \x03(\v2,.peachy.v1.ProtocolFloor.FormatVersionsEntryR\x0eformatVersions\x1aA\n" +
+	"\x13FormatVersionsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\rR\x05value:\x028\x01\"R\n" +
+	"\n" +
+	"BotMinimum\x12\x18\n" +
+	"\aversion\x18\x01 \x01(\tR\aversion\x12*\n" +
+	"\x02at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\"p\n" +
+	"\x10FormatRetirement\x12\x16\n" +
+	"\x06format\x18\x01 \x01(\tR\x06format\x12\x18\n" +
+	"\aversion\x18\x02 \x01(\rR\aversion\x12*\n" +
+	"\x02at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\"\x18\n" +
+	"\x16GetRemoteConfigRequest\"\x87\x01\n" +
+	"\x17GetRemoteConfigResponse\x12/\n" +
+	"\x06config\x18\x01 \x01(\v2\x17.peachy.v1.RemoteConfigR\x06config\x12;\n" +
+	"\vserver_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"serverTime\"|\n" +
+	"\fRemoteConfig\x12\x16\n" +
+	"\x06digest\x18\x01 \x01(\fR\x06digest\x12+\n" +
+	"\x05flags\x18\x02 \x03(\v2\x15.peachy.v1.RemoteFlagR\x05flags\x12'\n" +
+	"\x0frefresh_seconds\x18\x03 \x01(\rR\x0erefreshSeconds\"\xf5\x02\n" +
+	"\n" +
+	"RemoteFlag\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12-\n" +
+	"\x04kind\x18\x02 \x01(\x0e2\x19.peachy.v1.RemoteFlagKindR\x04kind\x12\x0e\n" +
+	"\x02on\x18\x03 \x01(\bR\x02on\x12*\n" +
+	"\x11parts_per_million\x18\x04 \x01(\rR\x0fpartsPerMillion\x127\n" +
+	"\n" +
+	"min_builds\x18\x05 \x03(\v2\x18.peachy.v1.PlatformBuildR\tminBuilds\x12=\n" +
+	"\rexcept_builds\x18\x06 \x03(\v2\x18.peachy.v1.PlatformBuildR\fexceptBuilds\x125\n" +
+	"\bchannels\x18\a \x03(\x0e2\x19.peachy.v1.ReleaseChannelR\bchannels\x129\n" +
+	"\n" +
+	"not_before\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tnotBefore\"A\n" +
+	"\rPlatformBuild\x12\x1a\n" +
+	"\bplatform\x18\x01 \x01(\tR\bplatform\x12\x14\n" +
+	"\x05build\x18\x02 \x01(\tR\x05build\"\x0e\n" +
+	"\fGetMeRequest\"\xac\x01\n" +
 	"\rGetMeResponse\x12#\n" +
 	"\x04user\x18\x01 \x01(\v2\x0f.peachy.v1.UserR\x04user\x12$\n" +
-	"\x0emedia_base_url\x18\x03 \x01(\tR\fmediaBaseUrlJ\x04\b\x02\x10\x03\"f\n" +
+	"\x0emedia_base_url\x18\x03 \x01(\tR\fmediaBaseUrl\x12#\n" +
+	"\rfeature_gates\x18\x04 \x03(\tR\ffeatureGates\x12\x1f\n" +
+	"\vbots_paused\x18\x05 \x01(\bR\n" +
+	"botsPausedJ\x04\b\x02\x10\x03J\x04\b\x06\x10\a\"\xcf\x01\n" +
+	"\x11ReportUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\x12\x1d\n" +
+	"\n" +
+	"message_id\x18\x04 \x01(\tR\tmessageId\x12\x1f\n" +
+	"\vquoted_body\x18\x05 \x01(\tR\n" +
+	"quotedBody\x12\x1a\n" +
+	"\bcategory\x18\f \x01(\tR\bcategory\x12!\n" +
+	"\freport_token\x18\x14 \x01(\fR\vreportTokenJ\x04\b\x02\x10\x03J\x04\b\x06\x10\f\"\x14\n" +
+	"\x12ReportUserResponse\"f\n" +
 	"\x0fGetUsersRequest\x12\x19\n" +
 	"\buser_ids\x18\x01 \x03(\tR\auserIds\x128\n" +
 	"\fprofile_asks\x18\x02 \x03(\v2\x15.peachy.v1.ProfileAskR\vprofileAsks\"|\n" +
@@ -7100,15 +9860,14 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\vhandle_hash\x18\x02 \x01(\fR\n" +
 	"handleHashJ\x04\b\x01\x10\x02\"D\n" +
 	"\x17GetUserByHandleResponse\x12#\n" +
-	"\x04user\x18\x01 \x01(\v2\x0f.peachy.v1.UserR\x04userJ\x04\b\x02\x10\x04\"\xd9\x01\n" +
+	"\x04user\x18\x01 \x01(\v2\x0f.peachy.v1.UserR\x04userJ\x04\b\x02\x10\x04\"\xd3\x01\n" +
 	"\x0fMailboxEnvelope\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x04kind\x18\x02 \x01(\x0e2\x16.peachy.v1.MailboxKindR\x04kind\x12\x18\n" +
 	"\apayload\x18\x04 \x01(\fR\apayload\x12;\n" +
 	"\vreceived_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"receivedAt\x12!\n" +
-	"\fcommit_stamp\x18\t \x01(\fR\vcommitStampJ\x04\b\x03\x10\x04J\x04\b\x06\x10\tJ\x04\b\n" +
-	"\x10\v\"M\n" +
+	"\freport_token\x18\v \x01(\fR\vreportTokenJ\x04\b\x03\x10\x04J\x04\b\x06\x10\v\"M\n" +
 	"\x0fSealedRecipient\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tdevice_id\x18\x02 \x01(\tR\bdeviceIdJ\x04\b\x03\x10\x04\"L\n" +
@@ -7126,28 +9885,37 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\vaccess_keys\x18\t \x03(\v2\x1d.peachy.v1.RecipientAccessKeyR\n" +
 	"accessKeys\x12\x1c\n" +
 	"\tephemeral\x18\n" +
-	" \x01(\bR\tephemeralJ\x04\b\x01\x10\x04J\x04\b\a\x10\bJ\x04\b\v\x10\f\"\x83\x02\n" +
+	" \x01(\bR\tephemeralJ\x04\b\x01\x10\x04J\x04\b\a\x10\bJ\x04\b\v\x10\f\"\xe9\x02\n" +
 	"\x12SendSealedResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12;\n" +
 	"\vreceived_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"receivedAt\x12(\n" +
 	"\x10stale_device_ids\x18\x03 \x03(\tR\x0estaleDeviceIds\x12H\n" +
 	"\x11stale_revocations\x18\x04 \x03(\v2\x1b.peachy.v1.DeviceRevocationR\x10staleRevocations\x12,\n" +
-	"\x12retired_device_ids\x18\x05 \x03(\tR\x10retiredDeviceIds\"H\n" +
+	"\x12retired_device_ids\x18\x05 \x03(\tR\x10retiredDeviceIds\x120\n" +
+	"\x14throttled_device_ids\x18\x06 \x03(\tR\x12throttledDeviceIds\x122\n" +
+	"\tplacement\x18\a \x01(\v2\x14.peachy.v1.PlacementR\tplacement\"*\n" +
+	"\tPlacement\x12\x1d\n" +
+	"\n" +
+	"device_ids\x18\x01 \x03(\tR\tdeviceIds\"H\n" +
 	"\x13FetchMailboxRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\rR\x05limit\"\xde\x01\n" +
+	"\x05limit\x18\x02 \x01(\rR\x05limit\"\xff\x01\n" +
 	"\x14FetchMailboxResponse\x128\n" +
 	"\tenvelopes\x18\x01 \x03(\v2\x1a.peachy.v1.MailboxEnvelopeR\tenvelopes\x12\x12\n" +
 	"\x04more\x18\x02 \x01(\bR\x04more\x12\x12\n" +
 	"\x04lost\x18\x03 \x01(\bR\x04lost\x12;\n" +
 	"\vserver_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"serverTime\x12'\n" +
-	"\x0fnotices_waiting\x18\x05 \x01(\bR\x0enoticesWaiting\"B\n" +
+	"\x0fnotices_waiting\x18\x05 \x01(\bR\x0enoticesWaiting\x12\x1f\n" +
+	"\vacked_count\x18\x06 \x01(\x04R\n" +
+	"ackedCount\"B\n" +
 	"\x11AckMailboxRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x10\n" +
-	"\x03ids\x18\x02 \x03(\tR\x03ids\"\x14\n" +
-	"\x12AckMailboxResponse\"L\n" +
+	"\x03ids\x18\x02 \x03(\tR\x03ids\"5\n" +
+	"\x12AckMailboxResponse\x12\x1f\n" +
+	"\vacked_count\x18\x01 \x01(\x04R\n" +
+	"ackedCount\"L\n" +
 	"\x13SendSelfNoteRequest\x12\x18\n" +
 	"\apayload\x18\x01 \x01(\fR\apayload\x12\x1b\n" +
 	"\tdevice_id\x18\x02 \x01(\tR\bdeviceId\"&\n" +
@@ -7208,7 +9976,7 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\bversions\x18\x02 \x03(\v2\x1d.peachy.v1.StateDomainVersionR\bversions\"O\n" +
 	"\x13CreateHandleRequest\x12\x16\n" +
 	"\x06handle\x18\x01 \x01(\fR\x06handle\x12\x1a\n" +
-	"\bverifier\x18\x02 \x01(\fR\bverifierJ\x04\b\x03\x10\x05\"\x16\n" +
+	"\bverifier\x18\x02 \x01(\fR\bverifierJ\x04\b\x03\x10\a\"\x16\n" +
 	"\x14CreateHandleResponse\"F\n" +
 	"\x16FetchVerifierAtRequest\x12\x16\n" +
 	"\x06handle\x18\x01 \x01(\fR\x06handle\x12\x14\n" +
@@ -7221,11 +9989,12 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x1cFetchConversationHeadRequest\x12\x18\n" +
 	"\ahandles\x18\x01 \x03(\fR\ahandles\x12\x14\n" +
 	"\x05every\x18\x02 \x01(\bR\x05every\x12\x14\n" +
-	"\x05after\x18\x03 \x01(\fR\x05after\"\\\n" +
+	"\x05after\x18\x03 \x01(\fR\x05after\"\x86\x01\n" +
 	"\x10ConversationHead\x12\x16\n" +
 	"\x06handle\x18\x01 \x01(\fR\x06handle\x12\x14\n" +
 	"\x05epoch\x18\x02 \x01(\x04R\x05epoch\x12\x1a\n" +
-	"\bverifier\x18\x03 \x01(\fR\bverifier\"f\n" +
+	"\bverifier\x18\x03 \x01(\fR\bverifier\x12(\n" +
+	"\x10stamp_set_digest\x18\x04 \x01(\fR\x0estampSetDigest\"f\n" +
 	"\x1dFetchConversationHeadResponse\x121\n" +
 	"\x05heads\x18\x01 \x03(\v2\x1b.peachy.v1.ConversationHeadR\x05heads\x12\x12\n" +
 	"\x04more\x18\x02 \x01(\bR\x04more\"\xb2\x02\n" +
@@ -7247,7 +10016,120 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x06key_id\x18\x02 \x01(\fR\x05keyId\x12)\n" +
 	"\x10blinded_messages\x18\x03 \x03(\fR\x0fblindedMessages\"D\n" +
 	"\x17IssueCallTokensResponse\x12)\n" +
-	"\x10blind_signatures\x18\x01 \x03(\fR\x0fblindSignatures*K\n" +
+	"\x10blind_signatures\x18\x01 \x03(\fR\x0fblindSignatures\"\xbd\x02\n" +
+	"\n" +
+	"BotSummary\x126\n" +
+	"\n" +
+	"owner_kind\x18\x01 \x01(\x0e2\x17.peachy.v1.BotOwnerKindR\townerKind\x12\x19\n" +
+	"\bowner_id\x18\x02 \x01(\tR\aownerId\x12\x1d\n" +
+	"\n" +
+	"owner_name\x18\x03 \x01(\tR\townerName\x12!\n" +
+	"\fowner_handle\x18\x04 \x01(\tR\vownerHandle\x12\x1a\n" +
+	"\bverified\x18\x05 \x01(\bR\bverified\x12,\n" +
+	"\x06status\x18\a \x01(\x0e2\x14.peachy.v1.BotStatusR\x06status\x12 \n" +
+	"\vdevelopment\x18\b \x01(\bR\vdevelopment\x12(\n" +
+	"\x10owner_avatar_url\x18\t \x01(\tR\x0eownerAvatarUrlJ\x04\b\x06\x10\a\"\x80\x01\n" +
+	"\n" +
+	"BotCommand\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
+	"\x06blanks\x18\x02 \x01(\tR\x06blanks\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1e\n" +
+	"\vworks_in_dm\x18\x05 \x01(\bR\tworksInDmJ\x04\b\x04\x10\x05\"B\n" +
+	"\bBotReach\x12\x16\n" +
+	"\x06anyone\x18\x01 \x01(\bR\x06anyone\x12\x18\n" +
+	"\asummary\x18\x03 \x01(\tR\asummaryJ\x04\b\x02\x10\x03\"\xc7\x03\n" +
+	"\n" +
+	"BotListing\x12\x16\n" +
+	"\x06handle\x18\x01 \x01(\tR\x06handle\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
+	"\atagline\x18\x03 \x01(\tR\atagline\x12\x14\n" +
+	"\x05about\x18\x04 \x01(\tR\x05about\x121\n" +
+	"\bcommands\x18\x06 \x03(\v2\x15.peachy.v1.BotCommandR\bcommands\x12 \n" +
+	"\vdestination\x18\t \x01(\tR\vdestination\x12\x1c\n" +
+	"\tretention\x18\n" +
+	" \x01(\tR\tretention\x12\x1d\n" +
+	"\n" +
+	"policy_url\x18\v \x01(\tR\tpolicyUrl\x12>\n" +
+	"\x10grants_requested\x18\f \x03(\x0e2\x13.peachy.v1.BotGrantR\x0fgrantsRequested\x12<\n" +
+	"\x0fgrants_required\x18\r \x03(\x0e2\x13.peachy.v1.BotGrantR\x0egrantsRequired\x12)\n" +
+	"\x05reach\x18\x0e \x01(\v2\x13.peachy.v1.BotReachR\x05reach\x12\x16\n" +
+	"\x06listed\x18\x0f \x01(\bR\x06listedJ\x04\b\x05\x10\x06J\x04\b\a\x10\t\"j\n" +
+	"\x10RevokedBotDevice\x12\x1b\n" +
+	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x129\n" +
+	"\n" +
+	"revoked_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\trevokedAt\"h\n" +
+	"\fBotOwnerView\x12&\n" +
+	"\x0freach_actor_ids\x18\n" +
+	" \x03(\tR\rreachActorIds\x12$\n" +
+	"\x0emedia_base_url\x18\x12 \x01(\tR\fmediaBaseUrlJ\x04\b\x01\x10\n" +
+	"J\x04\b\v\x10\x12\"\xb5\x05\n" +
+	"\x03Bot\x12#\n" +
+	"\x04user\x18\x01 \x01(\v2\x0f.peachy.v1.UserR\x04user\x12/\n" +
+	"\alisting\x18\x02 \x01(\v2\x15.peachy.v1.BotListingR\alisting\x126\n" +
+	"\n" +
+	"owner_kind\x18\x03 \x01(\x0e2\x17.peachy.v1.BotOwnerKindR\townerKind\x12\x19\n" +
+	"\bowner_id\x18\x04 \x01(\tR\aownerId\x12\x1d\n" +
+	"\n" +
+	"owner_name\x18\x05 \x01(\tR\townerName\x12!\n" +
+	"\fowner_handle\x18\x06 \x01(\tR\vownerHandle\x12\x1a\n" +
+	"\bverified\x18\a \x01(\bR\bverified\x12#\n" +
+	"\rlabel_version\x18\b \x01(\rR\flabelVersion\x12,\n" +
+	"\x06status\x18\t \x01(\x0e2\x14.peachy.v1.BotStatusR\x06status\x12D\n" +
+	"\x0frevoked_devices\x18\v \x03(\v2\x1b.peachy.v1.RevokedBotDeviceR\x0erevokedDevices\x126\n" +
+	"\n" +
+	"owner_view\x18\r \x01(\v2\x17.peachy.v1.BotOwnerViewR\townerView\x12 \n" +
+	"\vdevelopment\x18\x0e \x01(\bR\vdevelopment\x12?\n" +
+	"\rpending_owner\x18\x0f \x01(\v2\x1a.peachy.v1.BotPendingOwnerR\fpendingOwner\x12=\n" +
+	"\feffective_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\veffectiveAt\x12(\n" +
+	"\x10owner_avatar_url\x18\x11 \x01(\tR\x0eownerAvatarUrlJ\x04\b\n" +
+	"\x10\vJ\x04\b\f\x10\r\"\xc2\x01\n" +
+	"\x0fBotPendingOwner\x126\n" +
+	"\n" +
+	"owner_kind\x18\x01 \x01(\x0e2\x17.peachy.v1.BotOwnerKindR\townerKind\x12\x19\n" +
+	"\bowner_id\x18\x02 \x01(\tR\aownerId\x12\x1d\n" +
+	"\n" +
+	"owner_name\x18\x03 \x01(\tR\townerName\x12!\n" +
+	"\fowner_handle\x18\x04 \x01(\tR\vownerHandle\x12\x1a\n" +
+	"\bverified\x18\x05 \x01(\bR\bverified\">\n" +
+	"\rGetBotRequest\x12\x15\n" +
+	"\x06bot_id\x18\x01 \x01(\tR\x05botId\x12\x16\n" +
+	"\x06handle\x18\x02 \x01(\tR\x06handle\"2\n" +
+	"\x0eGetBotResponse\x12 \n" +
+	"\x03bot\x18\x01 \x01(\v2\x0e.peachy.v1.BotR\x03bot\"z\n" +
+	"\x1bRedeemBotConnectCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x1f\n" +
+	"\vsdk_version\x18\x02 \x01(\tR\n" +
+	"sdkVersion\x12&\n" +
+	"\x0fexpected_bot_id\x18\x03 \x01(\tR\rexpectedBotId\"j\n" +
+	"\x1cRedeemBotConnectCodeResponse\x12\x1b\n" +
+	"\tbot_token\x18\x01 \x01(\tR\bbotToken\x12\x15\n" +
+	"\x06bot_id\x18\x02 \x01(\tR\x05botId\x12\x16\n" +
+	"\x06handle\x18\x03 \x01(\tR\x06handle\"z\n" +
+	"\x16ReportBotCommitRequest\x12\x15\n" +
+	"\x06bot_id\x18\x01 \x01(\tR\x05botId\x12\x1b\n" +
+	"\tdeny_code\x18\x02 \x01(\rR\bdenyCode\x12\x16\n" +
+	"\x06handle\x18\x03 \x01(\fR\x06handle\x12\x14\n" +
+	"\x05epoch\x18\x04 \x01(\x04R\x05epoch\"\x19\n" +
+	"\x17ReportBotCommitResponse*\\\n" +
+	"\vSignupCheck\x12\x1c\n" +
+	"\x18SIGNUP_CHECK_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11SIGNUP_CHECK_PUSH\x10\x01\x12\x18\n" +
+	"\x14SIGNUP_CHECK_CAPTCHA\x10\x02*A\n" +
+	"\vCommitScope\x12\x1c\n" +
+	"\x18COMMIT_SCOPE_UNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10COMMIT_SCOPE_OWN\x10\x01*\x89\x01\n" +
+	"\x0eRemoteFlagKind\x12 \n" +
+	"\x1cREMOTE_FLAG_KIND_UNSPECIFIED\x10\x00\x12\x1c\n" +
+	"\x18REMOTE_FLAG_KIND_ROLLOUT\x10\x01\x12\x19\n" +
+	"\x15REMOTE_FLAG_KIND_KILL\x10\x02\x12\x1c\n" +
+	"\x18REMOTE_FLAG_KIND_ONE_WAY\x10\x03*\xbe\x01\n" +
+	"\x0eReleaseChannel\x12\x1f\n" +
+	"\x1bRELEASE_CHANNEL_UNSPECIFIED\x10\x00\x12\x19\n" +
+	"\x15RELEASE_CHANNEL_DEBUG\x10\x01\x12\x1e\n" +
+	"\x1aRELEASE_CHANNEL_TESTFLIGHT\x10\x02\x12\x1d\n" +
+	"\x19RELEASE_CHANNEL_APP_STORE\x10\x03\x12\x18\n" +
+	"\x14RELEASE_CHANNEL_PLAY\x10\x04\x12\x17\n" +
+	"\x13RELEASE_CHANNEL_WEB\x10\x05*K\n" +
 	"\n" +
 	"UploadKind\x12\x1b\n" +
 	"\x17UPLOAD_KIND_UNSPECIFIED\x10\x00\x12\x14\n" +
@@ -7266,7 +10148,27 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x1eCALL_TOKEN_PURPOSE_UNSPECIFIED\x10\x00\x12\x1b\n" +
 	"\x17CALL_TOKEN_PURPOSE_JOIN\x10\x01\x12\"\n" +
 	"\x1eCALL_TOKEN_PURPOSE_LINK_CREATE\x10\x02\x12\"\n" +
-	"\x1eCALL_TOKEN_PURPOSE_GROUP_PHOTO\x10\x032\x91\x1b\n" +
+	"\x1eCALL_TOKEN_PURPOSE_GROUP_PHOTO\x10\x03*r\n" +
+	"\bUserKind\x12\x19\n" +
+	"\x15USER_KIND_UNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10USER_KIND_PERSON\x10\x01\x12\x11\n" +
+	"\rUSER_KIND_BOT\x10\x02\x12\"\n" +
+	"\x1eUSER_KIND_ORGANIZATION_ACCOUNT\x10\x03*j\n" +
+	"\fBotOwnerKind\x12\x1e\n" +
+	"\x1aBOT_OWNER_KIND_UNSPECIFIED\x10\x00\x12\x19\n" +
+	"\x15BOT_OWNER_KIND_PERSON\x10\x01\x12\x1f\n" +
+	"\x1bBOT_OWNER_KIND_ORGANIZATION\x10\x02*\x87\x01\n" +
+	"\tBotStatus\x12\x1a\n" +
+	"\x16BOT_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11BOT_STATUS_ACTIVE\x10\x01\x12\x15\n" +
+	"\x11BOT_STATUS_PAUSED\x10\x02\x12\x18\n" +
+	"\x14BOT_STATUS_SUSPENDED\x10\x03\x12\x16\n" +
+	"\x12BOT_STATUS_DELETED\x10\x04*b\n" +
+	"\bBotGrant\x12\x19\n" +
+	"\x15BOT_GRANT_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eBOT_GRANT_POST\x10\x01\x12\x13\n" +
+	"\x0fBOT_GRANT_REACT\x10\x02\x12\x12\n" +
+	"\x0eBOT_GRANT_CALL\x10\x032\x98\x1f\n" +
 	"\vChatService\x12m\n" +
 	"\x16StartPhoneVerification\x12(.peachy.v1.StartPhoneVerificationRequest\x1a).peachy.v1.StartPhoneVerificationResponse\x12L\n" +
 	"\vVerifyPhone\x12\x1d.peachy.v1.VerifyPhoneRequest\x1a\x1e.peachy.v1.VerifyPhoneResponse\x12@\n" +
@@ -7282,17 +10184,21 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\x0fClaimSoleDevice\x12!.peachy.v1.ClaimSoleDeviceRequest\x1a\".peachy.v1.ClaimSoleDeviceResponse\x12a\n" +
 	"\x12PublishKeyPackages\x12$.peachy.v1.PublishKeyPackagesRequest\x1a%.peachy.v1.PublishKeyPackagesResponse\x12[\n" +
 	"\x10FetchKeyPackages\x12\".peachy.v1.FetchKeyPackagesRequest\x1a#.peachy.v1.FetchKeyPackagesResponse\x12v\n" +
-	"\x19FetchKeyPackagesAnonymous\x12+.peachy.v1.FetchKeyPackagesAnonymousRequest\x1a,.peachy.v1.FetchKeyPackagesAnonymousResponse\x12O\n" +
+	"\x19FetchKeyPackagesAnonymous\x12+.peachy.v1.FetchKeyPackagesAnonymousRequest\x1a,.peachy.v1.FetchKeyPackagesAnonymousResponse\x12^\n" +
+	"\x11ListPeopleDevices\x12#.peachy.v1.ListPeopleDevicesRequest\x1a$.peachy.v1.ListPeopleDevicesResponse\x12O\n" +
 	"\fSetAccessKey\x12\x1e.peachy.v1.SetAccessKeyRequest\x1a\x1f.peachy.v1.SetAccessKeyResponse\x12g\n" +
 	"\x14KeyPackagePoolStatus\x12&.peachy.v1.KeyPackagePoolStatusRequest\x1a'.peachy.v1.KeyPackagePoolStatusResponse\x12O\n" +
 	"\fSubmitCommit\x12\x1e.peachy.v1.SubmitCommitRequest\x1a\x1f.peachy.v1.SubmitCommitResponse\x12m\n" +
-	"\x16GetMinSupportedVersion\x12(.peachy.v1.GetMinSupportedVersionRequest\x1a).peachy.v1.GetMinSupportedVersionResponse\x12:\n" +
+	"\x16GetMinSupportedVersion\x12(.peachy.v1.GetMinSupportedVersionRequest\x1a).peachy.v1.GetMinSupportedVersionResponse\x12X\n" +
+	"\x0fGetRemoteConfig\x12!.peachy.v1.GetRemoteConfigRequest\x1a\".peachy.v1.GetRemoteConfigResponse\x12:\n" +
 	"\x05GetMe\x12\x17.peachy.v1.GetMeRequest\x1a\x18.peachy.v1.GetMeResponse\x12O\n" +
 	"\fCreateUpload\x12\x1e.peachy.v1.CreateUploadRequest\x1a\x1f.peachy.v1.CreateUploadResponse\x12R\n" +
 	"\rAbandonUpload\x12\x1f.peachy.v1.AbandonUploadRequest\x1a .peachy.v1.AbandonUploadResponse\x12a\n" +
 	"\x12DeleteSealedObject\x12$.peachy.v1.DeleteSealedObjectRequest\x1a%.peachy.v1.DeleteSealedObjectResponse\x12c\n" +
 	"\x16CreateSealedMetaUpload\x12(.peachy.v1.CreateSealedMetaUploadRequest\x1a\x1f.peachy.v1.CreateUploadResponse\x12X\n" +
-	"\x0fGetUserByHandle\x12!.peachy.v1.GetUserByHandleRequest\x1a\".peachy.v1.GetUserByHandleResponse\x12C\n" +
+	"\x0fGetUserByHandle\x12!.peachy.v1.GetUserByHandleRequest\x1a\".peachy.v1.GetUserByHandleResponse\x12I\n" +
+	"\n" +
+	"ReportUser\x12\x1c.peachy.v1.ReportUserRequest\x1a\x1d.peachy.v1.ReportUserResponse\x12C\n" +
 	"\bGetUsers\x12\x1a.peachy.v1.GetUsersRequest\x1a\x1b.peachy.v1.GetUsersResponse\x12I\n" +
 	"\n" +
 	"SendSealed\x12\x1c.peachy.v1.SendSealedRequest\x1a\x1d.peachy.v1.SendSealedResponse\x12O\n" +
@@ -7311,7 +10217,10 @@ const file_peachy_v1_chat_proto_rawDesc = "" +
 	"\n" +
 	"BeatStream\x12\x1c.peachy.v1.BeatStreamRequest\x1a\x1d.peachy.v1.BeatStreamResponse\x12[\n" +
 	"\x10GetCallTokenKeys\x12\".peachy.v1.GetCallTokenKeysRequest\x1a#.peachy.v1.GetCallTokenKeysResponse\x12X\n" +
-	"\x0fIssueCallTokens\x12!.peachy.v1.IssueCallTokensRequest\x1a\".peachy.v1.IssueCallTokensResponseb\x06proto3"
+	"\x0fIssueCallTokens\x12!.peachy.v1.IssueCallTokensRequest\x1a\".peachy.v1.IssueCallTokensResponse\x12=\n" +
+	"\x06GetBot\x12\x18.peachy.v1.GetBotRequest\x1a\x19.peachy.v1.GetBotResponse\x12g\n" +
+	"\x14RedeemBotConnectCode\x12&.peachy.v1.RedeemBotConnectCodeRequest\x1a'.peachy.v1.RedeemBotConnectCodeResponse\x12X\n" +
+	"\x0fReportBotCommit\x12!.peachy.v1.ReportBotCommitRequest\x1a\".peachy.v1.ReportBotCommitResponseb\x06proto3"
 
 var (
 	file_peachy_v1_chat_proto_rawDescOnce sync.Once
@@ -7325,272 +10234,360 @@ func file_peachy_v1_chat_proto_rawDescGZIP() []byte {
 	return file_peachy_v1_chat_proto_rawDescData
 }
 
-var file_peachy_v1_chat_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_peachy_v1_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 105)
+var file_peachy_v1_chat_proto_enumTypes = make([]protoimpl.EnumInfo, 12)
+var file_peachy_v1_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 135)
 var file_peachy_v1_chat_proto_goTypes = []any{
-	(UploadKind)(0),                           // 0: peachy.v1.UploadKind
-	(SealedClass)(0),                          // 1: peachy.v1.SealedClass
-	(MailboxKind)(0),                          // 2: peachy.v1.MailboxKind
-	(CallTokenPurpose)(0),                     // 3: peachy.v1.CallTokenPurpose
-	(*User)(nil),                              // 4: peachy.v1.User
-	(*StartPhoneVerificationRequest)(nil),     // 5: peachy.v1.StartPhoneVerificationRequest
-	(*StartPhoneVerificationResponse)(nil),    // 6: peachy.v1.StartPhoneVerificationResponse
-	(*VerifyPhoneRequest)(nil),                // 7: peachy.v1.VerifyPhoneRequest
-	(*VerifyPhoneResponse)(nil),               // 8: peachy.v1.VerifyPhoneResponse
-	(*SignOutRequest)(nil),                    // 9: peachy.v1.SignOutRequest
-	(*SignOutResponse)(nil),                   // 10: peachy.v1.SignOutResponse
-	(*Session)(nil),                           // 11: peachy.v1.Session
-	(*ListSessionsRequest)(nil),               // 12: peachy.v1.ListSessionsRequest
-	(*ListSessionsResponse)(nil),              // 13: peachy.v1.ListSessionsResponse
-	(*RevokeSessionRequest)(nil),              // 14: peachy.v1.RevokeSessionRequest
-	(*RevokeSessionResponse)(nil),             // 15: peachy.v1.RevokeSessionResponse
-	(*Device)(nil),                            // 16: peachy.v1.Device
-	(*DeviceRevocation)(nil),                  // 17: peachy.v1.DeviceRevocation
-	(*DeviceLinkExchange)(nil),                // 18: peachy.v1.DeviceLinkExchange
-	(*StepDeviceLinkRequest)(nil),             // 19: peachy.v1.StepDeviceLinkRequest
-	(*StepDeviceLinkResponse)(nil),            // 20: peachy.v1.StepDeviceLinkResponse
-	(*RegisterDeviceRequest)(nil),             // 21: peachy.v1.RegisterDeviceRequest
-	(*RegisterDeviceResponse)(nil),            // 22: peachy.v1.RegisterDeviceResponse
-	(*ListDevicesRequest)(nil),                // 23: peachy.v1.ListDevicesRequest
-	(*ListDevicesResponse)(nil),               // 24: peachy.v1.ListDevicesResponse
-	(*RevokeDeviceRequest)(nil),               // 25: peachy.v1.RevokeDeviceRequest
-	(*RevokeDeviceResponse)(nil),              // 26: peachy.v1.RevokeDeviceResponse
-	(*ApproveDeviceRequest)(nil),              // 27: peachy.v1.ApproveDeviceRequest
-	(*ApproveDeviceResponse)(nil),             // 28: peachy.v1.ApproveDeviceResponse
-	(*ReapproveDeviceRequest)(nil),            // 29: peachy.v1.ReapproveDeviceRequest
-	(*ReapproveDeviceResponse)(nil),           // 30: peachy.v1.ReapproveDeviceResponse
-	(*ClaimSoleDeviceRequest)(nil),            // 31: peachy.v1.ClaimSoleDeviceRequest
-	(*ClaimSoleDeviceResponse)(nil),           // 32: peachy.v1.ClaimSoleDeviceResponse
-	(*RegistrationLockChallenge)(nil),         // 33: peachy.v1.RegistrationLockChallenge
-	(*MlsKeyPackage)(nil),                     // 34: peachy.v1.MlsKeyPackage
-	(*PublishKeyPackagesRequest)(nil),         // 35: peachy.v1.PublishKeyPackagesRequest
-	(*PublishKeyPackagesResponse)(nil),        // 36: peachy.v1.PublishKeyPackagesResponse
-	(*FetchKeyPackagesRequest)(nil),           // 37: peachy.v1.FetchKeyPackagesRequest
-	(*FetchedKeyPackage)(nil),                 // 38: peachy.v1.FetchedKeyPackage
-	(*FetchKeyPackagesResponse)(nil),          // 39: peachy.v1.FetchKeyPackagesResponse
-	(*SetAccessKeyRequest)(nil),               // 40: peachy.v1.SetAccessKeyRequest
-	(*SetAccessKeyResponse)(nil),              // 41: peachy.v1.SetAccessKeyResponse
-	(*FetchKeyPackagesAnonymousRequest)(nil),  // 42: peachy.v1.FetchKeyPackagesAnonymousRequest
-	(*FetchKeyPackagesAnonymousResponse)(nil), // 43: peachy.v1.FetchKeyPackagesAnonymousResponse
-	(*KeyPackagePoolStatusRequest)(nil),       // 44: peachy.v1.KeyPackagePoolStatusRequest
-	(*DeviceKeyPackagePool)(nil),              // 45: peachy.v1.DeviceKeyPackagePool
-	(*KeyPackagePoolStatusResponse)(nil),      // 46: peachy.v1.KeyPackagePoolStatusResponse
-	(*MlsWelcome)(nil),                        // 47: peachy.v1.MlsWelcome
-	(*SubmitCommitRequest)(nil),               // 48: peachy.v1.SubmitCommitRequest
-	(*SubmitCommitResponse)(nil),              // 49: peachy.v1.SubmitCommitResponse
-	(*GetMinSupportedVersionRequest)(nil),     // 50: peachy.v1.GetMinSupportedVersionRequest
-	(*GetMinSupportedVersionResponse)(nil),    // 51: peachy.v1.GetMinSupportedVersionResponse
-	(*ProtocolFloor)(nil),                     // 52: peachy.v1.ProtocolFloor
-	(*GetMeRequest)(nil),                      // 53: peachy.v1.GetMeRequest
-	(*GetMeResponse)(nil),                     // 54: peachy.v1.GetMeResponse
-	(*GetUsersRequest)(nil),                   // 55: peachy.v1.GetUsersRequest
-	(*GetUsersResponse)(nil),                  // 56: peachy.v1.GetUsersResponse
-	(*ProfileAsk)(nil),                        // 57: peachy.v1.ProfileAsk
-	(*SealedProfile)(nil),                     // 58: peachy.v1.SealedProfile
-	(*CreateUploadRequest)(nil),               // 59: peachy.v1.CreateUploadRequest
-	(*ResumableUpload)(nil),                   // 60: peachy.v1.ResumableUpload
-	(*CreateUploadResponse)(nil),              // 61: peachy.v1.CreateUploadResponse
-	(*AbandonUploadRequest)(nil),              // 62: peachy.v1.AbandonUploadRequest
-	(*AbandonUploadResponse)(nil),             // 63: peachy.v1.AbandonUploadResponse
-	(*DeleteSealedObjectRequest)(nil),         // 64: peachy.v1.DeleteSealedObjectRequest
-	(*DeleteSealedObjectResponse)(nil),        // 65: peachy.v1.DeleteSealedObjectResponse
-	(*CreateSealedMetaUploadRequest)(nil),     // 66: peachy.v1.CreateSealedMetaUploadRequest
-	(*GetUserByHandleRequest)(nil),            // 67: peachy.v1.GetUserByHandleRequest
-	(*GetUserByHandleResponse)(nil),           // 68: peachy.v1.GetUserByHandleResponse
-	(*MailboxEnvelope)(nil),                   // 69: peachy.v1.MailboxEnvelope
-	(*SealedRecipient)(nil),                   // 70: peachy.v1.SealedRecipient
-	(*RecipientAccessKey)(nil),                // 71: peachy.v1.RecipientAccessKey
-	(*SendSealedRequest)(nil),                 // 72: peachy.v1.SendSealedRequest
-	(*SendSealedResponse)(nil),                // 73: peachy.v1.SendSealedResponse
-	(*FetchMailboxRequest)(nil),               // 74: peachy.v1.FetchMailboxRequest
-	(*FetchMailboxResponse)(nil),              // 75: peachy.v1.FetchMailboxResponse
-	(*AckMailboxRequest)(nil),                 // 76: peachy.v1.AckMailboxRequest
-	(*AckMailboxResponse)(nil),                // 77: peachy.v1.AckMailboxResponse
-	(*SendSelfNoteRequest)(nil),               // 78: peachy.v1.SendSelfNoteRequest
-	(*SendSelfNoteResponse)(nil),              // 79: peachy.v1.SendSelfNoteResponse
-	(*StoreRecord)(nil),                       // 80: peachy.v1.StoreRecord
-	(*ReadStoreRequest)(nil),                  // 81: peachy.v1.ReadStoreRequest
-	(*ReadStoreResponse)(nil),                 // 82: peachy.v1.ReadStoreResponse
-	(*WriteStoreRequest)(nil),                 // 83: peachy.v1.WriteStoreRequest
-	(*WriteStoreResponse)(nil),                // 84: peachy.v1.WriteStoreResponse
-	(*FetchAccountKeyRequest)(nil),            // 85: peachy.v1.FetchAccountKeyRequest
-	(*FetchAccountKeyResponse)(nil),           // 86: peachy.v1.FetchAccountKeyResponse
-	(*EphemeralEvent)(nil),                    // 87: peachy.v1.EphemeralEvent
-	(*StreamEventsRequest)(nil),               // 88: peachy.v1.StreamEventsRequest
-	(*BeatStreamRequest)(nil),                 // 89: peachy.v1.BeatStreamRequest
-	(*BeatStreamResponse)(nil),                // 90: peachy.v1.BeatStreamResponse
-	(*StreamBeat)(nil),                        // 91: peachy.v1.StreamBeat
-	(*StreamEventsResponse)(nil),              // 92: peachy.v1.StreamEventsResponse
-	(*StateVersions)(nil),                     // 93: peachy.v1.StateVersions
-	(*StateDomainVersion)(nil),                // 94: peachy.v1.StateDomainVersion
-	(*ReconnectHint)(nil),                     // 95: peachy.v1.ReconnectHint
-	(*StateChangedEvent)(nil),                 // 96: peachy.v1.StateChangedEvent
-	(*CreateHandleRequest)(nil),               // 97: peachy.v1.CreateHandleRequest
-	(*CreateHandleResponse)(nil),              // 98: peachy.v1.CreateHandleResponse
-	(*FetchVerifierAtRequest)(nil),            // 99: peachy.v1.FetchVerifierAtRequest
-	(*FetchVerifierAtResponse)(nil),           // 100: peachy.v1.FetchVerifierAtResponse
-	(*FetchConversationHeadRequest)(nil),      // 101: peachy.v1.FetchConversationHeadRequest
-	(*ConversationHead)(nil),                  // 102: peachy.v1.ConversationHead
-	(*FetchConversationHeadResponse)(nil),     // 103: peachy.v1.FetchConversationHeadResponse
-	(*CallTokenKey)(nil),                      // 104: peachy.v1.CallTokenKey
-	(*GetCallTokenKeysRequest)(nil),           // 105: peachy.v1.GetCallTokenKeysRequest
-	(*GetCallTokenKeysResponse)(nil),          // 106: peachy.v1.GetCallTokenKeysResponse
-	(*IssueCallTokensRequest)(nil),            // 107: peachy.v1.IssueCallTokensRequest
-	(*IssueCallTokensResponse)(nil),           // 108: peachy.v1.IssueCallTokensResponse
-	(*timestamppb.Timestamp)(nil),             // 109: google.protobuf.Timestamp
-	(StateDomain)(0),                          // 110: peachy.v1.StateDomain
+	(SignupCheck)(0),                          // 0: peachy.v1.SignupCheck
+	(CommitScope)(0),                          // 1: peachy.v1.CommitScope
+	(RemoteFlagKind)(0),                       // 2: peachy.v1.RemoteFlagKind
+	(ReleaseChannel)(0),                       // 3: peachy.v1.ReleaseChannel
+	(UploadKind)(0),                           // 4: peachy.v1.UploadKind
+	(SealedClass)(0),                          // 5: peachy.v1.SealedClass
+	(MailboxKind)(0),                          // 6: peachy.v1.MailboxKind
+	(CallTokenPurpose)(0),                     // 7: peachy.v1.CallTokenPurpose
+	(UserKind)(0),                             // 8: peachy.v1.UserKind
+	(BotOwnerKind)(0),                         // 9: peachy.v1.BotOwnerKind
+	(BotStatus)(0),                            // 10: peachy.v1.BotStatus
+	(BotGrant)(0),                             // 11: peachy.v1.BotGrant
+	(*User)(nil),                              // 12: peachy.v1.User
+	(*AccountOrganization)(nil),               // 13: peachy.v1.AccountOrganization
+	(*StartPhoneVerificationRequest)(nil),     // 14: peachy.v1.StartPhoneVerificationRequest
+	(*SignupPushToken)(nil),                   // 15: peachy.v1.SignupPushToken
+	(*StartPhoneVerificationResponse)(nil),    // 16: peachy.v1.StartPhoneVerificationResponse
+	(*VerifyPhoneRequest)(nil),                // 17: peachy.v1.VerifyPhoneRequest
+	(*VerifyPhoneResponse)(nil),               // 18: peachy.v1.VerifyPhoneResponse
+	(*SignOutRequest)(nil),                    // 19: peachy.v1.SignOutRequest
+	(*SignOutResponse)(nil),                   // 20: peachy.v1.SignOutResponse
+	(*Session)(nil),                           // 21: peachy.v1.Session
+	(*ListSessionsRequest)(nil),               // 22: peachy.v1.ListSessionsRequest
+	(*ListSessionsResponse)(nil),              // 23: peachy.v1.ListSessionsResponse
+	(*RevokeSessionRequest)(nil),              // 24: peachy.v1.RevokeSessionRequest
+	(*RevokeSessionResponse)(nil),             // 25: peachy.v1.RevokeSessionResponse
+	(*Device)(nil),                            // 26: peachy.v1.Device
+	(*DeviceRevocation)(nil),                  // 27: peachy.v1.DeviceRevocation
+	(*DeviceLinkExchange)(nil),                // 28: peachy.v1.DeviceLinkExchange
+	(*StepDeviceLinkRequest)(nil),             // 29: peachy.v1.StepDeviceLinkRequest
+	(*StepDeviceLinkResponse)(nil),            // 30: peachy.v1.StepDeviceLinkResponse
+	(*RegisterDeviceRequest)(nil),             // 31: peachy.v1.RegisterDeviceRequest
+	(*RegisterDeviceResponse)(nil),            // 32: peachy.v1.RegisterDeviceResponse
+	(*ListDevicesRequest)(nil),                // 33: peachy.v1.ListDevicesRequest
+	(*ListDevicesResponse)(nil),               // 34: peachy.v1.ListDevicesResponse
+	(*RevokeDeviceRequest)(nil),               // 35: peachy.v1.RevokeDeviceRequest
+	(*RevokeDeviceResponse)(nil),              // 36: peachy.v1.RevokeDeviceResponse
+	(*ApproveDeviceRequest)(nil),              // 37: peachy.v1.ApproveDeviceRequest
+	(*ApproveDeviceResponse)(nil),             // 38: peachy.v1.ApproveDeviceResponse
+	(*ReapproveDeviceRequest)(nil),            // 39: peachy.v1.ReapproveDeviceRequest
+	(*ReapproveDeviceResponse)(nil),           // 40: peachy.v1.ReapproveDeviceResponse
+	(*ClaimSoleDeviceRequest)(nil),            // 41: peachy.v1.ClaimSoleDeviceRequest
+	(*ClaimSoleDeviceResponse)(nil),           // 42: peachy.v1.ClaimSoleDeviceResponse
+	(*RegistrationLockChallenge)(nil),         // 43: peachy.v1.RegistrationLockChallenge
+	(*MlsKeyPackage)(nil),                     // 44: peachy.v1.MlsKeyPackage
+	(*PublishKeyPackagesRequest)(nil),         // 45: peachy.v1.PublishKeyPackagesRequest
+	(*PublishKeyPackagesResponse)(nil),        // 46: peachy.v1.PublishKeyPackagesResponse
+	(*FetchKeyPackagesRequest)(nil),           // 47: peachy.v1.FetchKeyPackagesRequest
+	(*FetchedKeyPackage)(nil),                 // 48: peachy.v1.FetchedKeyPackage
+	(*FetchKeyPackagesResponse)(nil),          // 49: peachy.v1.FetchKeyPackagesResponse
+	(*SetAccessKeyRequest)(nil),               // 50: peachy.v1.SetAccessKeyRequest
+	(*SetAccessKeyResponse)(nil),              // 51: peachy.v1.SetAccessKeyResponse
+	(*FetchKeyPackagesAnonymousRequest)(nil),  // 52: peachy.v1.FetchKeyPackagesAnonymousRequest
+	(*FetchKeyPackagesAnonymousResponse)(nil), // 53: peachy.v1.FetchKeyPackagesAnonymousResponse
+	(*ListPeopleDevicesRequest)(nil),          // 54: peachy.v1.ListPeopleDevicesRequest
+	(*ListPeopleDevicesResponse)(nil),         // 55: peachy.v1.ListPeopleDevicesResponse
+	(*PersonDevices)(nil),                     // 56: peachy.v1.PersonDevices
+	(*KeyPackagePoolStatusRequest)(nil),       // 57: peachy.v1.KeyPackagePoolStatusRequest
+	(*DeviceKeyPackagePool)(nil),              // 58: peachy.v1.DeviceKeyPackagePool
+	(*KeyPackagePoolStatusResponse)(nil),      // 59: peachy.v1.KeyPackagePoolStatusResponse
+	(*MlsWelcome)(nil),                        // 60: peachy.v1.MlsWelcome
+	(*SubmitCommitRequest)(nil),               // 61: peachy.v1.SubmitCommitRequest
+	(*SubmitCommitResponse)(nil),              // 62: peachy.v1.SubmitCommitResponse
+	(*GetMinSupportedVersionRequest)(nil),     // 63: peachy.v1.GetMinSupportedVersionRequest
+	(*GetMinSupportedVersionResponse)(nil),    // 64: peachy.v1.GetMinSupportedVersionResponse
+	(*ProtocolFloor)(nil),                     // 65: peachy.v1.ProtocolFloor
+	(*BotMinimum)(nil),                        // 66: peachy.v1.BotMinimum
+	(*FormatRetirement)(nil),                  // 67: peachy.v1.FormatRetirement
+	(*GetRemoteConfigRequest)(nil),            // 68: peachy.v1.GetRemoteConfigRequest
+	(*GetRemoteConfigResponse)(nil),           // 69: peachy.v1.GetRemoteConfigResponse
+	(*RemoteConfig)(nil),                      // 70: peachy.v1.RemoteConfig
+	(*RemoteFlag)(nil),                        // 71: peachy.v1.RemoteFlag
+	(*PlatformBuild)(nil),                     // 72: peachy.v1.PlatformBuild
+	(*GetMeRequest)(nil),                      // 73: peachy.v1.GetMeRequest
+	(*GetMeResponse)(nil),                     // 74: peachy.v1.GetMeResponse
+	(*ReportUserRequest)(nil),                 // 75: peachy.v1.ReportUserRequest
+	(*ReportUserResponse)(nil),                // 76: peachy.v1.ReportUserResponse
+	(*GetUsersRequest)(nil),                   // 77: peachy.v1.GetUsersRequest
+	(*GetUsersResponse)(nil),                  // 78: peachy.v1.GetUsersResponse
+	(*ProfileAsk)(nil),                        // 79: peachy.v1.ProfileAsk
+	(*SealedProfile)(nil),                     // 80: peachy.v1.SealedProfile
+	(*CreateUploadRequest)(nil),               // 81: peachy.v1.CreateUploadRequest
+	(*ResumableUpload)(nil),                   // 82: peachy.v1.ResumableUpload
+	(*CreateUploadResponse)(nil),              // 83: peachy.v1.CreateUploadResponse
+	(*AbandonUploadRequest)(nil),              // 84: peachy.v1.AbandonUploadRequest
+	(*AbandonUploadResponse)(nil),             // 85: peachy.v1.AbandonUploadResponse
+	(*DeleteSealedObjectRequest)(nil),         // 86: peachy.v1.DeleteSealedObjectRequest
+	(*DeleteSealedObjectResponse)(nil),        // 87: peachy.v1.DeleteSealedObjectResponse
+	(*CreateSealedMetaUploadRequest)(nil),     // 88: peachy.v1.CreateSealedMetaUploadRequest
+	(*GetUserByHandleRequest)(nil),            // 89: peachy.v1.GetUserByHandleRequest
+	(*GetUserByHandleResponse)(nil),           // 90: peachy.v1.GetUserByHandleResponse
+	(*MailboxEnvelope)(nil),                   // 91: peachy.v1.MailboxEnvelope
+	(*SealedRecipient)(nil),                   // 92: peachy.v1.SealedRecipient
+	(*RecipientAccessKey)(nil),                // 93: peachy.v1.RecipientAccessKey
+	(*SendSealedRequest)(nil),                 // 94: peachy.v1.SendSealedRequest
+	(*SendSealedResponse)(nil),                // 95: peachy.v1.SendSealedResponse
+	(*Placement)(nil),                         // 96: peachy.v1.Placement
+	(*FetchMailboxRequest)(nil),               // 97: peachy.v1.FetchMailboxRequest
+	(*FetchMailboxResponse)(nil),              // 98: peachy.v1.FetchMailboxResponse
+	(*AckMailboxRequest)(nil),                 // 99: peachy.v1.AckMailboxRequest
+	(*AckMailboxResponse)(nil),                // 100: peachy.v1.AckMailboxResponse
+	(*SendSelfNoteRequest)(nil),               // 101: peachy.v1.SendSelfNoteRequest
+	(*SendSelfNoteResponse)(nil),              // 102: peachy.v1.SendSelfNoteResponse
+	(*StoreRecord)(nil),                       // 103: peachy.v1.StoreRecord
+	(*ReadStoreRequest)(nil),                  // 104: peachy.v1.ReadStoreRequest
+	(*ReadStoreResponse)(nil),                 // 105: peachy.v1.ReadStoreResponse
+	(*WriteStoreRequest)(nil),                 // 106: peachy.v1.WriteStoreRequest
+	(*WriteStoreResponse)(nil),                // 107: peachy.v1.WriteStoreResponse
+	(*FetchAccountKeyRequest)(nil),            // 108: peachy.v1.FetchAccountKeyRequest
+	(*FetchAccountKeyResponse)(nil),           // 109: peachy.v1.FetchAccountKeyResponse
+	(*EphemeralEvent)(nil),                    // 110: peachy.v1.EphemeralEvent
+	(*StreamEventsRequest)(nil),               // 111: peachy.v1.StreamEventsRequest
+	(*BeatStreamRequest)(nil),                 // 112: peachy.v1.BeatStreamRequest
+	(*BeatStreamResponse)(nil),                // 113: peachy.v1.BeatStreamResponse
+	(*StreamBeat)(nil),                        // 114: peachy.v1.StreamBeat
+	(*StreamEventsResponse)(nil),              // 115: peachy.v1.StreamEventsResponse
+	(*StateVersions)(nil),                     // 116: peachy.v1.StateVersions
+	(*StateDomainVersion)(nil),                // 117: peachy.v1.StateDomainVersion
+	(*ReconnectHint)(nil),                     // 118: peachy.v1.ReconnectHint
+	(*StateChangedEvent)(nil),                 // 119: peachy.v1.StateChangedEvent
+	(*CreateHandleRequest)(nil),               // 120: peachy.v1.CreateHandleRequest
+	(*CreateHandleResponse)(nil),              // 121: peachy.v1.CreateHandleResponse
+	(*FetchVerifierAtRequest)(nil),            // 122: peachy.v1.FetchVerifierAtRequest
+	(*FetchVerifierAtResponse)(nil),           // 123: peachy.v1.FetchVerifierAtResponse
+	(*FetchConversationHeadRequest)(nil),      // 124: peachy.v1.FetchConversationHeadRequest
+	(*ConversationHead)(nil),                  // 125: peachy.v1.ConversationHead
+	(*FetchConversationHeadResponse)(nil),     // 126: peachy.v1.FetchConversationHeadResponse
+	(*CallTokenKey)(nil),                      // 127: peachy.v1.CallTokenKey
+	(*GetCallTokenKeysRequest)(nil),           // 128: peachy.v1.GetCallTokenKeysRequest
+	(*GetCallTokenKeysResponse)(nil),          // 129: peachy.v1.GetCallTokenKeysResponse
+	(*IssueCallTokensRequest)(nil),            // 130: peachy.v1.IssueCallTokensRequest
+	(*IssueCallTokensResponse)(nil),           // 131: peachy.v1.IssueCallTokensResponse
+	(*BotSummary)(nil),                        // 132: peachy.v1.BotSummary
+	(*BotCommand)(nil),                        // 133: peachy.v1.BotCommand
+	(*BotReach)(nil),                          // 134: peachy.v1.BotReach
+	(*BotListing)(nil),                        // 135: peachy.v1.BotListing
+	(*RevokedBotDevice)(nil),                  // 136: peachy.v1.RevokedBotDevice
+	(*BotOwnerView)(nil),                      // 137: peachy.v1.BotOwnerView
+	(*Bot)(nil),                               // 138: peachy.v1.Bot
+	(*BotPendingOwner)(nil),                   // 139: peachy.v1.BotPendingOwner
+	(*GetBotRequest)(nil),                     // 140: peachy.v1.GetBotRequest
+	(*GetBotResponse)(nil),                    // 141: peachy.v1.GetBotResponse
+	(*RedeemBotConnectCodeRequest)(nil),       // 142: peachy.v1.RedeemBotConnectCodeRequest
+	(*RedeemBotConnectCodeResponse)(nil),      // 143: peachy.v1.RedeemBotConnectCodeResponse
+	(*ReportBotCommitRequest)(nil),            // 144: peachy.v1.ReportBotCommitRequest
+	(*ReportBotCommitResponse)(nil),           // 145: peachy.v1.ReportBotCommitResponse
+	nil,                                       // 146: peachy.v1.ProtocolFloor.FormatVersionsEntry
+	(*timestamppb.Timestamp)(nil),             // 147: google.protobuf.Timestamp
+	(StateDomain)(0),                          // 148: peachy.v1.StateDomain
 }
 var file_peachy_v1_chat_proto_depIdxs = []int32{
-	109, // 0: peachy.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	4,   // 1: peachy.v1.VerifyPhoneResponse.user:type_name -> peachy.v1.User
-	33,  // 2: peachy.v1.VerifyPhoneResponse.registration_lock:type_name -> peachy.v1.RegistrationLockChallenge
-	109, // 3: peachy.v1.Session.created_at:type_name -> google.protobuf.Timestamp
-	109, // 4: peachy.v1.Session.last_seen_at:type_name -> google.protobuf.Timestamp
-	11,  // 5: peachy.v1.ListSessionsResponse.sessions:type_name -> peachy.v1.Session
-	109, // 6: peachy.v1.Device.created_at:type_name -> google.protobuf.Timestamp
-	109, // 7: peachy.v1.Device.last_seen_at:type_name -> google.protobuf.Timestamp
-	109, // 8: peachy.v1.Device.revoked_at:type_name -> google.protobuf.Timestamp
-	109, // 9: peachy.v1.Device.approval_requested_at:type_name -> google.protobuf.Timestamp
-	18,  // 10: peachy.v1.Device.link_exchanges:type_name -> peachy.v1.DeviceLinkExchange
-	109, // 11: peachy.v1.Device.unlinks_at:type_name -> google.protobuf.Timestamp
-	109, // 12: peachy.v1.DeviceRevocation.revoked_at:type_name -> google.protobuf.Timestamp
-	16,  // 13: peachy.v1.RegisterDeviceResponse.device:type_name -> peachy.v1.Device
-	16,  // 14: peachy.v1.ListDevicesResponse.devices:type_name -> peachy.v1.Device
-	17,  // 15: peachy.v1.RevokeDeviceRequest.revocations:type_name -> peachy.v1.DeviceRevocation
-	16,  // 16: peachy.v1.ApproveDeviceResponse.device:type_name -> peachy.v1.Device
-	16,  // 17: peachy.v1.ReapproveDeviceResponse.device:type_name -> peachy.v1.Device
-	16,  // 18: peachy.v1.ClaimSoleDeviceResponse.device:type_name -> peachy.v1.Device
-	34,  // 19: peachy.v1.PublishKeyPackagesRequest.key_packages:type_name -> peachy.v1.MlsKeyPackage
-	38,  // 20: peachy.v1.FetchKeyPackagesResponse.key_packages:type_name -> peachy.v1.FetchedKeyPackage
-	38,  // 21: peachy.v1.FetchKeyPackagesAnonymousResponse.key_packages:type_name -> peachy.v1.FetchedKeyPackage
-	45,  // 22: peachy.v1.KeyPackagePoolStatusResponse.devices:type_name -> peachy.v1.DeviceKeyPackagePool
-	47,  // 23: peachy.v1.SubmitCommitRequest.welcomes:type_name -> peachy.v1.MlsWelcome
-	70,  // 24: peachy.v1.SubmitCommitRequest.recipients:type_name -> peachy.v1.SealedRecipient
-	71,  // 25: peachy.v1.SubmitCommitRequest.access_keys:type_name -> peachy.v1.RecipientAccessKey
-	17,  // 26: peachy.v1.SubmitCommitResponse.stale_revocations:type_name -> peachy.v1.DeviceRevocation
-	109, // 27: peachy.v1.GetMinSupportedVersionResponse.server_time:type_name -> google.protobuf.Timestamp
-	52,  // 28: peachy.v1.GetMinSupportedVersionResponse.protocol:type_name -> peachy.v1.ProtocolFloor
-	109, // 29: peachy.v1.ProtocolFloor.next_refused_at:type_name -> google.protobuf.Timestamp
-	4,   // 30: peachy.v1.GetMeResponse.user:type_name -> peachy.v1.User
-	57,  // 31: peachy.v1.GetUsersRequest.profile_asks:type_name -> peachy.v1.ProfileAsk
-	4,   // 32: peachy.v1.GetUsersResponse.users:type_name -> peachy.v1.User
-	58,  // 33: peachy.v1.GetUsersResponse.sealed_profiles:type_name -> peachy.v1.SealedProfile
-	0,   // 34: peachy.v1.CreateUploadRequest.kind:type_name -> peachy.v1.UploadKind
-	1,   // 35: peachy.v1.CreateUploadRequest.sealed_class:type_name -> peachy.v1.SealedClass
-	60,  // 36: peachy.v1.CreateUploadResponse.resumable:type_name -> peachy.v1.ResumableUpload
-	4,   // 37: peachy.v1.GetUserByHandleResponse.user:type_name -> peachy.v1.User
-	2,   // 38: peachy.v1.MailboxEnvelope.kind:type_name -> peachy.v1.MailboxKind
-	109, // 39: peachy.v1.MailboxEnvelope.received_at:type_name -> google.protobuf.Timestamp
-	70,  // 40: peachy.v1.SendSealedRequest.recipients:type_name -> peachy.v1.SealedRecipient
-	71,  // 41: peachy.v1.SendSealedRequest.access_keys:type_name -> peachy.v1.RecipientAccessKey
-	109, // 42: peachy.v1.SendSealedResponse.received_at:type_name -> google.protobuf.Timestamp
-	17,  // 43: peachy.v1.SendSealedResponse.stale_revocations:type_name -> peachy.v1.DeviceRevocation
-	69,  // 44: peachy.v1.FetchMailboxResponse.envelopes:type_name -> peachy.v1.MailboxEnvelope
-	109, // 45: peachy.v1.FetchMailboxResponse.server_time:type_name -> google.protobuf.Timestamp
-	80,  // 46: peachy.v1.ReadStoreResponse.records:type_name -> peachy.v1.StoreRecord
-	80,  // 47: peachy.v1.WriteStoreRequest.upserts:type_name -> peachy.v1.StoreRecord
-	96,  // 48: peachy.v1.StreamEventsResponse.state_changed:type_name -> peachy.v1.StateChangedEvent
-	87,  // 49: peachy.v1.StreamEventsResponse.ephemeral:type_name -> peachy.v1.EphemeralEvent
-	95,  // 50: peachy.v1.StreamEventsResponse.reconnect:type_name -> peachy.v1.ReconnectHint
-	93,  // 51: peachy.v1.StreamEventsResponse.state_versions:type_name -> peachy.v1.StateVersions
-	75,  // 52: peachy.v1.StreamEventsResponse.mailbox:type_name -> peachy.v1.FetchMailboxResponse
-	91,  // 53: peachy.v1.StreamEventsResponse.beat:type_name -> peachy.v1.StreamBeat
-	94,  // 54: peachy.v1.StateVersions.domains:type_name -> peachy.v1.StateDomainVersion
-	110, // 55: peachy.v1.StateDomainVersion.domain:type_name -> peachy.v1.StateDomain
-	110, // 56: peachy.v1.StateChangedEvent.domains:type_name -> peachy.v1.StateDomain
-	94,  // 57: peachy.v1.StateChangedEvent.versions:type_name -> peachy.v1.StateDomainVersion
-	102, // 58: peachy.v1.FetchConversationHeadResponse.heads:type_name -> peachy.v1.ConversationHead
-	3,   // 59: peachy.v1.CallTokenKey.purpose:type_name -> peachy.v1.CallTokenPurpose
-	109, // 60: peachy.v1.CallTokenKey.issue_from:type_name -> google.protobuf.Timestamp
-	109, // 61: peachy.v1.CallTokenKey.issue_until:type_name -> google.protobuf.Timestamp
-	109, // 62: peachy.v1.CallTokenKey.redeem_until:type_name -> google.protobuf.Timestamp
-	104, // 63: peachy.v1.GetCallTokenKeysResponse.keys:type_name -> peachy.v1.CallTokenKey
-	3,   // 64: peachy.v1.IssueCallTokensRequest.purpose:type_name -> peachy.v1.CallTokenPurpose
-	5,   // 65: peachy.v1.ChatService.StartPhoneVerification:input_type -> peachy.v1.StartPhoneVerificationRequest
-	7,   // 66: peachy.v1.ChatService.VerifyPhone:input_type -> peachy.v1.VerifyPhoneRequest
-	9,   // 67: peachy.v1.ChatService.SignOut:input_type -> peachy.v1.SignOutRequest
-	12,  // 68: peachy.v1.ChatService.ListSessions:input_type -> peachy.v1.ListSessionsRequest
-	14,  // 69: peachy.v1.ChatService.RevokeSession:input_type -> peachy.v1.RevokeSessionRequest
-	21,  // 70: peachy.v1.ChatService.RegisterDevice:input_type -> peachy.v1.RegisterDeviceRequest
-	23,  // 71: peachy.v1.ChatService.ListDevices:input_type -> peachy.v1.ListDevicesRequest
-	25,  // 72: peachy.v1.ChatService.RevokeDevice:input_type -> peachy.v1.RevokeDeviceRequest
-	27,  // 73: peachy.v1.ChatService.ApproveDevice:input_type -> peachy.v1.ApproveDeviceRequest
-	29,  // 74: peachy.v1.ChatService.ReapproveDevice:input_type -> peachy.v1.ReapproveDeviceRequest
-	19,  // 75: peachy.v1.ChatService.StepDeviceLink:input_type -> peachy.v1.StepDeviceLinkRequest
-	31,  // 76: peachy.v1.ChatService.ClaimSoleDevice:input_type -> peachy.v1.ClaimSoleDeviceRequest
-	35,  // 77: peachy.v1.ChatService.PublishKeyPackages:input_type -> peachy.v1.PublishKeyPackagesRequest
-	37,  // 78: peachy.v1.ChatService.FetchKeyPackages:input_type -> peachy.v1.FetchKeyPackagesRequest
-	42,  // 79: peachy.v1.ChatService.FetchKeyPackagesAnonymous:input_type -> peachy.v1.FetchKeyPackagesAnonymousRequest
-	40,  // 80: peachy.v1.ChatService.SetAccessKey:input_type -> peachy.v1.SetAccessKeyRequest
-	44,  // 81: peachy.v1.ChatService.KeyPackagePoolStatus:input_type -> peachy.v1.KeyPackagePoolStatusRequest
-	48,  // 82: peachy.v1.ChatService.SubmitCommit:input_type -> peachy.v1.SubmitCommitRequest
-	50,  // 83: peachy.v1.ChatService.GetMinSupportedVersion:input_type -> peachy.v1.GetMinSupportedVersionRequest
-	53,  // 84: peachy.v1.ChatService.GetMe:input_type -> peachy.v1.GetMeRequest
-	59,  // 85: peachy.v1.ChatService.CreateUpload:input_type -> peachy.v1.CreateUploadRequest
-	62,  // 86: peachy.v1.ChatService.AbandonUpload:input_type -> peachy.v1.AbandonUploadRequest
-	64,  // 87: peachy.v1.ChatService.DeleteSealedObject:input_type -> peachy.v1.DeleteSealedObjectRequest
-	66,  // 88: peachy.v1.ChatService.CreateSealedMetaUpload:input_type -> peachy.v1.CreateSealedMetaUploadRequest
-	67,  // 89: peachy.v1.ChatService.GetUserByHandle:input_type -> peachy.v1.GetUserByHandleRequest
-	55,  // 90: peachy.v1.ChatService.GetUsers:input_type -> peachy.v1.GetUsersRequest
-	72,  // 91: peachy.v1.ChatService.SendSealed:input_type -> peachy.v1.SendSealedRequest
-	97,  // 92: peachy.v1.ChatService.CreateHandle:input_type -> peachy.v1.CreateHandleRequest
-	101, // 93: peachy.v1.ChatService.FetchConversationHead:input_type -> peachy.v1.FetchConversationHeadRequest
-	99,  // 94: peachy.v1.ChatService.FetchVerifierAt:input_type -> peachy.v1.FetchVerifierAtRequest
-	74,  // 95: peachy.v1.ChatService.FetchMailbox:input_type -> peachy.v1.FetchMailboxRequest
-	76,  // 96: peachy.v1.ChatService.AckMailbox:input_type -> peachy.v1.AckMailboxRequest
-	78,  // 97: peachy.v1.ChatService.SendSelfNote:input_type -> peachy.v1.SendSelfNoteRequest
-	81,  // 98: peachy.v1.ChatService.ReadStore:input_type -> peachy.v1.ReadStoreRequest
-	83,  // 99: peachy.v1.ChatService.WriteStore:input_type -> peachy.v1.WriteStoreRequest
-	85,  // 100: peachy.v1.ChatService.FetchAccountKey:input_type -> peachy.v1.FetchAccountKeyRequest
-	88,  // 101: peachy.v1.ChatService.StreamEvents:input_type -> peachy.v1.StreamEventsRequest
-	89,  // 102: peachy.v1.ChatService.BeatStream:input_type -> peachy.v1.BeatStreamRequest
-	105, // 103: peachy.v1.ChatService.GetCallTokenKeys:input_type -> peachy.v1.GetCallTokenKeysRequest
-	107, // 104: peachy.v1.ChatService.IssueCallTokens:input_type -> peachy.v1.IssueCallTokensRequest
-	6,   // 105: peachy.v1.ChatService.StartPhoneVerification:output_type -> peachy.v1.StartPhoneVerificationResponse
-	8,   // 106: peachy.v1.ChatService.VerifyPhone:output_type -> peachy.v1.VerifyPhoneResponse
-	10,  // 107: peachy.v1.ChatService.SignOut:output_type -> peachy.v1.SignOutResponse
-	13,  // 108: peachy.v1.ChatService.ListSessions:output_type -> peachy.v1.ListSessionsResponse
-	15,  // 109: peachy.v1.ChatService.RevokeSession:output_type -> peachy.v1.RevokeSessionResponse
-	22,  // 110: peachy.v1.ChatService.RegisterDevice:output_type -> peachy.v1.RegisterDeviceResponse
-	24,  // 111: peachy.v1.ChatService.ListDevices:output_type -> peachy.v1.ListDevicesResponse
-	26,  // 112: peachy.v1.ChatService.RevokeDevice:output_type -> peachy.v1.RevokeDeviceResponse
-	28,  // 113: peachy.v1.ChatService.ApproveDevice:output_type -> peachy.v1.ApproveDeviceResponse
-	30,  // 114: peachy.v1.ChatService.ReapproveDevice:output_type -> peachy.v1.ReapproveDeviceResponse
-	20,  // 115: peachy.v1.ChatService.StepDeviceLink:output_type -> peachy.v1.StepDeviceLinkResponse
-	32,  // 116: peachy.v1.ChatService.ClaimSoleDevice:output_type -> peachy.v1.ClaimSoleDeviceResponse
-	36,  // 117: peachy.v1.ChatService.PublishKeyPackages:output_type -> peachy.v1.PublishKeyPackagesResponse
-	39,  // 118: peachy.v1.ChatService.FetchKeyPackages:output_type -> peachy.v1.FetchKeyPackagesResponse
-	43,  // 119: peachy.v1.ChatService.FetchKeyPackagesAnonymous:output_type -> peachy.v1.FetchKeyPackagesAnonymousResponse
-	41,  // 120: peachy.v1.ChatService.SetAccessKey:output_type -> peachy.v1.SetAccessKeyResponse
-	46,  // 121: peachy.v1.ChatService.KeyPackagePoolStatus:output_type -> peachy.v1.KeyPackagePoolStatusResponse
-	49,  // 122: peachy.v1.ChatService.SubmitCommit:output_type -> peachy.v1.SubmitCommitResponse
-	51,  // 123: peachy.v1.ChatService.GetMinSupportedVersion:output_type -> peachy.v1.GetMinSupportedVersionResponse
-	54,  // 124: peachy.v1.ChatService.GetMe:output_type -> peachy.v1.GetMeResponse
-	61,  // 125: peachy.v1.ChatService.CreateUpload:output_type -> peachy.v1.CreateUploadResponse
-	63,  // 126: peachy.v1.ChatService.AbandonUpload:output_type -> peachy.v1.AbandonUploadResponse
-	65,  // 127: peachy.v1.ChatService.DeleteSealedObject:output_type -> peachy.v1.DeleteSealedObjectResponse
-	61,  // 128: peachy.v1.ChatService.CreateSealedMetaUpload:output_type -> peachy.v1.CreateUploadResponse
-	68,  // 129: peachy.v1.ChatService.GetUserByHandle:output_type -> peachy.v1.GetUserByHandleResponse
-	56,  // 130: peachy.v1.ChatService.GetUsers:output_type -> peachy.v1.GetUsersResponse
-	73,  // 131: peachy.v1.ChatService.SendSealed:output_type -> peachy.v1.SendSealedResponse
-	98,  // 132: peachy.v1.ChatService.CreateHandle:output_type -> peachy.v1.CreateHandleResponse
-	103, // 133: peachy.v1.ChatService.FetchConversationHead:output_type -> peachy.v1.FetchConversationHeadResponse
-	100, // 134: peachy.v1.ChatService.FetchVerifierAt:output_type -> peachy.v1.FetchVerifierAtResponse
-	75,  // 135: peachy.v1.ChatService.FetchMailbox:output_type -> peachy.v1.FetchMailboxResponse
-	77,  // 136: peachy.v1.ChatService.AckMailbox:output_type -> peachy.v1.AckMailboxResponse
-	79,  // 137: peachy.v1.ChatService.SendSelfNote:output_type -> peachy.v1.SendSelfNoteResponse
-	82,  // 138: peachy.v1.ChatService.ReadStore:output_type -> peachy.v1.ReadStoreResponse
-	84,  // 139: peachy.v1.ChatService.WriteStore:output_type -> peachy.v1.WriteStoreResponse
-	86,  // 140: peachy.v1.ChatService.FetchAccountKey:output_type -> peachy.v1.FetchAccountKeyResponse
-	92,  // 141: peachy.v1.ChatService.StreamEvents:output_type -> peachy.v1.StreamEventsResponse
-	90,  // 142: peachy.v1.ChatService.BeatStream:output_type -> peachy.v1.BeatStreamResponse
-	106, // 143: peachy.v1.ChatService.GetCallTokenKeys:output_type -> peachy.v1.GetCallTokenKeysResponse
-	108, // 144: peachy.v1.ChatService.IssueCallTokens:output_type -> peachy.v1.IssueCallTokensResponse
-	105, // [105:145] is the sub-list for method output_type
-	65,  // [65:105] is the sub-list for method input_type
-	65,  // [65:65] is the sub-list for extension type_name
-	65,  // [65:65] is the sub-list for extension extendee
-	0,   // [0:65] is the sub-list for field type_name
+	147, // 0: peachy.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	8,   // 1: peachy.v1.User.kind:type_name -> peachy.v1.UserKind
+	132, // 2: peachy.v1.User.bot:type_name -> peachy.v1.BotSummary
+	13,  // 3: peachy.v1.User.organization:type_name -> peachy.v1.AccountOrganization
+	15,  // 4: peachy.v1.StartPhoneVerificationRequest.push_token:type_name -> peachy.v1.SignupPushToken
+	0,   // 5: peachy.v1.StartPhoneVerificationResponse.check:type_name -> peachy.v1.SignupCheck
+	12,  // 6: peachy.v1.VerifyPhoneResponse.user:type_name -> peachy.v1.User
+	43,  // 7: peachy.v1.VerifyPhoneResponse.registration_lock:type_name -> peachy.v1.RegistrationLockChallenge
+	147, // 8: peachy.v1.Session.created_at:type_name -> google.protobuf.Timestamp
+	147, // 9: peachy.v1.Session.last_seen_at:type_name -> google.protobuf.Timestamp
+	21,  // 10: peachy.v1.ListSessionsResponse.sessions:type_name -> peachy.v1.Session
+	147, // 11: peachy.v1.Device.created_at:type_name -> google.protobuf.Timestamp
+	147, // 12: peachy.v1.Device.last_seen_at:type_name -> google.protobuf.Timestamp
+	147, // 13: peachy.v1.Device.revoked_at:type_name -> google.protobuf.Timestamp
+	147, // 14: peachy.v1.Device.approval_requested_at:type_name -> google.protobuf.Timestamp
+	28,  // 15: peachy.v1.Device.link_exchanges:type_name -> peachy.v1.DeviceLinkExchange
+	147, // 16: peachy.v1.Device.unlinks_at:type_name -> google.protobuf.Timestamp
+	147, // 17: peachy.v1.DeviceRevocation.revoked_at:type_name -> google.protobuf.Timestamp
+	26,  // 18: peachy.v1.RegisterDeviceResponse.device:type_name -> peachy.v1.Device
+	26,  // 19: peachy.v1.ListDevicesResponse.devices:type_name -> peachy.v1.Device
+	27,  // 20: peachy.v1.RevokeDeviceRequest.revocations:type_name -> peachy.v1.DeviceRevocation
+	26,  // 21: peachy.v1.ApproveDeviceResponse.device:type_name -> peachy.v1.Device
+	26,  // 22: peachy.v1.ReapproveDeviceResponse.device:type_name -> peachy.v1.Device
+	26,  // 23: peachy.v1.ClaimSoleDeviceResponse.device:type_name -> peachy.v1.Device
+	44,  // 24: peachy.v1.PublishKeyPackagesRequest.key_packages:type_name -> peachy.v1.MlsKeyPackage
+	48,  // 25: peachy.v1.FetchKeyPackagesResponse.key_packages:type_name -> peachy.v1.FetchedKeyPackage
+	48,  // 26: peachy.v1.FetchKeyPackagesAnonymousResponse.key_packages:type_name -> peachy.v1.FetchedKeyPackage
+	56,  // 27: peachy.v1.ListPeopleDevicesResponse.people:type_name -> peachy.v1.PersonDevices
+	58,  // 28: peachy.v1.KeyPackagePoolStatusResponse.devices:type_name -> peachy.v1.DeviceKeyPackagePool
+	60,  // 29: peachy.v1.SubmitCommitRequest.welcomes:type_name -> peachy.v1.MlsWelcome
+	92,  // 30: peachy.v1.SubmitCommitRequest.recipients:type_name -> peachy.v1.SealedRecipient
+	93,  // 31: peachy.v1.SubmitCommitRequest.access_keys:type_name -> peachy.v1.RecipientAccessKey
+	1,   // 32: peachy.v1.SubmitCommitRequest.scope:type_name -> peachy.v1.CommitScope
+	27,  // 33: peachy.v1.SubmitCommitResponse.stale_revocations:type_name -> peachy.v1.DeviceRevocation
+	147, // 34: peachy.v1.GetMinSupportedVersionResponse.server_time:type_name -> google.protobuf.Timestamp
+	65,  // 35: peachy.v1.GetMinSupportedVersionResponse.protocol:type_name -> peachy.v1.ProtocolFloor
+	147, // 36: peachy.v1.ProtocolFloor.next_refused_at:type_name -> google.protobuf.Timestamp
+	67,  // 37: peachy.v1.ProtocolFloor.next_format_retirement:type_name -> peachy.v1.FormatRetirement
+	66,  // 38: peachy.v1.ProtocolFloor.next_bot_minimum:type_name -> peachy.v1.BotMinimum
+	146, // 39: peachy.v1.ProtocolFloor.format_versions:type_name -> peachy.v1.ProtocolFloor.FormatVersionsEntry
+	147, // 40: peachy.v1.BotMinimum.at:type_name -> google.protobuf.Timestamp
+	147, // 41: peachy.v1.FormatRetirement.at:type_name -> google.protobuf.Timestamp
+	70,  // 42: peachy.v1.GetRemoteConfigResponse.config:type_name -> peachy.v1.RemoteConfig
+	147, // 43: peachy.v1.GetRemoteConfigResponse.server_time:type_name -> google.protobuf.Timestamp
+	71,  // 44: peachy.v1.RemoteConfig.flags:type_name -> peachy.v1.RemoteFlag
+	2,   // 45: peachy.v1.RemoteFlag.kind:type_name -> peachy.v1.RemoteFlagKind
+	72,  // 46: peachy.v1.RemoteFlag.min_builds:type_name -> peachy.v1.PlatformBuild
+	72,  // 47: peachy.v1.RemoteFlag.except_builds:type_name -> peachy.v1.PlatformBuild
+	3,   // 48: peachy.v1.RemoteFlag.channels:type_name -> peachy.v1.ReleaseChannel
+	147, // 49: peachy.v1.RemoteFlag.not_before:type_name -> google.protobuf.Timestamp
+	12,  // 50: peachy.v1.GetMeResponse.user:type_name -> peachy.v1.User
+	79,  // 51: peachy.v1.GetUsersRequest.profile_asks:type_name -> peachy.v1.ProfileAsk
+	12,  // 52: peachy.v1.GetUsersResponse.users:type_name -> peachy.v1.User
+	80,  // 53: peachy.v1.GetUsersResponse.sealed_profiles:type_name -> peachy.v1.SealedProfile
+	4,   // 54: peachy.v1.CreateUploadRequest.kind:type_name -> peachy.v1.UploadKind
+	5,   // 55: peachy.v1.CreateUploadRequest.sealed_class:type_name -> peachy.v1.SealedClass
+	82,  // 56: peachy.v1.CreateUploadResponse.resumable:type_name -> peachy.v1.ResumableUpload
+	12,  // 57: peachy.v1.GetUserByHandleResponse.user:type_name -> peachy.v1.User
+	6,   // 58: peachy.v1.MailboxEnvelope.kind:type_name -> peachy.v1.MailboxKind
+	147, // 59: peachy.v1.MailboxEnvelope.received_at:type_name -> google.protobuf.Timestamp
+	92,  // 60: peachy.v1.SendSealedRequest.recipients:type_name -> peachy.v1.SealedRecipient
+	93,  // 61: peachy.v1.SendSealedRequest.access_keys:type_name -> peachy.v1.RecipientAccessKey
+	147, // 62: peachy.v1.SendSealedResponse.received_at:type_name -> google.protobuf.Timestamp
+	27,  // 63: peachy.v1.SendSealedResponse.stale_revocations:type_name -> peachy.v1.DeviceRevocation
+	96,  // 64: peachy.v1.SendSealedResponse.placement:type_name -> peachy.v1.Placement
+	91,  // 65: peachy.v1.FetchMailboxResponse.envelopes:type_name -> peachy.v1.MailboxEnvelope
+	147, // 66: peachy.v1.FetchMailboxResponse.server_time:type_name -> google.protobuf.Timestamp
+	103, // 67: peachy.v1.ReadStoreResponse.records:type_name -> peachy.v1.StoreRecord
+	103, // 68: peachy.v1.WriteStoreRequest.upserts:type_name -> peachy.v1.StoreRecord
+	119, // 69: peachy.v1.StreamEventsResponse.state_changed:type_name -> peachy.v1.StateChangedEvent
+	110, // 70: peachy.v1.StreamEventsResponse.ephemeral:type_name -> peachy.v1.EphemeralEvent
+	118, // 71: peachy.v1.StreamEventsResponse.reconnect:type_name -> peachy.v1.ReconnectHint
+	116, // 72: peachy.v1.StreamEventsResponse.state_versions:type_name -> peachy.v1.StateVersions
+	98,  // 73: peachy.v1.StreamEventsResponse.mailbox:type_name -> peachy.v1.FetchMailboxResponse
+	114, // 74: peachy.v1.StreamEventsResponse.beat:type_name -> peachy.v1.StreamBeat
+	117, // 75: peachy.v1.StateVersions.domains:type_name -> peachy.v1.StateDomainVersion
+	148, // 76: peachy.v1.StateDomainVersion.domain:type_name -> peachy.v1.StateDomain
+	148, // 77: peachy.v1.StateChangedEvent.domains:type_name -> peachy.v1.StateDomain
+	117, // 78: peachy.v1.StateChangedEvent.versions:type_name -> peachy.v1.StateDomainVersion
+	125, // 79: peachy.v1.FetchConversationHeadResponse.heads:type_name -> peachy.v1.ConversationHead
+	7,   // 80: peachy.v1.CallTokenKey.purpose:type_name -> peachy.v1.CallTokenPurpose
+	147, // 81: peachy.v1.CallTokenKey.issue_from:type_name -> google.protobuf.Timestamp
+	147, // 82: peachy.v1.CallTokenKey.issue_until:type_name -> google.protobuf.Timestamp
+	147, // 83: peachy.v1.CallTokenKey.redeem_until:type_name -> google.protobuf.Timestamp
+	127, // 84: peachy.v1.GetCallTokenKeysResponse.keys:type_name -> peachy.v1.CallTokenKey
+	7,   // 85: peachy.v1.IssueCallTokensRequest.purpose:type_name -> peachy.v1.CallTokenPurpose
+	9,   // 86: peachy.v1.BotSummary.owner_kind:type_name -> peachy.v1.BotOwnerKind
+	10,  // 87: peachy.v1.BotSummary.status:type_name -> peachy.v1.BotStatus
+	133, // 88: peachy.v1.BotListing.commands:type_name -> peachy.v1.BotCommand
+	11,  // 89: peachy.v1.BotListing.grants_requested:type_name -> peachy.v1.BotGrant
+	11,  // 90: peachy.v1.BotListing.grants_required:type_name -> peachy.v1.BotGrant
+	134, // 91: peachy.v1.BotListing.reach:type_name -> peachy.v1.BotReach
+	147, // 92: peachy.v1.RevokedBotDevice.revoked_at:type_name -> google.protobuf.Timestamp
+	12,  // 93: peachy.v1.Bot.user:type_name -> peachy.v1.User
+	135, // 94: peachy.v1.Bot.listing:type_name -> peachy.v1.BotListing
+	9,   // 95: peachy.v1.Bot.owner_kind:type_name -> peachy.v1.BotOwnerKind
+	10,  // 96: peachy.v1.Bot.status:type_name -> peachy.v1.BotStatus
+	136, // 97: peachy.v1.Bot.revoked_devices:type_name -> peachy.v1.RevokedBotDevice
+	137, // 98: peachy.v1.Bot.owner_view:type_name -> peachy.v1.BotOwnerView
+	139, // 99: peachy.v1.Bot.pending_owner:type_name -> peachy.v1.BotPendingOwner
+	147, // 100: peachy.v1.Bot.effective_at:type_name -> google.protobuf.Timestamp
+	9,   // 101: peachy.v1.BotPendingOwner.owner_kind:type_name -> peachy.v1.BotOwnerKind
+	138, // 102: peachy.v1.GetBotResponse.bot:type_name -> peachy.v1.Bot
+	14,  // 103: peachy.v1.ChatService.StartPhoneVerification:input_type -> peachy.v1.StartPhoneVerificationRequest
+	17,  // 104: peachy.v1.ChatService.VerifyPhone:input_type -> peachy.v1.VerifyPhoneRequest
+	19,  // 105: peachy.v1.ChatService.SignOut:input_type -> peachy.v1.SignOutRequest
+	22,  // 106: peachy.v1.ChatService.ListSessions:input_type -> peachy.v1.ListSessionsRequest
+	24,  // 107: peachy.v1.ChatService.RevokeSession:input_type -> peachy.v1.RevokeSessionRequest
+	31,  // 108: peachy.v1.ChatService.RegisterDevice:input_type -> peachy.v1.RegisterDeviceRequest
+	33,  // 109: peachy.v1.ChatService.ListDevices:input_type -> peachy.v1.ListDevicesRequest
+	35,  // 110: peachy.v1.ChatService.RevokeDevice:input_type -> peachy.v1.RevokeDeviceRequest
+	37,  // 111: peachy.v1.ChatService.ApproveDevice:input_type -> peachy.v1.ApproveDeviceRequest
+	39,  // 112: peachy.v1.ChatService.ReapproveDevice:input_type -> peachy.v1.ReapproveDeviceRequest
+	29,  // 113: peachy.v1.ChatService.StepDeviceLink:input_type -> peachy.v1.StepDeviceLinkRequest
+	41,  // 114: peachy.v1.ChatService.ClaimSoleDevice:input_type -> peachy.v1.ClaimSoleDeviceRequest
+	45,  // 115: peachy.v1.ChatService.PublishKeyPackages:input_type -> peachy.v1.PublishKeyPackagesRequest
+	47,  // 116: peachy.v1.ChatService.FetchKeyPackages:input_type -> peachy.v1.FetchKeyPackagesRequest
+	52,  // 117: peachy.v1.ChatService.FetchKeyPackagesAnonymous:input_type -> peachy.v1.FetchKeyPackagesAnonymousRequest
+	54,  // 118: peachy.v1.ChatService.ListPeopleDevices:input_type -> peachy.v1.ListPeopleDevicesRequest
+	50,  // 119: peachy.v1.ChatService.SetAccessKey:input_type -> peachy.v1.SetAccessKeyRequest
+	57,  // 120: peachy.v1.ChatService.KeyPackagePoolStatus:input_type -> peachy.v1.KeyPackagePoolStatusRequest
+	61,  // 121: peachy.v1.ChatService.SubmitCommit:input_type -> peachy.v1.SubmitCommitRequest
+	63,  // 122: peachy.v1.ChatService.GetMinSupportedVersion:input_type -> peachy.v1.GetMinSupportedVersionRequest
+	68,  // 123: peachy.v1.ChatService.GetRemoteConfig:input_type -> peachy.v1.GetRemoteConfigRequest
+	73,  // 124: peachy.v1.ChatService.GetMe:input_type -> peachy.v1.GetMeRequest
+	81,  // 125: peachy.v1.ChatService.CreateUpload:input_type -> peachy.v1.CreateUploadRequest
+	84,  // 126: peachy.v1.ChatService.AbandonUpload:input_type -> peachy.v1.AbandonUploadRequest
+	86,  // 127: peachy.v1.ChatService.DeleteSealedObject:input_type -> peachy.v1.DeleteSealedObjectRequest
+	88,  // 128: peachy.v1.ChatService.CreateSealedMetaUpload:input_type -> peachy.v1.CreateSealedMetaUploadRequest
+	89,  // 129: peachy.v1.ChatService.GetUserByHandle:input_type -> peachy.v1.GetUserByHandleRequest
+	75,  // 130: peachy.v1.ChatService.ReportUser:input_type -> peachy.v1.ReportUserRequest
+	77,  // 131: peachy.v1.ChatService.GetUsers:input_type -> peachy.v1.GetUsersRequest
+	94,  // 132: peachy.v1.ChatService.SendSealed:input_type -> peachy.v1.SendSealedRequest
+	120, // 133: peachy.v1.ChatService.CreateHandle:input_type -> peachy.v1.CreateHandleRequest
+	124, // 134: peachy.v1.ChatService.FetchConversationHead:input_type -> peachy.v1.FetchConversationHeadRequest
+	122, // 135: peachy.v1.ChatService.FetchVerifierAt:input_type -> peachy.v1.FetchVerifierAtRequest
+	97,  // 136: peachy.v1.ChatService.FetchMailbox:input_type -> peachy.v1.FetchMailboxRequest
+	99,  // 137: peachy.v1.ChatService.AckMailbox:input_type -> peachy.v1.AckMailboxRequest
+	101, // 138: peachy.v1.ChatService.SendSelfNote:input_type -> peachy.v1.SendSelfNoteRequest
+	104, // 139: peachy.v1.ChatService.ReadStore:input_type -> peachy.v1.ReadStoreRequest
+	106, // 140: peachy.v1.ChatService.WriteStore:input_type -> peachy.v1.WriteStoreRequest
+	108, // 141: peachy.v1.ChatService.FetchAccountKey:input_type -> peachy.v1.FetchAccountKeyRequest
+	111, // 142: peachy.v1.ChatService.StreamEvents:input_type -> peachy.v1.StreamEventsRequest
+	112, // 143: peachy.v1.ChatService.BeatStream:input_type -> peachy.v1.BeatStreamRequest
+	128, // 144: peachy.v1.ChatService.GetCallTokenKeys:input_type -> peachy.v1.GetCallTokenKeysRequest
+	130, // 145: peachy.v1.ChatService.IssueCallTokens:input_type -> peachy.v1.IssueCallTokensRequest
+	140, // 146: peachy.v1.ChatService.GetBot:input_type -> peachy.v1.GetBotRequest
+	142, // 147: peachy.v1.ChatService.RedeemBotConnectCode:input_type -> peachy.v1.RedeemBotConnectCodeRequest
+	144, // 148: peachy.v1.ChatService.ReportBotCommit:input_type -> peachy.v1.ReportBotCommitRequest
+	16,  // 149: peachy.v1.ChatService.StartPhoneVerification:output_type -> peachy.v1.StartPhoneVerificationResponse
+	18,  // 150: peachy.v1.ChatService.VerifyPhone:output_type -> peachy.v1.VerifyPhoneResponse
+	20,  // 151: peachy.v1.ChatService.SignOut:output_type -> peachy.v1.SignOutResponse
+	23,  // 152: peachy.v1.ChatService.ListSessions:output_type -> peachy.v1.ListSessionsResponse
+	25,  // 153: peachy.v1.ChatService.RevokeSession:output_type -> peachy.v1.RevokeSessionResponse
+	32,  // 154: peachy.v1.ChatService.RegisterDevice:output_type -> peachy.v1.RegisterDeviceResponse
+	34,  // 155: peachy.v1.ChatService.ListDevices:output_type -> peachy.v1.ListDevicesResponse
+	36,  // 156: peachy.v1.ChatService.RevokeDevice:output_type -> peachy.v1.RevokeDeviceResponse
+	38,  // 157: peachy.v1.ChatService.ApproveDevice:output_type -> peachy.v1.ApproveDeviceResponse
+	40,  // 158: peachy.v1.ChatService.ReapproveDevice:output_type -> peachy.v1.ReapproveDeviceResponse
+	30,  // 159: peachy.v1.ChatService.StepDeviceLink:output_type -> peachy.v1.StepDeviceLinkResponse
+	42,  // 160: peachy.v1.ChatService.ClaimSoleDevice:output_type -> peachy.v1.ClaimSoleDeviceResponse
+	46,  // 161: peachy.v1.ChatService.PublishKeyPackages:output_type -> peachy.v1.PublishKeyPackagesResponse
+	49,  // 162: peachy.v1.ChatService.FetchKeyPackages:output_type -> peachy.v1.FetchKeyPackagesResponse
+	53,  // 163: peachy.v1.ChatService.FetchKeyPackagesAnonymous:output_type -> peachy.v1.FetchKeyPackagesAnonymousResponse
+	55,  // 164: peachy.v1.ChatService.ListPeopleDevices:output_type -> peachy.v1.ListPeopleDevicesResponse
+	51,  // 165: peachy.v1.ChatService.SetAccessKey:output_type -> peachy.v1.SetAccessKeyResponse
+	59,  // 166: peachy.v1.ChatService.KeyPackagePoolStatus:output_type -> peachy.v1.KeyPackagePoolStatusResponse
+	62,  // 167: peachy.v1.ChatService.SubmitCommit:output_type -> peachy.v1.SubmitCommitResponse
+	64,  // 168: peachy.v1.ChatService.GetMinSupportedVersion:output_type -> peachy.v1.GetMinSupportedVersionResponse
+	69,  // 169: peachy.v1.ChatService.GetRemoteConfig:output_type -> peachy.v1.GetRemoteConfigResponse
+	74,  // 170: peachy.v1.ChatService.GetMe:output_type -> peachy.v1.GetMeResponse
+	83,  // 171: peachy.v1.ChatService.CreateUpload:output_type -> peachy.v1.CreateUploadResponse
+	85,  // 172: peachy.v1.ChatService.AbandonUpload:output_type -> peachy.v1.AbandonUploadResponse
+	87,  // 173: peachy.v1.ChatService.DeleteSealedObject:output_type -> peachy.v1.DeleteSealedObjectResponse
+	83,  // 174: peachy.v1.ChatService.CreateSealedMetaUpload:output_type -> peachy.v1.CreateUploadResponse
+	90,  // 175: peachy.v1.ChatService.GetUserByHandle:output_type -> peachy.v1.GetUserByHandleResponse
+	76,  // 176: peachy.v1.ChatService.ReportUser:output_type -> peachy.v1.ReportUserResponse
+	78,  // 177: peachy.v1.ChatService.GetUsers:output_type -> peachy.v1.GetUsersResponse
+	95,  // 178: peachy.v1.ChatService.SendSealed:output_type -> peachy.v1.SendSealedResponse
+	121, // 179: peachy.v1.ChatService.CreateHandle:output_type -> peachy.v1.CreateHandleResponse
+	126, // 180: peachy.v1.ChatService.FetchConversationHead:output_type -> peachy.v1.FetchConversationHeadResponse
+	123, // 181: peachy.v1.ChatService.FetchVerifierAt:output_type -> peachy.v1.FetchVerifierAtResponse
+	98,  // 182: peachy.v1.ChatService.FetchMailbox:output_type -> peachy.v1.FetchMailboxResponse
+	100, // 183: peachy.v1.ChatService.AckMailbox:output_type -> peachy.v1.AckMailboxResponse
+	102, // 184: peachy.v1.ChatService.SendSelfNote:output_type -> peachy.v1.SendSelfNoteResponse
+	105, // 185: peachy.v1.ChatService.ReadStore:output_type -> peachy.v1.ReadStoreResponse
+	107, // 186: peachy.v1.ChatService.WriteStore:output_type -> peachy.v1.WriteStoreResponse
+	109, // 187: peachy.v1.ChatService.FetchAccountKey:output_type -> peachy.v1.FetchAccountKeyResponse
+	115, // 188: peachy.v1.ChatService.StreamEvents:output_type -> peachy.v1.StreamEventsResponse
+	113, // 189: peachy.v1.ChatService.BeatStream:output_type -> peachy.v1.BeatStreamResponse
+	129, // 190: peachy.v1.ChatService.GetCallTokenKeys:output_type -> peachy.v1.GetCallTokenKeysResponse
+	131, // 191: peachy.v1.ChatService.IssueCallTokens:output_type -> peachy.v1.IssueCallTokensResponse
+	141, // 192: peachy.v1.ChatService.GetBot:output_type -> peachy.v1.GetBotResponse
+	143, // 193: peachy.v1.ChatService.RedeemBotConnectCode:output_type -> peachy.v1.RedeemBotConnectCodeResponse
+	145, // 194: peachy.v1.ChatService.ReportBotCommit:output_type -> peachy.v1.ReportBotCommitResponse
+	149, // [149:195] is the sub-list for method output_type
+	103, // [103:149] is the sub-list for method input_type
+	103, // [103:103] is the sub-list for extension type_name
+	103, // [103:103] is the sub-list for extension extendee
+	0,   // [0:103] is the sub-list for field type_name
 }
 
 func init() { file_peachy_v1_chat_proto_init() }
@@ -7599,19 +10596,19 @@ func file_peachy_v1_chat_proto_init() {
 		return
 	}
 	file_peachy_v1_state_proto_init()
-	file_peachy_v1_chat_proto_msgTypes[15].OneofWrappers = []any{
+	file_peachy_v1_chat_proto_msgTypes[17].OneofWrappers = []any{
 		(*StepDeviceLinkRequest_ApproverCommitment)(nil),
 		(*StepDeviceLinkRequest_DeviceNonce)(nil),
 		(*StepDeviceLinkRequest_ApproverNonce)(nil),
 	}
-	file_peachy_v1_chat_proto_msgTypes[96].OneofWrappers = []any{}
+	file_peachy_v1_chat_proto_msgTypes[111].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_peachy_v1_chat_proto_rawDesc), len(file_peachy_v1_chat_proto_rawDesc)),
-			NumEnums:      4,
-			NumMessages:   105,
+			NumEnums:      12,
+			NumMessages:   135,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

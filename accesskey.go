@@ -193,7 +193,8 @@ func (d *Device) sendHello(ctx context.Context, group string, key []byte, retryK
 	if err != nil {
 		return err
 	}
-	return d.sealHinted(ctx, group, wire, false, retryKey, nil, hintImplicit)
+	// A hello carries the access key: never to a bot leaf.
+	return d.sealHinted(ctx, group, wire, false, retryKey, nil, hintImplicit, botsNone)
 }
 
 func encodeHello(key []byte) ([]byte, error) {

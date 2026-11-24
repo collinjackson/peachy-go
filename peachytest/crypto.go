@@ -6,10 +6,11 @@ package peachytest
 // the account identity key (identity.md "The account identity key"), the
 // version-1 account-key box a server-run approver seals (identity.md
 // "Fetching and opening the account key"), the account store's sealed values
-// (account-store.md "Encryption") and the commit stamp (delivery.md "The
-// sealed stamp").
+// (account-store.md "Encryption") and the commit stamp (delivery.md "Commit
+// stamps").
 
 import (
+	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/ecdh"
@@ -49,16 +50,31 @@ func PublishedKeys(pub ed25519.PublicKey) string {
 // order, no whitespace, padded standard base64 inside, unpadded base64url
 // segments.
 func MintCredential(issuer ed25519.PrivateKey, actor, device string, deviceKey, accountKey, accountSig []byte, iat, exp int64) []byte {
+	return mintCredential(issuer, false, actor, device, deviceKey, accountKey, accountSig, iat, exp)
+}
+
+// MintBotCredential is MintCredential for a bot's device: a pdc3, the same
+// payload at v 3 with "kind":"bot" before iat (bots.md "The bot
+// credential"). A pdc3 always carries the account certificate.
+func MintBotCredential(issuer ed25519.PrivateKey, actor, device string, deviceKey, accountKey, accountSig []byte, iat, exp int64) []byte {
+	return mintCredential(issuer, true, actor, device, deviceKey, accountKey, accountSig, iat, exp)
+}
+
+func mintCredential(issuer ed25519.PrivateKey, bot bool, actor, device string, deviceKey, accountKey, accountSig []byte, iat, exp int64) []byte {
 	b64 := base64.StdEncoding.EncodeToString
 	// json.Marshal of a string escapes <, > and &, which ids and base64 never
 	// hold, so the "no escapes" rule holds for every value written here.
 	q := func(s string) string { b, _ := json.Marshal(s); return string(b) }
-	payload := fmt.Sprintf(`{"v":1,"kid":%s,"actor_id":%s,"device_id":%s,"device_key":%s,"account_key":%s,"account_sig":%s,"iat":%d,"exp":%d}`,
-		q(Kid(issuer.Public().(ed25519.PublicKey))), q(actor), q(device), q(b64(deviceKey)),
-		q(b64(accountKey)), q(b64(accountSig)), iat, exp)
+	v, kind, prefix := 1, "", "pdc1."
+	if bot {
+		v, kind, prefix = 3, `"kind":"bot",`, "pdc3."
+	}
+	payload := fmt.Sprintf(`{"v":%d,"kid":%s,"actor_id":%s,"device_id":%s,"device_key":%s,"account_key":%s,"account_sig":%s,%s"iat":%d,"exp":%d}`,
+		v, q(Kid(issuer.Public().(ed25519.PublicKey))), q(actor), q(device), q(b64(deviceKey)),
+		q(b64(accountKey)), q(b64(accountSig)), kind, iat, exp)
 	sig := ed25519.Sign(issuer, []byte(payload))
 	enc := base64.RawURLEncoding.EncodeToString
-	return []byte("pdc1." + enc([]byte(payload)) + "." + enc(sig))
+	return []byte(prefix + enc([]byte(payload)) + "." + enc(sig))
 }
 
 // credentialLifetime is iat and exp for a credential issued at now: the UTC
@@ -83,11 +99,16 @@ func hkdf32(ikm []byte, info string) []byte {
 	return k
 }
 
-// accountIdentity is the account identity key pair derived from the account
-// key.
+// accountIdentity is the account identity key pair derived from the held
+// account key's identity root: the key itself in the one-key form (32
+// bytes), its second half in the two-key form (64) (account-store.md "The
+// held account key").
 func accountIdentity(accountKey []byte) ed25519.PrivateKey {
-	return ed25519.NewKeyFromSeed(hkdf32(accountKey, "peachy account identity v1"))
+	return ed25519.NewKeyFromSeed(hkdf32(accountKey[len(accountKey)-32:], "peachy account identity v1"))
 }
+
+// storeKeyOf is the held account key's store key: its first 32 bytes.
+func storeKeyOf(accountKey []byte) []byte { return accountKey[:32] }
 
 // certifyDevice is the account certificate over a device's signing key.
 func certifyDevice(identity ed25519.PrivateKey, deviceKey []byte) []byte {
@@ -207,7 +228,7 @@ func gcm(key []byte) cipher.AEAD {
 
 // storeSeal seals an account store value under its record id.
 func storeSeal(accountKey, id, plaintext []byte) []byte {
-	key := hkdf32(accountKey, "peachy store v1\x00"+string(id))
+	key := hkdf32(storeKeyOf(accountKey), "peachy store v1\x00"+string(id))
 	padded := append(append([]byte{}, plaintext...), 0x80)
 	for len(padded)%256 != 0 {
 		padded = append(padded, 0)
@@ -218,20 +239,53 @@ func storeSeal(accountKey, id, plaintext []byte) []byte {
 	return append(out, gcm(key).Seal(nil, nonce, padded, id)...)
 }
 
-// commitStamp seals what the server was told about a commit built at epoch
-// with sendKey: the next verifier, and zeros for the steward key and MAC
-// that no client supplies.
-func commitStamp(sendKey []byte, epoch uint64, nextVerifier []byte) []byte {
-	key := hkdf32(sendKey, "peachy commit stamp v1")
-	plain := make([]byte, 96)
-	copy(plain, nextVerifier)
-	nonce := make([]byte, 12)
-	rand.Read(nonce)
-	aad := make([]byte, 9)
-	aad[0] = 1
-	binary.BigEndian.PutUint64(aad[1:], epoch)
-	out := append([]byte{1}, nonce...)
-	return append(out, gcm(key).Seal(nil, nonce, plain, aad)...)
+// stampSetDigest is SHA-256("peachy stamp set v1" || set), the set's keys
+// in the order given (delivery.md "Commit stamps").
+func stampSetDigest(set [][]byte) []byte {
+	h := sha256.New()
+	h.Write([]byte("peachy stamp set v1"))
+	for _, k := range set {
+		h.Write(k)
+	}
+	return h.Sum(nil)
+}
+
+// stampVerifies is whether stamp is one key of set's Ed25519 signature over
+// "peachy commit stamp v1" || handle || BE64(epoch) || SHA-256(commit) ||
+// the new set's digest (32 zeros for none).
+func stampVerifies(set [][]byte, stamp, handle []byte, epoch uint64, commit []byte, newSet [][]byte) bool {
+	if len(stamp) != ed25519.SignatureSize {
+		return false
+	}
+	msg := append([]byte("peachy commit stamp v1"), handle...)
+	msg = binary.BigEndian.AppendUint64(msg, epoch)
+	sum := sha256.Sum256(commit)
+	msg = append(msg, sum[:]...)
+	if len(newSet) == 0 {
+		msg = append(msg, make([]byte, 32)...)
+	} else {
+		msg = append(msg, stampSetDigest(newSet)...)
+	}
+	for _, k := range set {
+		if len(k) == ed25519.PublicKeySize && ed25519.Verify(k, msg, stamp) {
+			return true
+		}
+	}
+	return false
+}
+
+// validStampSet: 1 to 64 keys of 32 bytes, strictly ascending. The fake
+// doesn't check that each is a point of large order.
+func validStampSet(set [][]byte) bool {
+	if len(set) == 0 || len(set) > 64 {
+		return false
+	}
+	for i, k := range set {
+		if len(k) != 32 || i > 0 && bytes.Compare(set[i-1], k) >= 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func randomBytes(n int) []byte {

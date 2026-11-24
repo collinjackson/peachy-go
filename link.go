@@ -218,6 +218,10 @@ func (d *Device) openBox(p *pairing, byID map[string]*pb.Device, fetched *pb.Fet
 		p.interrupted = true
 		return LinkStatus{}, fmt.Errorf("the account key didn't open (%v): %w", err, ErrLinkInterrupted)
 	}
+	if !accountKeyLength(len(key)) {
+		p.interrupted = true
+		return LinkStatus{}, fmt.Errorf("the account key is %d bytes, not 32 or 64: %w", len(key), ErrLinkInterrupted)
+	}
 	d.state.AccountKeyHex = hex.EncodeToString(key)
 	if err := d.state.save(d.dir); err != nil {
 		return LinkStatus{}, err

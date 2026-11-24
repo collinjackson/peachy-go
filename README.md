@@ -67,10 +67,13 @@ PEACHY_FEATURES=peachy-mls-cabi/test-issuer ./build.sh
 CGO_LDFLAGS=-L$PWD/target/lib go test -tags testissuer ./...
 ```
 
-`peachytest.Start(t)` starts one, `AddAccount` makes an account, and every
-number signs in with `peachytest.Code`. With `-tags testissuer`, a Device can
-also start conversations (`FoundGroupForTest`, `AddMemberForTest`,
-`RemoveMemberForTest`). The engine built that way is for tests only.
+`peachytest.Start(t)` starts one, `AddAccount` makes an account
+(`AddAccountOneKey` with an older 32-byte account key, `AddBot` a bot whose
+device gets a `pdc3`), and every number signs in with `peachytest.Code`.
+With `-tags testissuer`, a Device can also start conversations
+(`FoundGroupForTest`, `FoundGovernedGroupForTest`, `AddMemberForTest`,
+`RemoveMemberForTest`, `AddBotForTest`). The engine built that way is for
+tests only.
 
 ## License
 

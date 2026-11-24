@@ -93,8 +93,8 @@ func (f *fakeStore) put(t *testing.T, version int64, records map[string]string) 
 	f.sealed = sealed
 }
 
-func testDevice(url string) *Device {
-	return &Device{rpc: newRPC(url), state: &deviceState{AccountKeyHex: hex.EncodeToString(testAccountKey)}}
+func testDevice(t *testing.T, url string) *Device {
+	return &Device{rpc: newRPC(url), dir: t.TempDir(), state: &deviceState{AccountKeyHex: hex.EncodeToString(testAccountKey)}}
 }
 
 // A write keeps a record of a kind this build doesn't know in its manifest,
@@ -117,7 +117,7 @@ func TestStoreWriteKeepsUnknownKinds(t *testing.T) {
 		in[r.ID] = r.JSON
 	}
 	f.put(t, 3, in)
-	d := testDevice(f.server(t).URL)
+	d := testDevice(t, f.server(t).URL)
 	if err := d.Accept(context.Background(), "11111111-1111-4111-8111-111111111111"); err != nil {
 		t.Fatal(err)
 	}
@@ -157,7 +157,7 @@ func TestStoreWriteConflict(t *testing.T) {
 	f.race = func(f *fakeStore) {
 		f.put(t, 2, map[string]string{"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": `{"kind":"contact","key":"` + who + `","at":2,"value":{"contactName":"Sam","nameChoice":"contact"}}`})
 	}
-	d := testDevice(f.server(t).URL)
+	d := testDevice(t, f.server(t).URL)
 	if err := d.Accept(context.Background(), who); err != nil {
 		t.Fatal(err)
 	}

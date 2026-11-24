@@ -50,6 +50,12 @@ func (s *Server) user(a *account) *pb.User {
 	if a.handle != "" {
 		u.Handle = "@" + a.handle
 	}
+	if a.bot {
+		// The server serves a bot's row only to some clients (bots.md,
+		// Conventions); the fake serves it to everyone.
+		u.Kind = pb.UserKind_USER_KIND_BOT
+		u.Bot = &pb.BotSummary{}
+	}
 	return u
 }
 
@@ -147,6 +153,9 @@ func (s *Server) registerDevice(c *caller, req *pb.RegisterDeviceRequest) (*pb.R
 	}
 	iat, exp := credentialLifetime(now)
 	cred := MintCredential(s.issuer, a.id, row.id, row.signingKey, row.accountKey, row.accountSig, iat, exp)
+	if a.bot && row.certified {
+		cred = MintBotCredential(s.issuer, a.id, row.id, row.signingKey, row.accountKey, row.accountSig, iat, exp)
+	}
 	return &pb.RegisterDeviceResponse{Device: s.deviceRow(row, sess), Credential: cred, AccountIdentityKey: pinned}, nil
 }
 

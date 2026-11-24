@@ -363,7 +363,22 @@ func openMLS(credential, seed []byte, trustedKeysJSON, storePath string, storeKe
 	if err != nil {
 		return nil, err
 	}
-	return &mlsClient{c: client}, nil
+	m := &mlsClient{c: client}
+	if accountKey != nil {
+		// The stamp keys derive from it; the core holds it in memory only, so
+		// it goes in after every open (peachy-protocol 0.3.0).
+		if err := m.setAccountKey(accountKey); err != nil {
+			m.close()
+			return nil, err
+		}
+	}
+	return m, nil
+}
+
+// setAccountKey hands the core the account key as held (32 or 64 bytes).
+func (m *mlsClient) setAccountKey(key []byte) error {
+	kp, kn := in(key)
+	return ffi(func() C.int32_t { return C.peachy_mls_client_set_account_key(m.c, kp, kn) })
 }
 
 func (m *mlsClient) close() {
@@ -483,6 +498,9 @@ func (m *mlsClient) signJoinRequest(group []byte) ([]byte, error) {
 
 type member struct {
 	actorID, deviceID string
+	// bot: the leaf's credential is a pdc3 (docs/bots.md). botAware: the
+	// leaf lists peachy_bot_aware (0xF1AB), as a 0.3.0 core's leaves do.
+	bot, botAware bool
 }
 
 // roster is the group's members whose credentials verify. A leaf that
@@ -507,10 +525,30 @@ func (m *mlsClient) roster(group []byte) ([]member, error) {
 		take(&k)
 		take(&lk)
 		if rejection == 0 && actor != "" {
-			out = append(out, member{actorID: actor, deviceID: device})
+			bot, aware := m.memberKind(gp, gn, i)
+			out = append(out, member{actorID: actor, deviceID: device, bot: bot, botAware: aware})
 		}
 	}
 	return out, nil
+}
+
+// memberKind reads the roster entry at pos: whether its leaf is a bot's,
+// and whether it lists 0xF1AB. A kind this build doesn't know, or a failed
+// read, is a person's, as the core asks.
+func (m *mlsClient) memberKind(gp *C.uint8_t, gn C.uintptr_t, pos C.uintptr_t) (bot, aware bool) {
+	var kind, ownerKind C.uint32_t
+	var owner C.PeachyMlsBuffer
+	if ffi(func() C.int32_t {
+		return C.peachy_mls_group_member_kind(m.c, gp, gn, pos, &kind, &ownerKind, &owner)
+	}) == nil {
+		bot = kind == C.PEACHY_MLS_MEMBER_BOT
+	}
+	take(&owner)
+	var supports C.bool
+	if ffi(func() C.int32_t { return C.peachy_mls_group_member_supports_bot(m.c, gp, gn, pos, &supports) }) == nil {
+		aware = bool(supports)
+	}
+	return bot, aware
 }
 
 // meta is the group's name-and-photo JSON, or nil when none is set.

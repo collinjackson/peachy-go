@@ -282,6 +282,9 @@ func (d *Device) connect(ctx context.Context) error {
 	if err := keepPrivate(d.dir, store); err != nil {
 		return err
 	}
+	if err := d.sweepLeaves(time.Now()); err != nil {
+		return err
+	}
 	// The encrypted store opened under its key: any copy in the clear an
 	// older build's migration left can go.
 	if n, err := removeClearCopies(store); err != nil {
@@ -414,13 +417,17 @@ type Event struct {
 	JSON string
 }
 
-// Poll drains one page of the mailbox, then sends the hellos that are due.
+// Poll drains one page of the mailbox, then sends the hellos that are due
+// and, once the mailbox is drained, the leaf updates.
 // more is true when another page waits. The MLS engine saves after every
 // message it processes, so envelopes are acknowledged only once what they did
 // is on disk.
 func (d *Device) Poll(ctx context.Context) (events []Event, more bool, err error) {
 	events, more, err = d.poll(ctx)
 	d.sendHellos(ctx, time.Now())
+	if !more {
+		d.sendLeafUpdates(ctx, time.Now())
+	}
 	return events, more, err
 }
 
@@ -511,6 +518,9 @@ func (d *Device) handle(ctx context.Context, accountKey []byte, env *pb.MailboxE
 		} else if err != nil {
 			return nil, err
 		}
+		// A leaf from a key package an older core made lacks 0xF1AB: one
+		// update, 0 to 60 seconds on (leafupdate.go). oweHello saves it.
+		d.oweLeafUpdate(group, leafUpdateDue(false, d.state.DeviceID, string(group), 0, time.Now().Unix()))
 		if err := d.oweHello(string(group), time.Now()); err != nil {
 			return nil, err
 		}
@@ -740,6 +750,9 @@ type Conversation struct {
 	Name string
 	// Members' actor ids, ourselves included, each once.
 	Members []string
+	// The members that are bots (their leaves carry a pdc3), also in
+	// Members.
+	Bots []string
 	// Advanced Chat Privacy is on for this chat.
 	ACP bool
 	// The chat's disappearing-message timer, which messages sent to it carry;
@@ -789,9 +802,13 @@ func (d *Device) Conversations() ([]Conversation, error) {
 			if !seen[m.actorID] {
 				seen[m.actorID] = true
 				c.Members = append(c.Members, m.actorID)
+				if m.bot {
+					c.Bots = append(c.Bots, m.actorID)
+				}
 			}
 		}
 		sort.Strings(c.Members)
+		sort.Strings(c.Bots)
 		d.readMeta(g, &c)
 		out = append(out, c)
 	}
@@ -828,6 +845,9 @@ type Person struct {
 	Name      string
 	Handle    string // without the @; "" when they have none
 	AvatarURL string
+	// The account is a bot's, as far as the server says (it tells only some
+	// clients; a bot leaf in a group is the surer sign: Conversation.Bots).
+	Bot bool
 }
 
 func (d *Device) People(ctx context.Context, ids []string) ([]Person, error) {
@@ -837,7 +857,8 @@ func (d *Device) People(ctx context.Context, ids []string) ([]Person, error) {
 	}
 	var out []Person
 	for _, u := range resp.GetUsers() {
-		out = append(out, Person{ID: u.GetId(), Name: u.GetDisplayName(), Handle: strings.TrimPrefix(u.GetHandle(), "@"), AvatarURL: u.GetAvatarUrl()})
+		out = append(out, Person{ID: u.GetId(), Name: u.GetDisplayName(), Handle: strings.TrimPrefix(u.GetHandle(), "@"),
+			AvatarURL: u.GetAvatarUrl(), Bot: u.GetKind() == pb.UserKind_USER_KIND_BOT})
 	}
 	return out, nil
 }
@@ -900,7 +921,9 @@ func (d *Device) Receipt(ctx context.Context, conversation, kind, target string,
 		d.narrowMarks[conversation] = n + 1
 	}
 	d.mu.Unlock()
-	return d.sealTo(ctx, conversation, wire, false, "", authors)
+	// Receipts reach a bot leaf only in its own person-to-bot chat
+	// (docs/bots.md, "Addressing bot leaves").
+	return d.sealHinted(ctx, conversation, wire, false, "", authors, -1, botsInOwnChat)
 }
 
 // Edit replaces the words of one of this person's own messages. revision is
@@ -1054,8 +1077,9 @@ func (d *Device) send(ctx context.Context, id, conversation, text, replyTo strin
 	if d.mls != nil {
 		d.readMeta([]byte(conversation), &conv)
 	}
-	if d.accessKey != nil {
-		// So members can reach this account without naming themselves.
+	if d.accessKey != nil && !d.holdsBotLocked([]byte(conversation)) {
+		// So members can reach this account without naming themselves; never
+		// where a bot reads (docs/bots.md, "Addressing bot leaves").
 		msg["ak"] = base64.StdEncoding.EncodeToString(d.accessKey)
 	}
 	d.mu.Unlock()
@@ -1109,14 +1133,23 @@ func (d *Device) seal(ctx context.Context, conversation string, plaintext []byte
 // sealTo is seal to the devices of only those accounts, or with none named,
 // to every other device in the conversation.
 func (d *Device) sealTo(ctx context.Context, conversation string, plaintext []byte, urgent bool, clientID string, only []string) error {
-	return d.sealHinted(ctx, conversation, plaintext, urgent, clientID, only, -1)
+	return d.sealHinted(ctx, conversation, plaintext, urgent, clientID, only, -1, botsAll)
 }
 
+// Which bot leaves a send is addressed to (docs/bots.md, "Addressing bot
+// leaves"): all of them (transcript frames, reactions, edits, deletes),
+// none (hellos), or only in a person-to-bot chat (receipts).
+const (
+	botsAll = iota
+	botsNone
+	botsInOwnChat
+)
+
 // sealHinted is sealTo with a content hint (0 to 3), or none for -1.
-func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint int) error {
+func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint, bots int) error {
 	// Sealing takes the lock; the send doesn't, so a slow or hung request
 	// can't hold up receiving (or other sends) behind it.
-	req, r, err := d.sealLocked(conversation, plaintext, urgent, clientID, only, hint)
+	req, r, err := d.sealLocked(conversation, plaintext, urgent, clientID, only, hint, bots)
 	if err != nil || req == nil {
 		return err
 	}
@@ -1134,7 +1167,7 @@ func (d *Device) sealHinted(ctx context.Context, conversation string, plaintext 
 // sealLocked encrypts and seals a message, returning the request that sends
 // it (nil when there's nobody to tell) and a copy of the rpc client to send
 // it with.
-func (d *Device) sealLocked(conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint int) (*pb.SendSealedRequest, *rpc, error) {
+func (d *Device) sealLocked(conversation string, plaintext []byte, urgent bool, clientID string, only []string, hint, bots int) (*pb.SendSealedRequest, *rpc, error) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	if d.mls == nil {
@@ -1145,8 +1178,12 @@ func (d *Device) sealLocked(conversation string, plaintext []byte, urgent bool, 
 	if err != nil {
 		return nil, nil, err
 	}
+	skipBots := bots == botsNone || bots == botsInOwnChat && !d.personToBot(group, roster)
 	var recipients []*pb.SealedRecipient
 	for _, m := range roster {
+		if m.bot && skipBots {
+			continue
+		}
 		if m.deviceID != d.state.DeviceID && (only == nil || slices.Contains(only, m.actorID)) {
 			recipients = append(recipients, &pb.SealedRecipient{UserId: m.actorID, DeviceId: m.deviceID})
 		}

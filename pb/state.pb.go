@@ -49,10 +49,18 @@ const (
 	StateDomain_STATE_DOMAIN_ACCOUNT_STORE StateDomain = 17
 	// This account's mailbox has something new (FetchMailbox). Not versioned.
 	StateDomain_STATE_DOMAIN_MAILBOX StateDomain = 18
-	// Someone this account holds changed their public row (GetUsers). Co-members of
-	// sealed conversations are unknown to the server, so also refresh people when
-	// coming back to the foreground.
+	// Someone the server knows this account holds changed their public row
+	// (GetUsers). Sharing a sealed conversation does not count, so also refresh
+	// people when coming back to the foreground.
 	StateDomain_STATE_DOMAIN_PEOPLE StateDomain = 20
+	// The account's gates or bots_paused, or a bot the account runs, changed: a
+	// person's client re-reads GetMe, and a bot's own session re-reads its card
+	// (GetBot).
+	// Sent to every open session when bots are paused or resumed or the gates move.
+	StateDomain_STATE_DOMAIN_BOTS StateDomain = 23
+	// The remote flag document changed (GetRemoteConfig). Sent to every open stream
+	// and not versioned; fetch after a random wait of 0 to 20 seconds.
+	StateDomain_STATE_DOMAIN_REMOTE_CONFIG StateDomain = 24
 )
 
 // Enum value maps for StateDomain.
@@ -65,6 +73,8 @@ var (
 		17: "STATE_DOMAIN_ACCOUNT_STORE",
 		18: "STATE_DOMAIN_MAILBOX",
 		20: "STATE_DOMAIN_PEOPLE",
+		23: "STATE_DOMAIN_BOTS",
+		24: "STATE_DOMAIN_REMOTE_CONFIG",
 	}
 	StateDomain_value = map[string]int32{
 		"STATE_DOMAIN_UNSPECIFIED":   0,
@@ -74,6 +84,8 @@ var (
 		"STATE_DOMAIN_ACCOUNT_STORE": 17,
 		"STATE_DOMAIN_MAILBOX":       18,
 		"STATE_DOMAIN_PEOPLE":        20,
+		"STATE_DOMAIN_BOTS":          23,
+		"STATE_DOMAIN_REMOTE_CONFIG": 24,
 	}
 )
 
@@ -108,7 +120,7 @@ var File_peachy_v1_state_proto protoreflect.FileDescriptor
 
 const file_peachy_v1_state_proto_rawDesc = "" +
 	"\n" +
-	"\x15peachy/v1/state.proto\x12\tpeachy.v1*\xed\x01\n" +
+	"\x15peachy/v1/state.proto\x12\tpeachy.v1*\x9e\x02\n" +
 	"\vStateDomain\x12\x1c\n" +
 	"\x18STATE_DOMAIN_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14STATE_DOMAIN_PROFILE\x10\x01\x12\x19\n" +
@@ -116,7 +128,9 @@ const file_peachy_v1_state_proto_rawDesc = "" +
 	"\x10STATE_DOMAIN_MLS\x10\x0e\x12\x1e\n" +
 	"\x1aSTATE_DOMAIN_ACCOUNT_STORE\x10\x11\x12\x18\n" +
 	"\x14STATE_DOMAIN_MAILBOX\x10\x12\x12\x17\n" +
-	"\x13STATE_DOMAIN_PEOPLE\x10\x14\"\x04\b\x02\x10\x04\"\x04\b\x06\x10\r\"\x04\b\x0f\x10\x10\"\x04\b\x13\x10\x13\"\x04\b\x15\x10\x15\"\x04\b\x18\x10\x18b\x06proto3"
+	"\x13STATE_DOMAIN_PEOPLE\x10\x14\x12\x15\n" +
+	"\x11STATE_DOMAIN_BOTS\x10\x17\x12\x1e\n" +
+	"\x1aSTATE_DOMAIN_REMOTE_CONFIG\x10\x18\"\x04\b\x02\x10\x04\"\x04\b\x06\x10\r\"\x04\b\x0f\x10\x10\"\x04\b\x13\x10\x13\"\x04\b\x15\x10\x16b\x06proto3"
 
 var (
 	file_peachy_v1_state_proto_rawDescOnce sync.Once

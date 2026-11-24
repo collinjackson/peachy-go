@@ -37,6 +37,7 @@ const (
 	recoveryRejoinLost    = C.PEACHY_MLS_RECOVERY_REJOIN_LOST
 	recoverySettleFirst   = C.PEACHY_MLS_RECOVERY_SETTLE_FIRST
 	recoveryBackoff       = C.PEACHY_MLS_RECOVERY_BACKOFF
+	recoveryHold          = C.PEACHY_MLS_RECOVERY_HOLD
 	maxSweepPages         = 1000
 	sweepReuse            = 30 * time.Second
 	conversationHandleLen = 32
@@ -160,16 +161,44 @@ func (d *Device) recoverGroup(ctx context.Context, group string, kind int) {
 		}
 		fresh = true
 	}
-	switch step {
-	case recoveryRejoinForked, recoveryRejoinStuck, recoveryRejoinLost:
+	switch recoveryAction(step) {
+	case actRejoin:
 		log.Error().Int("step", step).Msg("Peachy: this device's copy of the group fell behind or forked; " +
 			"forgetting it and asking the members to seat this device again")
 		if err := d.rejoin(ctx, group, nil); err != nil {
 			log.Error().Err(err).Msg("Peachy: couldn't rejoin the group; the engine will ask again")
 		}
-	case recoverySettleFirst, recoveryBackoff:
+	case actWait:
 		log.Info().Int("step", step).Msg("Peachy: a group's copy isn't in step; the engine says wait")
+	case actHold:
+		// A governed group's copy behind with nothing to carry it up: kept,
+		// never forgotten. It moves on when the missing commit or an admin's
+		// rewind arrives. Answering and sending resync asks from a held copy
+		// (docs/delivery.md, "Holding a copy") isn't implemented here, so it
+		// waits for that commit.
+		log.Warn().Msg("Peachy: a governed group's copy is behind with nothing to carry it up; holding it until the group moves on")
 	}
+}
+
+const (
+	actNothing = iota
+	actRejoin
+	actWait
+	actHold
+)
+
+// recoveryAction is what this device does on a recovery step
+// (docs/mls-core.md, "Group recovery"). Steps 3 and 4 are retired.
+func recoveryAction(step int) int {
+	switch step {
+	case recoveryRejoinForked, recoveryRejoinStuck, recoveryRejoinLost:
+		return actRejoin
+	case recoverySettleFirst, recoveryBackoff:
+		return actWait
+	case recoveryHold:
+		return actHold
+	}
+	return actNothing
 }
 
 // checkAllGroups judges every group this device holds against its head,

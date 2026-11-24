@@ -319,12 +319,35 @@
  * THE ABI VERSION this header describes. Raised whenever a function's
  * signature, a struct's layout, a constant's value or the meaning of an
  * existing status code changes in a way a caller built against the old
- * header could misread; never for an addition alone. A caller compares
- * [`peachy_mls_abi_version`] with the `PEACHY_MLS_ABI_VERSION` its own copy
- * of the header carries and refuses to run on a mismatch: a hand-written
- * struct of an older layout reads fields that are no longer there.
+ * header could misread; never for an addition alone. 1 is `peachy-mls-core`
+ * 0.1.0. A caller compares [`peachy_mls_abi_version`] with the
+ * `PEACHY_MLS_ABI_VERSION` its own copy of the header carries and refuses to
+ * run on a mismatch: a hand-written struct of an older layout reads fields
+ * that are no longer there. 2 is 0.2.0. 3 is 0.3.0, raised for an addition
+ * once: its bot doors and deny codes 25 to 28, so a binding that compares
+ * the two refuses to run rather than reading a deny code it has no name for
+ * (docs/mls-core.md §Bot doors). The Swift binding exposes the
+ * comparison (`MLSClient.abiMatches`), held by its tests; the apps link the
+ * core they were built with, so the check guards a third party's binding.
  */
-#define PEACHY_MLS_ABI_VERSION 2
+#define PEACHY_MLS_ABI_VERSION 3
+
+/**
+ * [`peachy_mls_group_member_kind`]: a person's leaf, and the answer for
+ * anything that does not verify.
+ */
+#define PEACHY_MLS_MEMBER_PERSON 0
+
+/**
+ * [`peachy_mls_group_member_kind`]: a bot's leaf (its credential a `pdc3`).
+ */
+#define PEACHY_MLS_MEMBER_BOT 1
+
+/**
+ * [`peachy_mls_group_member_kind`]'s owner kind, for every leaf: a
+ * credential names no owner (a device takes a bot's owner from GetBot).
+ */
+#define PEACHY_MLS_OWNER_NONE 0
 
 /**
  * The `kept_from` of [`peachy_mls_group_join_at_head_logged`] when the
@@ -348,17 +371,6 @@
  * the copy.
  */
 #define PEACHY_MLS_RECOVERY_ROLLED_BACK 2
-
-/**
- * The group is held for its steward: every rejoin waits.
- */
-#define PEACHY_MLS_RECOVERY_HELD 3
-
-/**
- * The driver just held the group for its steward: fetch the missing commit
- * and read the head again at the hold's cap.
- */
-#define PEACHY_MLS_RECOVERY_HOLD_ENTERED 4
 
 /**
  * Forked: forget the group and ask back in.
@@ -405,6 +417,15 @@
 #define PEACHY_MLS_RECOVERY_SETTLE_FIRST 12
 
 /**
+ * Behind with nothing to carry it up, in a governed group, and the copy is
+ * settled: HOLD it. Keep it, answer others' asks from it, and ask
+ * (`peachy_mls_resync_asks_due`); it moves on when the missing commit or an
+ * admin's rewind arrives, or when enough people's settled answers at the
+ * head agree (`peachy_mls_group_resync_join`).
+ */
+#define PEACHY_MLS_RECOVERY_HOLD 13
+
+/**
  * [`peachy_mls_group_recovery_judge`]'s `kind`: the fork check (a refused
  * commit of this device's own, messages that would not open, a second
  * reading a drain owes, a stale open, the caller's own schedule).
@@ -418,8 +439,7 @@
 #define PEACHY_MLS_HEAD_READ_SEALED_AHEAD 1
 
 /**
- * After a lost mailbox, an envelope that opened for no group, or a hold
- * that reached its cap: a copy behind the head rejoins at once; nothing
+ * After a lost mailbox, or an envelope that opened for no group: a copy behind the head rejoins at once; nothing
  * else is judged.
  */
 #define PEACHY_MLS_HEAD_READ_LOST 2
@@ -439,6 +459,23 @@
  * [`peachy_mls_held_disposition`]: for a group this device holds no copy of.
  */
 #define PEACHY_MLS_HELD_ORPHAN 2
+
+/**
+ * [`peachy_mls_kt_mode`] and [`peachy_mls_kt_set_mode`]: nothing is
+ * verified and no door changes. The default.
+ */
+#define PEACHY_MLS_KT_MODE_OFF 0
+
+/**
+ * Verify and record; change no MLS outcome.
+ */
+#define PEACHY_MLS_KT_MODE_COMPARE 1
+
+/**
+ * The adder, the founder and the joiner refuse a key the log has not been
+ * shown to hold (`not_in_log`, 14; `log_fault`, 15).
+ */
+#define PEACHY_MLS_KT_MODE_REQUIRE 2
 
 /**
  * The delivery service's `MAILBOX_KIND_MLS`: an envelope of anything but a commit.
@@ -1321,8 +1358,8 @@ int32_t peachy_mls_device_link_approver_step(const uint8_t *pending_key,
                                              uint32_t *out_step);
 
 /**
- * The account's 32-byte public identity key, derived from its 32-byte
- * account key. Freed with [`peachy_mls_buffer_free`].
+ * The account's 32-byte public identity key, derived from its account key
+ * (32 or 64 bytes). Freed with [`peachy_mls_buffer_free`].
  *
  * # Safety
  * See the module header.
@@ -1376,8 +1413,9 @@ int32_t peachy_mls_generate_account_key(PeachyMlsBuffer *out_key);
 /**
  * Seal `account_key` as a version-1 (X25519-only) box: `approver_seed` is
  * THIS device's 32-byte Ed25519 seed, `recipient_signing_key` the new
- * device's 32-byte Ed25519 public key, `device_id` its `devices.id`.
- * `out_box` receives exactly 93 bytes. Only a device with its own
+ * device's 32-byte Ed25519 public key, `device_id` its `devices.id`,
+ * `account_key` 32 or 64 bytes. `out_box` receives 93 bytes for a 32-byte
+ * key, or 125 for a 64-byte one. Only a device with its own
  * server-approval switch on (`server_approval_allowed`) opens one: a device
  * a person approves takes only the version-3 box
  * ([`peachy_mls_account_key_seal_hybrid`]). For a server-run approver (a
@@ -1401,7 +1439,8 @@ int32_t peachy_mls_account_key_seal(const uint8_t *approver_seed,
  * `recipient_link_key` is the 1216-byte X-Wing key the waiting device posted,
  * which the caller MUST have checked with
  * [`peachy_mls_verify_device_link_kem`]. The rest are
- * [`peachy_mls_account_key_seal`]'s. `out_box` receives exactly 1213 bytes.
+ * [`peachy_mls_account_key_seal`]'s. `out_box` receives 1213 bytes, or 1245 for a
+ * 64-byte (two-key) account key.
  *
  * # Safety
  * See the module header. `device_id` must be a valid NUL-terminated string.
@@ -1426,7 +1465,7 @@ int32_t peachy_mls_account_key_seal_hybrid(const uint8_t *approver_seed,
  * this device (length 0 for none), and `server_approval_allowed` this
  * device's own switch, never set from anything the server says. The rest
  * are [`peachy_mls_account_key_open`]'s. `out_account_key` receives 32
- * bytes.
+ * or 64 bytes (the two-key form: store key, then identity root).
  *
  * # Safety
  * See the module header. `device_id` must be a valid NUL-terminated string.
@@ -1449,7 +1488,7 @@ int32_t peachy_mls_account_key_accept_hybrid(const uint8_t *recipient_seed,
  * Open a version-1 account-key box with no check of who sealed it:
  * `recipient_seed` is THIS device's seed, `approver_signing_key` the
  * approving device's public key, and `device_id` this device's own
- * `devices.id`. `out_account_key` receives 32 bytes. A new device takes its
+ * `devices.id`. `out_account_key` receives 32 or 64 bytes. A new device takes its
  * key through [`peachy_mls_account_key_accept_hybrid`], under the person's
  * confirmation of the approver's number; this is for tests and tools, and
  * works only in a build with the `fixture` feature. Every other build
@@ -1745,8 +1784,7 @@ int32_t peachy_mls_group_confirm_head(PeachyMlsClient *client,
  * which the group's own head once stood above `head_epoch`, and which held
  * that epoch under the send key `head_verifier` names when it is one of the
  * copy's last 64 epochs (below all of them, that the head stood above it is
- * enough only on a copy that has kept 64 epochs since its seat, in a group
- * no steward was ever named for on it). Such a head is no fork: the caller
+ * enough only on a copy that has kept 64 epochs since its seat). Such a head is no fork: the caller
  * keeps its copy, and neither forgets the group nor asks back in.
  * `out_rolled_back` receives false for a head at or above the copy, a group
  * not held, a head the group's own head never stood above on this copy, a
@@ -1794,8 +1832,7 @@ int32_t peachy_mls_group_note_head_read(PeachyMlsClient *client,
 /**
  * BEGIN A HEAD READ of the group, before the head is fetched. `out_step`
  * receives [`PEACHY_MLS_RECOVERY_READ_HEAD`] (fetch the head, then
- * [`peachy_mls_group_recovery_judge`]), [`PEACHY_MLS_RECOVERY_HELD`] (held
- * for its steward: read nothing) or [`PEACHY_MLS_RECOVERY_NO_COPY`].
+ * [`peachy_mls_group_recovery_judge`]) or [`PEACHY_MLS_RECOVERY_NO_COPY`].
  * Snapshots the copy's epoch, verifier and last complete drain, in memory.
  *
  * # Safety
@@ -1808,7 +1845,7 @@ int32_t peachy_mls_group_recovery_begin(PeachyMlsClient *client,
 
 /**
  * JUDGE A HEAD read since [`peachy_mls_group_recovery_begin`]: the fork
- * check, the stuck-behind count, the lost-mailbox rule, the hold and the
+ * check, the stuck-behind count, the lost-mailbox rule and the
  * fork backoff in one answer. `kind` is one of `PEACHY_MLS_HEAD_READ_*`.
  * `has_head` false: the server holds no head (the epoch and verifier are
  * not read; the verifier may be null). `fresh`: the read began after the
@@ -1890,6 +1927,24 @@ int32_t peachy_mls_group_add_member(PeachyMlsClient *client,
                                     uintptr_t key_package_len,
                                     PeachyMlsBuffer *out_commit,
                                     PeachyMlsBuffer *out_welcome);
+
+/**
+ * Add a batch of devices in ONE commit (`Client::add_members`):
+ * `key_packages` is the byte list [`peachy_mls_group_seat_founding`] takes,
+ * at least one package and fewer than [`peachy_mls_founding_seats`].
+ * `out_commit` goes to every existing member, `out_welcome` to every device
+ * added. A package refused refuses the whole batch and stages nothing.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_add_members(PeachyMlsClient *client,
+                                     const uint8_t *group_id,
+                                     uintptr_t group_id_len,
+                                     const uint8_t *key_packages,
+                                     uintptr_t key_packages_len,
+                                     PeachyMlsBuffer *out_commit,
+                                     PeachyMlsBuffer *out_welcome);
 
 /**
  * [`peachy_mls_group_add_member`] for a rejoin's seat ask whose device holds
@@ -1980,11 +2035,122 @@ int32_t peachy_mls_group_remove_member(PeachyMlsClient *client,
                                        PeachyMlsBuffer *out_commit);
 
 /**
+ * Remove a person: every leaf of `actor_id` (a C string), in ONE commit, read off
+ * the tree the store holds now (`peachy_mls_core::Client::remove_person`). A
+ * removed device then reads a tree with none of its person's leaves left, so
+ * it ends rather than asking back in. Refused for this device's own person
+ * and for a bot, with nothing staged; no such member when no leaf is theirs.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_remove_person(PeachyMlsClient *client,
+                                       const uint8_t *group_id,
+                                       uintptr_t group_id_len,
+                                       const char *actor_id,
+                                       PeachyMlsBuffer *out_commit);
+
+/**
+ * Seat a bot that reads everything: ONE commit carrying a
+ * GroupContextExtensions proposal setting `new_meta` (the bot's `bots`
+ * entry appended, `by` the caller; on the group's first bot also
+ * `bot: "member"`), with `0xF1AB` required, and the Add of the bot's key
+ * package, whose credential must be a `pdc3`. Stages the commit, as
+ * [`peachy_mls_group_add_member`] does; a refusal names its deny code
+ * (docs/bots.md §The core's bot rules) and stages nothing.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_add_bot_with_meta(PeachyMlsClient *client,
+                                           const uint8_t *group_id,
+                                           uintptr_t group_id_len,
+                                           const uint8_t *key_package,
+                                           uintptr_t key_package_len,
+                                           const uint8_t *new_meta,
+                                           uintptr_t new_meta_len,
+                                           PeachyMlsBuffer *out_commit,
+                                           PeachyMlsBuffer *out_welcome);
+
+/**
+ * Remove bot leaves: ONE commit carrying a GroupContextExtensions proposal
+ * setting `new_meta` (each removed bot's `bots` entry deleted) and the
+ * Removes of `leaves`. `leaves` is a u32 big-endian count, then per leaf a
+ * u32 big-endian leaf index, a u32 big-endian length and the expected leaf
+ * key, as [`peachy_mls_group_remove_member`] takes one. Every leaf must be
+ * a bot's. Stages the commit; a key that no longer matches is
+ * `PEACHY_MLS_ERR_NO_SUCH_MEMBER` with nothing staged.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_remove_with_meta(PeachyMlsClient *client,
+                                          const uint8_t *group_id,
+                                          uintptr_t group_id_len,
+                                          const uint8_t *leaves,
+                                          uintptr_t leaves_len,
+                                          const uint8_t *new_meta,
+                                          uintptr_t new_meta_len,
+                                          PeachyMlsBuffer *out_commit);
+
+/**
+ * The kind of the roster entry at `position` (as [`peachy_mls_group_member`]
+ * takes it): `out_kind` [`PEACHY_MLS_MEMBER_PERSON`] or
+ * [`PEACHY_MLS_MEMBER_BOT`] (its verified credential a `pdc3`).
+ * `out_owner_kind` is always [`PEACHY_MLS_OWNER_NONE`] and `out_owner`
+ * empty: a `pdc3` names no owner, and a device takes a bot's owner from
+ * GetBot. On failure it writes the person answer. A caller MUST read a kind
+ * it does not know as a person's, which seats nothing as a bot.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_member_kind(PeachyMlsClient *client,
+                                     const uint8_t *group_id,
+                                     uintptr_t group_id_len,
+                                     uintptr_t position,
+                                     uint32_t *out_kind,
+                                     uint32_t *out_owner_kind,
+                                     PeachyMlsBuffer *out_owner);
+
+/**
+ * The credential token of the roster entry at `position` (as
+ * [`peachy_mls_group_member`] takes it), byte for byte as the leaf presented
+ * it: a person's `pdc1` or a bot's `pdc3`. Only for a leaf whose credential
+ * verifies; one that does not is [`PEACHY_MLS_ERR_CREDENTIAL`] and an
+ * empty `out_token`.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_member_credential(PeachyMlsClient *client,
+                                           const uint8_t *group_id,
+                                           uintptr_t group_id_len,
+                                           uintptr_t position,
+                                           PeachyMlsBuffer *out_token);
+
+/**
+ * Whether the roster entry at `position` (as [`peachy_mls_group_member`]
+ * takes it) advertises `peachy_bot_aware` (0xF1AB), which a group seating a
+ * bot requires of every leaf: `false` for a device whose build predates
+ * bots, which must update before a bot can be added beside it. On failure
+ * it writes `false`.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_member_supports_bot(PeachyMlsClient *client,
+                                             const uint8_t *group_id,
+                                             uintptr_t group_id_len,
+                                             uintptr_t position,
+                                             bool *out_supports);
+
+/**
  * LEAVE: propose the removal of the leaf at `leaf_index`, one of this
  * device's own person's leaves (its own included). A member cannot commit
  * its own removal, so a person leaving proposes each of their leaves and
  * sends each proposal to the group as an ordinary message; another member's
- * device commits them ([`peachy_mls_group_commit_proposed_leaves`]).
+ * device commits them ([`peachy_mls_group_commit_proposals`]).
  * [`peachy_mls_group_begin_leave`] does all of it and keeps proposing until
  * the leave takes. docs/sealed-messages.md §Leaving.
  *
@@ -2001,20 +2167,308 @@ int32_t peachy_mls_group_propose_leave(PeachyMlsClient *client,
                                        PeachyMlsBuffer *out_proposal);
 
 /**
- * Commit the LEAVES this device holds: one commit naming every leave queued
- * through the message door that is not this device's own person's.
- * `out_commit` is EMPTY when there is none to commit, and then nothing is
- * staged; otherwise the commit is staged like any other (submit, then merge
- * or clear). Once carried commits are sent, the commit carries the
+ * A KEY UPDATE BY PROPOSAL: a standalone Update of this device's own leaf,
+ * for a group where it may not commit (a governed group whose admins it is
+ * not among). It carries the freshest credential this device holds when that
+ * is newer than its leaf's (a renewal), else the same one under new keys.
+ * Send it to the group as an ordinary message (envelope kind 1); an admin's
+ * device commits it ([`peachy_mls_group_commit_proposals`]). Sealed at this
+ * epoch: a commit that takes the epoch first drops it, and the device
+ * proposes again (`Client::propose_update`).
+ *
+ * Not a commit: nothing is staged, and `out_proposal` is the message to send.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_propose_update(PeachyMlsClient *client,
+                                        const uint8_t *group_id,
+                                        uintptr_t group_id_len,
+                                        PeachyMlsBuffer *out_proposal);
+
+/**
+ * AN ADD BY PROPOSAL: a standalone Add of `key_package`'s device, for a group
+ * where this device may not commit but whose policy lets it add that person
+ * (its own new device, or anybody where the policy lets any member add).
+ * Validated as [`peachy_mls_group_add_member`] validates it. Send it to the
+ * group as an ordinary message (envelope kind 1); an admin's device commits
+ * it ([`peachy_mls_group_commit_proposals`]), whose commit carries the
+ * Welcome (`Client::propose_add`).
+ *
+ * Not a commit: nothing is staged, and `out_proposal` is the message to send.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_propose_add(PeachyMlsClient *client,
+                                     const uint8_t *group_id,
+                                     uintptr_t group_id_len,
+                                     const uint8_t *key_package,
+                                     uintptr_t key_package_len,
+                                     PeachyMlsBuffer *out_proposal);
+
+/**
+ * Commit the PROPOSALS this device holds: one commit naming by reference
+ * every queued leave of another person, every queued Update of another
+ * member's own leaf, and every queued Add its proposer may make on their own
+ * (`Client::commit_proposals`). In a governed group only an admin's device
+ * commits them. `out_commit` is EMPTY when there is none to commit, and then
+ * nothing is staged and `out_welcome` is empty too; otherwise the commit is
+ * staged like any other (submit, then merge or clear). `out_welcome` is
+ * non-empty when the commit adds anybody: send it to the devices
+ * [`peachy_mls_group_staged_joiners`] names. The commit carries the
  * proposals it names (`mls/core/src/carried_commit.rs`); submit it as it is.
  *
  * # Safety
  * See the module header.
  */
-int32_t peachy_mls_group_commit_proposed_leaves(PeachyMlsClient *client,
+int32_t peachy_mls_group_commit_proposals(PeachyMlsClient *client,
+                                          const uint8_t *group_id,
+                                          uintptr_t group_id_len,
+                                          PeachyMlsBuffer *out_commit,
+                                          PeachyMlsBuffer *out_welcome);
+
+/**
+ * [`peachy_mls_group_commit_proposals`], leaving out every queued Add of a
+ * device in `device_ids_json`, a JSON array of device ids
+ * (`Client::commit_proposals_without`): a device the caller knows not to
+ * seat. Its proposal is not committed and lapses with the epoch; with
+ * nothing else queued, the commit is this device's own update alone, so
+ * the epoch moves. The outputs are as
+ * [`peachy_mls_group_commit_proposals`] writes them.
+ *
+ * # Safety
+ * See the module header. `device_ids_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_group_commit_proposals_without(PeachyMlsClient *client,
+                                                  const uint8_t *group_id,
+                                                  uintptr_t group_id_len,
+                                                  const char *device_ids_json,
+                                                  PeachyMlsBuffer *out_commit,
+                                                  PeachyMlsBuffer *out_welcome);
+
+/**
+ * ANSWER A SEAT ASK WITH A RESYNC (`Client::resync_answer`): the
+ * envelope in `out_envelope` this device sends the asking device alone, so it
+ * joins `group_id` by itself with no admin's device online. Only in a
+ * governed group, for a person's new device certified by the account key a
+ * leaf of that person carries; any member's device answers. Check the ask
+ * with `peachy_mls_verify_join_request` on the same `key_package` first.
+ * [`PEACHY_MLS_ERR_POLICY`] (`external_join`) for any other device. Freed
+ * with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_answer(PeachyMlsClient *client,
+                                       const uint8_t *group_id,
+                                       uintptr_t group_id_len,
+                                       const uint8_t *key_package,
+                                       uintptr_t key_package_len,
+                                       PeachyMlsBuffer *out_envelope);
+
+/**
+ * ANSWER A SEAT ASK FROM A DEVICE RESTORED FROM THE PIN
+ * (`Client::resync_answer_restored`): as `peachy_mls_group_resync_answer`,
+ * with `restore_proof` the proof the ask carries
+ * (`peachy_mls_group_restore_proof` on the asking device; empty: none). A
+ * device certified under a new account key that no leaf of its person
+ * carries belongs when the proof verifies under the stamp key a leaf of
+ * that person carries; its person keeps their seat and role. Freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_answer_restored(PeachyMlsClient *client,
                                                 const uint8_t *group_id,
                                                 uintptr_t group_id_len,
-                                                PeachyMlsBuffer *out_commit);
+                                                const uint8_t *key_package,
+                                                uintptr_t key_package_len,
+                                                const uint8_t *restore_proof,
+                                                uintptr_t restore_proof_len,
+                                                PeachyMlsBuffer *out_envelope);
+
+/**
+ * A RESTORE PROOF (`Client::restore_proof`): this device's leaf key
+ * signed by its account's stamp key for `group_id`, 64 bytes in
+ * `out_proof`. A device restored from the PIN (a new identity root under
+ * the account's store key) sends it with its seat ask in a governed group,
+ * and its resync commit carries it. [`PEACHY_MLS_ERR_INVALID_ARGUMENT`] while the
+ * device holds no account key. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_restore_proof(PeachyMlsClient *client,
+                                       const uint8_t *group_id,
+                                       uintptr_t group_id_len,
+                                       PeachyMlsBuffer *out_proof);
+
+/**
+ * THIS DEVICE SHOULD BE IN `group_id` (`Client::resync_want`): write the
+ * resync record that `peachy_mls_resync_asks_due` schedules seat asks
+ * from. `people` is a string list (the shape `peachy_mls_group_add_member_for_ask`'s
+ * `pending_actors` takes): the other people the account's own records name
+ * for the group; empty (or NULL with length 0) for the roster this device
+ * kept when it forgot the group. `out_wanted` is false, and nothing is
+ * written, when this device holds a settled copy it can follow, nobody is
+ * known, or the group is not governed. Idempotent.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_want(PeachyMlsClient *client,
+                                     const uint8_t *group_id,
+                                     uintptr_t group_id_len,
+                                     const uint8_t *people,
+                                     uintptr_t people_len,
+                                     bool *out_wanted);
+
+/**
+ * THE SEAT ASKS DUE NOW (`Client::resync_asks_due`), `now_ms` unix ms:
+ * UTF-8 JSON in `out_json`, `{"asks":[{"g","confirm","to","t"}],"nextMs"}`
+ * (`g` the group id as text; `confirm` whether the ask carries `"c":1`; `to` the
+ * people to address it to; `t` whether `to` goes into the ask's `"t"` key;
+ * `nextMs` the soonest next due time, or null). After each ask is sent,
+ * `peachy_mls_group_resync_asked`. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_resync_asks_due(PeachyMlsClient *client,
+                                   uint64_t now_ms,
+                                   PeachyMlsBuffer *out_json);
+
+/**
+ * A SEAT ASK FOR `group_id` WENT (`Client::resync_asked`), at `now_ms`:
+ * call only after the send succeeded. A no-op with no record.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_asked(PeachyMlsClient *client,
+                                      const uint8_t *group_id,
+                                      uintptr_t group_id_len,
+                                      uint64_t now_ms);
+
+/**
+ * A RESYNC ANSWER for `group_id` reached this device (`Client::resync_offer`):
+ * `answer` is the envelope's resync answer. UTF-8 JSON in `out_json`,
+ * `{"step":"confirmed"|"kept"|"ignored","join","settled"}`: on `join`, read
+ * the head and call `peachy_mls_group_resync_join`. An answer that does
+ * not verify is an error; drop it. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_offer(PeachyMlsClient *client,
+                                      const uint8_t *group_id,
+                                      uintptr_t group_id_len,
+                                      const uint8_t *answer,
+                                      uintptr_t answer_len,
+                                      uint64_t now_ms,
+                                      PeachyMlsBuffer *out_json);
+
+/**
+ * JOIN `group_id` BY RESYNC from the answers kept for it
+ * (`Client::resync_join`), told the head (`head_epoch` and its verifier,
+ * read fresh). UTF-8 JSON in `out_join`: `null` when no join is possible
+ * yet, else
+ * `{"commit","epoch","sendKey","nextVerifier","stamp","rewind","replaced","settled"}`
+ * (bytes in base64url, `stamp` as `peachy_mls_group_commit_stamp` writes
+ * it): what `SubmitCommit` takes, `rewind` set when it is an admin's
+ * rewind. A refused submit is `peachy_mls_group_resync_refused`. Freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_join(PeachyMlsClient *client,
+                                     const uint8_t *group_id,
+                                     uintptr_t group_id_len,
+                                     uint64_t head_epoch,
+                                     const uint8_t *head_verifier,
+                                     uintptr_t head_verifier_len,
+                                     uint64_t now_ms,
+                                     PeachyMlsBuffer *out_join);
+
+/**
+ * THE SERVER REFUSED the resync join's commit for `group_id`
+ * (`Client::resync_refused`): the copy it built is forgotten and an ask is
+ * due on the retry ladder. In place of `peachy_mls_group_forget` on this
+ * path.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_refused(PeachyMlsClient *client,
+                                        const uint8_t *group_id,
+                                        uintptr_t group_id_len,
+                                        uint64_t now_ms);
+
+/**
+ * THE CONFIRM FRAME for the device `asker_device` (NUL-terminated UTF-8)
+ * in `group_id` (`Client::resync_confirm`): its wire in `out_frame` (UTF-8),
+ * empty when this device does not confirm it (no settled copy, a bot's
+ * device, or no leaf holds that device). Send it as a lane frame only to
+ * the asker's account. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_confirm(PeachyMlsClient *client,
+                                        const uint8_t *group_id,
+                                        uintptr_t group_id_len,
+                                        const char *asker_device,
+                                        PeachyMlsBuffer *out_frame);
+
+/**
+ * WHERE THIS DEVICE STANDS on getting back into `group_id`
+ * (`Client::resync_status`): UTF-8 in `out_status`, `none`, `asking`,
+ * `holding` or `unconfirmed`. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_resync_status(PeachyMlsClient *client,
+                                       const uint8_t *group_id,
+                                       uintptr_t group_id_len,
+                                       PeachyMlsBuffer *out_status);
+
+/**
+ * WHETHER THIS DEVICE'S COPY OF `group_id` MAY DECIDE ANYTHING OUTSIDE
+ * ITSELF (`Client::settled`): it holds the group (active or not) and no
+ * resync record holds it unconfirmed. `false` in `out_settled` for a group
+ * it holds no state for, or a store that cannot answer. Every client
+ * writer that derives an account-store record, a pin, an order or a key
+ * link from a copy gates on it; it is not
+ * [`peachy_mls_group_resync_status`], which answers `asking` for a copy
+ * removed while unconfirmed.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_settled(PeachyMlsClient *client,
+                           const uint8_t *group_id,
+                           uintptr_t group_id_len,
+                           bool *out_settled);
+
+/**
+ * Who the Welcome of the commit staged in `group_id` goes to
+ * (`Client::staged_joiners`): UTF-8 JSON in `out_joiners`, `[{"a","d"}]`,
+ * each person (`a`, actor id) and device (`d`) the commit adds, once each,
+ * in the order it adds them. `[]` when nothing is staged or it adds nobody.
+ * Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_staged_joiners(PeachyMlsClient *client,
+                                        const uint8_t *group_id,
+                                        uintptr_t group_id_len,
+                                        PeachyMlsBuffer *out_joiners);
 
 /**
  * LEAVE A GROUP UNTIL IT TAKES: propose the removal of every leaf of this
@@ -2282,6 +2736,28 @@ int32_t peachy_mls_group_handle(const uint8_t *group_id,
                                 PeachyMlsBuffer *out_handle);
 
 /**
+ * A listed group's inbox (docs/sealed-messages.md §A listed
+ * group's inbox): from the listing's join key `k` (`jk` or `lst.k`) and,
+ * for a member, the group's reader key `lr`, each 22 unpadded base64url
+ * characters as the group's state carries them. Needs no client.
+ *
+ * `out_json` receives UTF-8, **not** NUL-terminated, freed with
+ * [`peachy_mls_buffer_free`]: `{"listingId","handle","joinKeyHash",
+ * "approvalKey","approvalKeyHash"}`, plus `"sendKey","verifier",
+ * "readerKeyHash"` when `reader_key` is given, every byte value unpadded
+ * base64url. `reader_key` may be NULL or empty (an asker, who holds only
+ * `k`). [`PEACHY_MLS_ERR_INVALID_ARGUMENT`] for a key that is not 22
+ * canonical characters, or `lr` equal to `k`.
+ *
+ * # Safety
+ * See the module header. `join_key` must be valid and NUL-terminated;
+ * `reader_key` NULL or valid and NUL-terminated.
+ */
+int32_t peachy_mls_listing_inbox(const char *join_key,
+                                 const char *reader_key,
+                                 PeachyMlsBuffer *out_json);
+
+/**
  * Wrap `inner`, a seat ask (`kind` 3) or a link preview (`kind` 5), in the
  * envelope that hides which conversation it belongs to, as version 2. Needs
  * no client: the group id is the key, and whoever opens these holds no
@@ -2473,9 +2949,10 @@ int32_t peachy_mls_held_disposition(PeachyMlsClient *client,
  * `GroupContextExtensions` proposal that changes `peachy_group_meta` and
  * nothing else. Any member may.
  *
- * `value` is 1 to `MAX_GROUP_META_BYTES` bytes of the client format; an empty
- * or oversized value is refused with `PEACHY_MLS_ERR_INVALID_ARGUMENT` before
- * any commit is built.
+ * `value` is 1 to `MAX_GROUP_META_BYTES` bytes of the client format
+ * (`MAX_COMMUNITY_META_BYTES` for a community group's long form, `dl`); an
+ * empty or oversized value, or a `dir` past its form's cap, is refused with
+ * `PEACHY_MLS_ERR_INVALID_ARGUMENT` before any commit is built.
  *
  * **This STAGES a commit.** As for `peachy_mls_group_remove_member`: submit
  * the bytes, then call exactly one of merge and clear.
@@ -2500,7 +2977,10 @@ int32_t peachy_mls_group_set_meta(PeachyMlsClient *client,
  * The delivery service TOOK the staged commit: adopt the new epoch.
  *
  * `out_epoch` receives the epoch the group is now in. It is an error to call
- * this with nothing staged ([`PEACHY_MLS_ERR_INVALID_ARGUMENT`]).
+ * this with nothing staged ([`PEACHY_MLS_ERR_INVALID_ARGUMENT`]), and with a
+ * stage this client did not make, a saved commit
+ * ([`PEACHY_MLS_ERR_SETTLE_FIRST`]): another process's, or one put in place
+ * of this client's after it was settled. Nothing moves.
  *
  * # Safety
  * See the module header.
@@ -3065,6 +3545,663 @@ int32_t peachy_mls_own_device_standing(PeachyMlsClient *client,
                                        uint32_t *out_standing);
 
 /**
+ * Evaluate the served flag document (`peachy_mls_core::evaluate_remote_flags`).
+ * `registry_json` is the app's compiled registry, a JSON array of
+ * `{"name","kind","platforms","legacyRatchet"?}` (`kind` as
+ * `peachy_mls_core::remote_flags::FlagKind` names it); `config` the `RemoteConfig` bytes exactly as
+ * `GetRemoteConfig` returned them, empty (a null pointer allowed) when none
+ * was ever fetched; `context_json`
+ * `{"platform","build","channel","userId"?,"serverNow"}` (`channel` one of
+ * `debug`, `testflight`, `app_store`, `play`, `web`; `serverNow` RFC 3339);
+ * `held_json` a JSON array of the one-way names the app holds.
+ *
+ * `out_json` receives `{"values":{name:bool},"held":[name]}`: hand `values`
+ * to [`peachy_mls_client_adopt_remote_flags`] and keep `held` for good. A
+ * document that does not decode is refused; keep evaluating the last one
+ * that did. Needs no client. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. The three strings must be valid and NUL-terminated.
+ */
+int32_t peachy_mls_remote_flags_evaluate(const char *registry_json,
+                                         const uint8_t *config,
+                                         uintptr_t config_len,
+                                         const char *context_json,
+                                         const char *held_json,
+                                         PeachyMlsBuffer *out_json);
+
+/**
+ * THE ROOTS DOOR (`peachy_mls_core::evaluate_roots`,
+ * docs/sealed-messages.md §Admin orders): one JSON request with a
+ * `call` (`parse`, `parseDone`, `encode`, `encodeDone`, `accept`, `carry`,
+ * `approvedHere`, `botsAddressed`, `sendPath`, `authority`,
+ * `pins`) and that call's fields, named as in the core's golden
+ * tables.
+ * `out_json` receives the answer as JSON (an object, a bool, a string or
+ * null). Admin orders, bot approval and the `own` and `lr` reader rules are
+ * decided here, so every client calls this on its receive and send paths
+ * rather than deciding them itself. Needs no client. Refused for a request
+ * that does not read or names no call. Freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_roots_evaluate(const char *request_json, PeachyMlsBuffer *out_json);
+
+/**
+ * THE HOST BOOK DOOR, `guestHost` (`peachy_mls_core::evaluate_guest_host`,
+ * docs/sealed-messages.md §Guest orders, steps 5 and 5a): every
+ * guest order copy a device holds for its shared groups, what it closed and
+ * what it drew, as one pure reducer. Needs no client. The request is JSON;
+ * `out_json` receives the answer as JSON.
+ *
+ * The client keeps `book` (opaque: null for a new one, else the last one
+ * answered) and `wires[key]`, the bytes of each copy held. It stores a
+ * copy's wire when `take` answers `held`, deletes `wires[key]` for every
+ * key in `evict`, and writes `rows`. `facts` is `{"groupMeta", "members",
+ * "me", "ownerTree", "heldGuestTrees"}` as `guestOrder` takes them;
+ * `settled` the core's settled(S) (absent: false); `signerKeys` and
+ * `signerSearch` are what [`peachy_mls_guest_sign`]'s `signers` answered
+ * (its `signerKeys` and its `search`) for the wires about to be taken or
+ * judged, passed through unchanged (absent: empty); every call takes `now`
+ * (unix seconds) and lapses first. `take` and `judge` answer `search`: the
+ * one `signerSearch` label for the copy's own signer and certificate key,
+ * only while the copy is held and the judge reached its signer and waits
+ * `signer-unproven`, else `[]`. That `search` is the only key transparency
+ * signer search a client makes.
+ * - `{"call":"take","book","now","group","wire","sender","settled","facts"?,
+ *   "signerKeys"?,"signerSearch"?}`
+ *   -> `{"book","key","id","held":bool,"why","evict":[key],"search":[label]}`: every frame
+ *   for a guest order in the group it names, drained, sent or forwarded by
+ *   this device (`sender`, the frame's MLS sender, is then this account).
+ *   `why`: `held`, `not-an-order`, `other-group`, `stale`, `ahead`,
+ *   `bad-signature`, `not-a-guest`, `dup`, `closed`, `same-o` or `cap`.
+ *   `key` is `id + "." + hex(SHA-256(wire))` (null, with `id`, for
+ *   `not-an-order`).
+ * - `{"call":"due","book","now","group"?}` -> `{"book","keys":[key],
+ *   "evict":[key]}`: the open copies, oldest receipt first.
+ * - `{"call":"judge","book","now","key","wire","settled","facts",
+ *   "serverKeys","signerKeys"?,"signerSearch"?,"left"?:[actor]}` ->
+ *   `{"book","verdict","why","remove":[actor],"meta","closed":bool,
+ *   "evict":[key],"rows":[row],"search":[label]}`:
+ *   the judge's verdict with the server's digest (`wait` `signer-unproven`
+ *   while `signerKeys` doesn't prove the order's signer); `verdict` `skip`
+ *   (why `not-settled`, or `gone` for a key not held) changes nothing.
+ * - `{"call":"carried","book","now","key","removed":[actor]}` ->
+ *   `{"book","evict":[key],"rows":[row]}`: after this device committed a
+ *   `carry`; the order's id closes.
+ * - `{"call":"seen","book","now","group"?}` -> `[id]`: the closed ids,
+ *   `seen` for `guestOrderRelay`.
+ * - `{"call":"pool","book","key"}` -> `[{f, s}]`: the links the judge
+ *   searches beside the copy's own.
+ *
+ * A row is `{"id","o","g","c","k","a","n","people":[actor],"shGone":bool}`:
+ * "<a> removed <person>." for each of `people`, `n` the guest's name, and
+ * a `leave`'s single row once `shGone`.
+ *
+ * Refused for a request that does not read, and for a `wire` that is not
+ * the copy `key` names. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_guest_host(const char *request_json, PeachyMlsBuffer *out_json);
+
+/**
+ * THE SENT BOOK DOOR, `guestSent` (`peachy_mls_core::evaluate_guest_sent`,
+ * docs/sealed-messages.md §Guest orders): the guest orders a guest
+ * admin's device owes, and what it observed of each, as one pure reducer.
+ * Needs no client. The request is JSON; `out_json` receives the answer as
+ * JSON. The client keeps `sent` (opaque: null for a new one, else the last
+ * one answered).
+ * - `{"call":"intend","sent","now","flag","c","gg","k","p"?,"a"?,
+ *   "orders":[{"g","o"}]}` -> `{"sent"}`: at the tap, before signing; one
+ *   entry per shared group, each with a fresh `o`. Nothing is recorded with
+ *   the flag off, or for `keys`.
+ * - `{"call":"note","sent","now","order","sender","adm"}` -> `{"sent",
+ *   "noted","why"}`: a co-admin's order (its read form) taken in a
+ *   settled guest group; never signed here. Noted only when `sender`, the
+ *   frame's MLS sender, is in `adm` (that settled copy's admins) and is
+ *   the order's `a`, and `at` is within 7 days back and 5 minutes ahead;
+ *   at most 256 kept, the oldest going first. Else the book is unchanged
+ *   and `why` says why: `not-admin` (also with no `sender`), `not-signer`,
+ *   `stale`, `ahead`, `dup` or `keys`; `noted` with `why` `noted`.
+ * - `{"call":"tick","sent","now","flag","guests":{c:{"gg","signer","sd"}},
+ *   "groups":{g:{"groupMeta","members","ownerTree"?,"heldGuestTrees"?},
+ *   "unsettled" or null}}` -> `{"sent","due":[{"o","gg","body":{"o","at",
+ *   "g","c","k","p"?}}],"refused":[c]}`: after every drain and this
+ *   device's own commit on a guest group. `signer` is `guestSign`'s
+ *   `signer`; `groups` holds a settled copy of each shared group,
+ *   `"unsettled"` for one held here but not settled (its last reading
+ *   stands), else null (not held). Sign each `due` body with
+ *   `guestSign` (`o` and `at` as given) and report it with `attempted`;
+ *   `refused` names each guest whose owed `keys` order goes.
+ * - `{"call":"attempted","sent","now","o","result":"sent"|"failed","sd"}`
+ *   -> `{"sent"}`.
+ * - `{"call":"status","sent","now","c"?}` -> `[{"o","at","g","c","k","p"?,
+ *   "a","mine","status","why"}]`: `status` `done`, `alreadyDone`, `stays`,
+ *   `waiting`, `sent` or `notDone`; `why` `other-community`,
+ *   `group-admin`, `not-in-group` (only when the group was not held at the
+ *   last tick), `still-there`, `not-sent`, `not-admin` or empty.
+ * - `{"call":"reading","g","k","c","gg","p"?,"group"}` -> `{"reading",
+ *   "why"}`: what the sender observes of an order in a settled copy of its
+ *   group (`group` as a `tick` `groups` value, or null): `gone`, `stays`
+ *   or `there`, null without one; `why` as `status`'s for `stays`.
+ * - `{"call":"keysSeen","now","c","gg","targets":[g],"wire","stk",
+ *   "priorSd"|"priorStk","signerKeys"}` -> `{"seen":bool,"why","g"}`:
+ *   whether a co-admin's `keys` order read in the guest's settled group
+ *   `gg` (whose `stk` is `stk`) spares this device its own to the order's
+ *   `g`, and only there, for the change from `priorSd` (or the set
+ *   `priorStk`): it names the guest `c` and `gg`, its `g` is one of
+ *   `targets` (the shared groups this device sends the guest's `keys`
+ *   orders to), its `at` is within 7 days back and 5 minutes ahead of
+ *   `now`, both signatures verify, its `ks` is `stk`, its own links reach
+ *   it from the set before, and `signerKeys` (from `signers`) proves its
+ *   signer. `g` is that shared group when seen, else null. `why`: `seen`,
+ *   `not-an-order`, `not-keys`, `other-guest`, `other-group`,
+ *   `not-a-target`, `stale`, `ahead`, `bad-signature`, `not-current`,
+ *   `unknown-keys`, `bad-link` or `signer-unproven`.
+ *
+ * Refused for a request that does not read. Freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_guest_sent(const char *request_json, PeachyMlsBuffer *out_json);
+
+/**
+ * Hand this client the app's evaluated remote flags: the `values` object of
+ * [`peachy_mls_remote_flags_evaluate`] (`Client::adopt_remote_flags`), after
+ * every open and after every refresh. Two-way flags take the new value; a
+ * capability floor switched on stays on for the life of this client. In
+ * memory. Separate from [`peachy_mls_client_adopt_refusals`].
+ *
+ * # Safety
+ * See the module header. `values_json` must be a valid NUL-terminated string.
+ */
+int32_t peachy_mls_client_adopt_remote_flags(PeachyMlsClient *client, const char *values_json);
+
+/**
+ * Declare the app capabilities this build's app reads
+ * (`Client::declare_app_capabilities`): `codes_len` code points at `codes`
+ * (a null pointer allowed when there are none). Call it at open, before
+ * anything else: every key package and leaf this client makes from then on
+ * lists them beside the core's. Declare a code point only if this build
+ * reads its form in every path that receives it. Refused, with nothing
+ * changed, for a code point outside the private range, missing from this
+ * build's table, of the core layer, or not listed by current builds.
+ * Replaces what was declared before. In memory.
+ *
+ * # Safety
+ * See the module header. `codes` must be null with `codes_len` 0, or point
+ * to `codes_len` readable `uint16_t` values.
+ */
+int32_t peachy_mls_client_declare_app_capabilities(PeachyMlsClient *client,
+                                                   const uint16_t *codes,
+                                                   uintptr_t codes_len);
+
+/**
+ * Every private code point this client's leaves and key packages list,
+ * ascending (`Client::advertised_capabilities`): the core's own and the
+ * app's declared. `out_json` receives a JSON array of numbers, freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_client_advertised_capabilities(PeachyMlsClient *client,
+                                                  PeachyMlsBuffer *out_json);
+
+/**
+ * Whether a sender may write the form `cap` names into the group
+ * (`Client::group_supports`): every leaf of the current tree lists it, this
+ * device's own and its other devices included, or its floor holds (a
+ * `floor` table status, or its floor flag adopted through
+ * [`peachy_mls_client_adopt_remote_flags`]). A reserved or retired code
+ * point answers false; one this build's table lacks is refused. Ask at seal
+ * time: a commit that seats a capable or incapable leaf changes the answer.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_supports(PeachyMlsClient *client,
+                                  const uint8_t *group_id,
+                                  uintptr_t group_id_len,
+                                  uint16_t cap,
+                                  bool *out_supports);
+
+/**
+ * Whether every one of `key_packages` lists `cap`
+ * (`peachy_mls_core::key_packages_support`): the recipients' published
+ * packages, the last-resort one included, when no shared group answers
+ * yet. `key_packages` is the byte list [`peachy_mls_group_seat_founding`]
+ * takes (a u32 big-endian count, then each serialized KeyPackage message as
+ * a u32 big-endian length and its bytes). A package that does not verify is
+ * no evidence and answers false, as does an empty list; bytes that are not
+ * a KeyPackage at all are refused. A floor answers true, a reserved or
+ * retired code point false; one this build's table lacks is refused. Needs
+ * no client.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_key_packages_support(const uint8_t *key_packages,
+                                        uintptr_t key_packages_len,
+                                        uint16_t cap,
+                                        bool *out_supports);
+
+/**
+ * How this device's own leaf in the group differs from what this build
+ * advertises (`Client::own_leaf_capability_drift`). `out_json` receives
+ * `{"missing":[n],"unknown":[n],"requiredMissing":[n],"renewalDueAt":n|null,"renewalDue":bool}`:
+ * code points this build lists that the leaf lacks, private ones the leaf
+ * lists that this build does not, the subset of `missing` every leaf must
+ * list, and when (Unix seconds; 0 for at once) the renewal that carries
+ * today's capabilities is due. No drift for a group this device is not
+ * active in. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_own_leaf_capability_drift(PeachyMlsClient *client,
+                                             const uint8_t *group_id,
+                                             uintptr_t group_id_len,
+                                             PeachyMlsBuffer *out_json);
+
+/**
+ * The mode key transparency runs in on this client (`Client::kt_mode`): one
+ * of the `PEACHY_MLS_KT_MODE_*` codes. `OFF` while the build carries no log
+ * for the server named at [`peachy_mls_kt_set_mode`], whatever was asked.
+ * `*out_mode` is set to `OFF` before anything else. Reads only.
+ *
+ * # Safety
+ * See the module header. `out_mode` must point to one writable `u32`.
+ */
+int32_t peachy_mls_kt_mode(PeachyMlsClient *client, uint32_t *out_mode);
+
+/**
+ * Set the mode (`Client::set_kt_mode`) from the build: one of the
+ * `PEACHY_MLS_KT_MODE_*` codes, and `server`, `"production"` for the
+ * production API and `"development"` for any other, which picks the log the
+ * build carries. Never from anything a server says. A code that names no
+ * mode is [`PEACHY_MLS_ERR_INVALID_ARGUMENT`], with nothing changed. In
+ * memory: set it after every open.
+ *
+ * # Safety
+ * See the module header. `server` must be a valid NUL-terminated string.
+ */
+int32_t peachy_mls_kt_set_mode(PeachyMlsClient *client, uint32_t mode, const char *server);
+
+/**
+ * Stop key transparency and forget everything it kept for this account
+ * (`Client::kt_wipe`): every record of the store's `kt` namespace, under
+ * every log, and nothing else (groups and pins stay); the mode goes back to
+ * `OFF` until [`peachy_mls_kt_set_mode`] sets it again. Call it at sign-out
+ * and when this device was removed. Works in every mode; a second call
+ * changes nothing.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_wipe(PeachyMlsClient *client);
+
+/**
+ * The request that refreshes this client's view of the log
+ * (`Client::kt_head_request`, the key transparency design).
+ * `out_request` receives the bytes the client sends, freed with
+ * [`peachy_mls_buffer_free`]; keep them for [`peachy_mls_kt_apply_head`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_head_request(PeachyMlsClient *client, PeachyMlsBuffer *out_request);
+
+/**
+ * Verify the log's answer to [`peachy_mls_kt_head_request`]'s `request`
+ * and keep it (`Client::kt_apply_head`). `out_json` receives the outcome as
+ * UTF-8 JSON (`{"outcome": ..., "rechecked"?: n}`, `rechecked` on `ok`: how
+ * many bundles that waited for a head verified), freed with
+ * [`peachy_mls_buffer_free`]. A log that answered wrong is an outcome, not
+ * an error. Under `Require`, a device whose every head answer for 7 days
+ * ended not ready or waiting for the auditor's key answers
+ * `not_ready_too_long` (no verified head or ready self-check needed), with
+ * its finding (`{"kind": "not_ready_too_long"}`) once: show that once with
+ * `log_fault`'s copy (the key transparency design). It stands in
+ * for `need_auditor_key` too, so a client writes its finding first, then
+ * reads the auditor's key once and, when the core took it, asks again.
+ *
+ * # Safety
+ * See the module header. `request` and `response` must each be readable for
+ * their lengths.
+ */
+int32_t peachy_mls_kt_apply_head(PeachyMlsClient *client,
+                                 const uint8_t *request,
+                                 uintptr_t request_len,
+                                 const uint8_t *response,
+                                 uintptr_t response_len,
+                                 PeachyMlsBuffer *out_json);
+
+/**
+ * Hold the attested auditor's key (`Client::kt_accept_auditor_key`,
+ * the key transparency design): the 32 bytes the client read from the
+ * attested auditor's `/healthz/config` after verifying its attestation, and
+ * from nowhere else. The key is PENDING: no head is verified with it until
+ * [`peachy_mls_kt_apply_auditor_check`] answers `ok`.
+ *
+ * # Safety
+ * See the module header. `public_key` must be readable for
+ * `public_key_len` bytes.
+ */
+int32_t peachy_mls_kt_accept_auditor_key(PeachyMlsClient *client,
+                                         const uint8_t *public_key,
+                                         uintptr_t public_key_len);
+
+/**
+ * The request that checks the pending auditor key is logged under the `k`
+ * label (`Client::kt_auditor_check_request`,
+ * the key transparency design): `KtRequest` bytes for the `KtSearch`
+ * rpc, in `out_request`, freed with [`peachy_mls_buffer_free`]. Empty when no
+ * key is pending.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_auditor_check_request(PeachyMlsClient *client, PeachyMlsBuffer *out_request);
+
+/**
+ * Verify the log's answer to [`peachy_mls_kt_auditor_check_request`]'s
+ * `request` (`Client::kt_apply_auditor_check`). `out_json` receives
+ * `{"outcome": "ok" | "not_in_log" | "retry" | "log_fault" | "not_ready" |
+ * "unsupported_config", "rechecked"?: n}` as UTF-8 JSON, freed with
+ * [`peachy_mls_buffer_free`]. On `ok` the key is accepted: ask for the head
+ * again; `rechecked` bundles that waited for it verified.
+ *
+ * # Safety
+ * See the module header. `request` and `response` must each be readable for
+ * their lengths.
+ */
+int32_t peachy_mls_kt_apply_auditor_check(PeachyMlsClient *client,
+                                          const uint8_t *request,
+                                          uintptr_t request_len,
+                                          const uint8_t *response,
+                                          uintptr_t response_len,
+                                          PeachyMlsBuffer *out_json);
+
+/**
+ * The next requests of this account's self-check
+ * (`Client::kt_self_check_request`, the key transparency design) for
+ * the facts in `input_json`, as UTF-8 JSON in `out_json`, freed with
+ * [`peachy_mls_buffer_free`]. An empty list: nothing to ask.
+ *
+ * # Safety
+ * See the module header. `input_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_kt_self_check_request(PeachyMlsClient *client,
+                                         const char *input_json,
+                                         PeachyMlsBuffer *out_json);
+
+/**
+ * Verify the log's answers to [`peachy_mls_kt_self_check_request`]'s
+ * requests (`exchange_json`) for the same `input_json`, and return the
+ * self-check's outcome as UTF-8 JSON in `out_json`
+ * (`Client::kt_apply_self_check`, the key transparency design's table),
+ * freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. Both strings must be valid and NUL-terminated.
+ */
+int32_t peachy_mls_kt_apply_self_check(PeachyMlsClient *client,
+                                       const char *input_json,
+                                       const char *exchange_json,
+                                       PeachyMlsBuffer *out_json);
+
+/**
+ * The request for this device's own transparency proof
+ * (`Client::kt_proof_request`, the key transparency design), in
+ * `out_request`, freed with [`peachy_mls_buffer_free`]; keep it for
+ * [`peachy_mls_kt_apply_proof`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_proof_request(PeachyMlsClient *client, PeachyMlsBuffer *out_request);
+
+/**
+ * Verify the log's answer to [`peachy_mls_kt_proof_request`]'s `request`
+ * and keep it as this device's own proof (`Client::kt_apply_proof`).
+ * `out_json` receives the outcome as UTF-8 JSON, freed with
+ * [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request` and `response` must each be readable for
+ * their lengths.
+ */
+int32_t peachy_mls_kt_apply_proof(PeachyMlsClient *client,
+                                  const uint8_t *request,
+                                  uintptr_t request_len,
+                                  const uint8_t *response,
+                                  uintptr_t response_len,
+                                  PeachyMlsBuffer *out_json);
+
+/**
+ * This device's own verified transparency proof (`Client::kt_own_proof`),
+ * for publishing beside its key packages and in its frames. `out_proof`
+ * receives it, freed with [`peachy_mls_buffer_free`]: EMPTY (a null `data`
+ * and a zero `len`), and no error, when the device holds none. Reads only.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_own_proof(PeachyMlsClient *client, PeachyMlsBuffer *out_proof);
+
+/**
+ * Verify a contact's transparency proof from any channel (beside a key
+ * package, in a transcript frame, in a Welcome frame) and keep it
+ * (`Client::kt_receive_proof`). `out_json` receives what it found as UTF-8
+ * JSON, freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `proof` must be readable for `proof_len` bytes.
+ */
+int32_t peachy_mls_kt_receive_proof(PeachyMlsClient *client,
+                                    const uint8_t *proof,
+                                    uintptr_t proof_len,
+                                    PeachyMlsBuffer *out_json);
+
+/**
+ * A sessionless search for the label `label_json` names: an account, a
+ * handle or a phone lookup (`Client::kt_search_request`). `out_request`
+ * receives the bytes the client sends, freed with
+ * [`peachy_mls_buffer_free`]; keep them for [`peachy_mls_kt_apply_search`].
+ * An account label may carry `"version": n`, a fixed-version search under
+ * the same gate: the asked-for check sends one for the version before, when
+ * the account search answered another key or a closed account
+ * (the key transparency design).
+ *
+ * # Safety
+ * See the module header. `label_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_kt_search_request(PeachyMlsClient *client,
+                                     const char *label_json,
+                                     PeachyMlsBuffer *out_request);
+
+/**
+ * Verify the log's answer to [`peachy_mls_kt_search_request`]'s `request`
+ * (`Client::kt_apply_search`). `out_json` receives what it found as UTF-8
+ * JSON, freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request` and `response` must each be readable for
+ * their lengths.
+ */
+int32_t peachy_mls_kt_apply_search(PeachyMlsClient *client,
+                                   const uint8_t *request,
+                                   uintptr_t request_len,
+                                   const uint8_t *response,
+                                   uintptr_t response_len,
+                                   PeachyMlsBuffer *out_json);
+
+/**
+ * What the log is known to say about `device_id` under `device_key`, of
+ * `actor_id` under `account_key` (`Client::kt_status`,
+ * the key transparency design). `out_json` receives UTF-8 JSON, freed
+ * with [`peachy_mls_buffer_free`]: `{"state": "verified" | "unverified" |
+ * "not_in_log" | "not_ready", "checkedAtMs"?: n, "asOfMs"?: n,
+ * "unpublished"?: true}`; `not_ready` while key
+ * transparency is off. `checkedAtMs` is when this device verified, `asOfMs`
+ * the time the proof speaks for; a `verified` result reads `unverified` from
+ * 7 days after its `asOfMs` (the key transparency design).
+ * `not_in_log` is the proven mismatch only (the account closed, or this key
+ * replaced after this device verified it; the key transparency design).
+ * `unpublished` rides on `unverified`: the log left this device out
+ * of the account's set, or its logged certificate does not verify. The core
+ * never refuses it; only a bad argument fails. Reads only.
+ *
+ * # Safety
+ * See the module header. `actor_id` and `device_id` must be valid
+ * NUL-terminated strings, and each key NULL only with a zero length.
+ */
+int32_t peachy_mls_kt_status(PeachyMlsClient *client,
+                             const char *actor_id,
+                             const uint8_t *account_key,
+                             uintptr_t account_key_len,
+                             const char *device_id,
+                             const uint8_t *device_key,
+                             uintptr_t device_key_len,
+                             PeachyMlsBuffer *out_json);
+
+/**
+ * Verify every bundle of a proof set, a transcript frame's `kt` key
+ * base64-decoded by the client (`Client::kt_receive_proof_set`,
+ * the key transparency design), as [`peachy_mls_kt_receive_proof`]
+ * verifies one. `out_json` receives a UTF-8 JSON array of the bundles' results
+ * in the set's order, freed with [`peachy_mls_buffer_free`]: empty for bytes
+ * that are no set this build reads. A set never decides whether a message is
+ * shown.
+ *
+ * # Safety
+ * See the module header. `set` must be readable for `set_len` bytes.
+ */
+int32_t peachy_mls_kt_receive_proof_set(PeachyMlsClient *client,
+                                        const uint8_t *set,
+                                        uintptr_t set_len,
+                                        PeachyMlsBuffer *out_json);
+
+/**
+ * What the client should fetch, and what it should say
+ * (`Client::kt_pending_checks`), as UTF-8 JSON in `out_json`, freed with
+ * [`peachy_mls_buffer_free`]: `{"fetch": [actor id], "notices":
+ * [{"groupId", "actorId", "deviceId", "kind": "unpublished_device"},
+ * {"groupId", "actorId", "accountKey", "kind": "unverified_stale"}]}`.
+ * `fetch` names the actors seated in a group this client holds whose keys no
+ * verified proof covers; `unpublished_device` the leaves the log answered
+ * are not among their person's published devices; `unverified_stale`, under
+ * `Require`, a leaf unverified for 7 days that has sent a transcript frame
+ * since, from a healthy view with the in-band floor held (`accountKey`
+ * standard base64; write "Couldn't verify {name}'s keys" once per
+ * conversation, person and account key). Both empty while key transparency
+ * is off or not ready. Sends nothing; keeps the seat rows and their
+ * tallies.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_pending_checks(PeachyMlsClient *client, PeachyMlsBuffer *out_json);
+
+/**
+ * Take the door tallies (`Client::kt_counts_take`,
+ * the key transparency design "What is measured") and zero them in
+ * the same write, as UTF-8 JSON in `out_json`, freed with
+ * [`peachy_mls_buffer_free`]: `{"counts": [{"name", "props", "n"}]}`, one
+ * entry per tally that is not zero, each an event name, its fixed words and
+ * its count. No actor, group, device, key, version or time is in it.
+ * `{"counts": []}` while key transparency is off. Take it at most once a
+ * day, never at a door, and send one event per entry.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_counts_take(PeachyMlsClient *client, PeachyMlsBuffer *out_json);
+
+/**
+ * The conflicting heads log faults left, newest last, for a support export
+ * the person starts (`Client::kt_evidence`), as UTF-8 JSON in `out_json`,
+ * freed with [`peachy_mls_buffer_free`]: `[{"atMs", "rpc", "error",
+ * "view", "response"}]`, the last two base64. `[]` while key transparency
+ * is off. Nothing is sent anywhere by the core. Reads only.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_evidence(PeachyMlsClient *client, PeachyMlsBuffer *out_json);
+
+/**
+ * The `kt` value for the transcript frame the client is about to seal into
+ * `group_id` (`Client::kt_frame_proofs`, the key transparency design),
+ * as UTF-8 JSON in `out_json`, freed with [`peachy_mls_buffer_free`]:
+ * `{"kt": "<standard base64 of a proof set>"}`, or `{}` to write no `kt`
+ * key. Write the string unchanged as the frame's `kt`, and once the server
+ * has taken the send hand the same string to
+ * [`peachy_mls_kt_frame_proofs_sent`]. Reads only, and never fails for a key
+ * transparency reason; [`PEACHY_MLS_ERR_NO_SUCH_GROUP`] for a group this
+ * client does not hold.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_frame_proofs(PeachyMlsClient *client,
+                                   const uint8_t *group_id,
+                                   uintptr_t group_id_len,
+                                   PeachyMlsBuffer *out_json);
+
+/**
+ * Record that the server took a send into `group_id` whose frame carried
+ * `kt` (`Client::kt_frame_proofs_sent`): exactly the string inside
+ * [`peachy_mls_kt_frame_proofs`]'s `"kt"`. Call it once, where the message
+ * is marked sent; a send that never succeeds is not marked, and the next
+ * frame carries the set again. `recipients_json`: null for every leaf of
+ * the group, or a JSON array of the device ids the send named and the
+ * server took (as a send lists its recipients); what the set carried stays
+ * owed to the leaves it did not reach, at most four taken sends
+ * (the key transparency design); an empty array marks nothing and is
+ * not a taken send. A `kt` that does not decode, or a
+ * group this client does not hold, changes nothing and is not an error; a
+ * `recipients_json` that is not an array of strings is
+ * [`PEACHY_MLS_ERR_INVALID_ARGUMENT`].
+ *
+ * # Safety
+ * See the module header. `kt` must be a valid NUL-terminated string, and
+ * `recipients_json` null or one.
+ */
+int32_t peachy_mls_kt_frame_proofs_sent(PeachyMlsClient *client,
+                                        const uint8_t *group_id,
+                                        uintptr_t group_id_len,
+                                        const char *kt,
+                                        const char *recipients_json);
+
+/**
+ * Whether this device writes key transparency proofs into `group_id`, and
+ * why not (`Client::kt_in_band_state`), as UTF-8 JSON in `out_json`, freed
+ * with [`peachy_mls_buffer_free`]: `{"writes": bool, "why": "ok" | "off" |
+ * "flag" | "capability", …}`. For tests and a support export. Reads only;
+ * [`PEACHY_MLS_ERR_NO_SUCH_GROUP`] for a group this client does not hold.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_kt_in_band_state(PeachyMlsClient *client,
+                                    const uint8_t *group_id,
+                                    uintptr_t group_id_len,
+                                    PeachyMlsBuffer *out_json);
+
+/**
  * Sign a request to be seated in `group_id` as this client's own device, now.
  *
  * `out_proof` receives the 89-byte proof (version, time, nonce, signature),
@@ -3403,139 +4540,185 @@ int32_t peachy_mls_group_commit_strands(PeachyMlsClient *client,
                                         bool *out_strands);
 
 /**
- * Hand in the SEALED STAMP the delivery service attached to the commit about
- * to go through [`peachy_mls_group_process_door`] on the commit door for
- * `group_id` (`MailboxEnvelope.commit_stamp`; docs/delivery.md
- * §The sealed stamp). Kept in memory for that one commit; an empty stamp
- * hands in nothing.
+ * WHO COMMITTED the commit the commit door just refused
+ * (docs/bots.md §Stopping a bot).
+ *
+ * Asked AFTER [`peachy_mls_group_process_door`] refused `message` on the
+ * commit door, as [`peachy_mls_group_commit_strands`] is. `out_named` true
+ * exactly when `message` is the commit that door refused last in the group
+ * and it opened and verified before it was refused: then `out_leaf_index` is
+ * its committer's leaf in this device's tree, and `out_bot` the bot's actor
+ * id when that leaf is a bot's (its credential a `pdc3`), empty for a
+ * person's. Otherwise `out_named` is false, `out_leaf_index` 0 and `out_bot`
+ * empty: a commit that did not open names nobody, since its framing is
+ * anyone's to write. A refusal names the rule; this names who broke it, so a
+ * client stops a bot only for the bot's own refused commit.
  *
  * # Safety
  * See the module header.
  */
-int32_t peachy_mls_group_note_commit_stamp(PeachyMlsClient *client,
+int32_t peachy_mls_group_refused_committer(PeachyMlsClient *client,
                                            const uint8_t *group_id,
                                            uintptr_t group_id_len,
-                                           const uint8_t *stamp,
-                                           uintptr_t stamp_len);
+                                           const uint8_t *message,
+                                           uintptr_t message_len,
+                                           bool *out_named,
+                                           uint32_t *out_leaf_index,
+                                           PeachyMlsBuffer *out_bot);
 
 /**
- * What the commit door found checking the last commit it merged in
- * `group_id` against its sealed stamp, TAKEN: UTF-8 JSON in `out_check`,
- * `{"epoch","stamp","mac","steward"}` and `"blame"` (an actor id) when the
- * committer is blamed; `stamp` is one of `absent`, `unopened`, `match`,
- * `blame`, `repair`, `unjudged`. An EMPTY buffer when no commit merged since
- * the last take. A caller only alerts on it in this build. Freed with
+ * Hand this device its ACCOUNT KEY, as held (32 or 64 bytes), which its
+ * stamp keys derive from (`Client::set_account_key`): after every start, and
+ * whenever the account key it holds changes (an approval, a PIN restore).
+ * Held in memory only. [`PEACHY_MLS_ERR_INVALID_ARGUMENT`] for a key that is
+ * neither 32 nor 64 bytes or is not the one this device's credential is
+ * certified under.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_client_set_account_key(PeachyMlsClient *client,
+                                          const uint8_t *account_key,
+                                          uintptr_t account_key_len);
+
+/**
+ * WHETHER THIS DEVICE COMMITS in `group_id` (`Client::commits_here`):
+ * `out_commits` is true when the group's state names no stamp
+ * key, or names this device's account's; otherwise the device proposes,
+ * and leaves join asks to a device that commits.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_commits_here(PeachyMlsClient *client,
+                                      const uint8_t *group_id,
+                                      uintptr_t group_id_len,
+                                      bool *out_commits);
+
+/**
+ * THIS DEVICE'S GOVERNANCE FACTS for `group_id` (`Client::governance_facts`):
+ * `out_json` receives UTF-8, **not** NUL-terminated, freed with
+ * [`peachy_mls_buffer_free`]: `{"commitsHere","keyOnLeaf","committers"}`,
+ * which a client spreads into the roots door's `governanceStep` request.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_governance_facts(PeachyMlsClient *client,
+                                          const uint8_t *group_id,
+                                          uintptr_t group_id_len,
+                                          PeachyMlsBuffer *out_json);
+
+/**
+ * THE FACTS A RE-FOUNDING IS HONORED BY (`Client::refounding_facts`), for
+ * `new_group_id`, which names `old_group_id` as `prev`:
+ * `out_json` receives UTF-8, **not** NUL-terminated, freed with
+ * [`peachy_mls_buffer_free`]: `{"founder","founderBot","founderKeys",
+ * "oldFounderKeys","oldHeld","seatedBy","foundedBy"}`, which a client
+ * spreads into the roots door's `honorRefounding` request, or a pins `held`
+ * successor. `founder` and `seatedBy` name the Welcome's committer;
+ * `foundedBy` who made the founding commit, as this device can prove it, or
+ * null: the only name a re-founded group's closing line takes.
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_refounding_facts(PeachyMlsClient *client,
+                                          const uint8_t *old_group_id,
+                                          uintptr_t old_group_id_len,
+                                          const uint8_t *new_group_id,
+                                          uintptr_t new_group_id_len,
+                                          PeachyMlsBuffer *out_json);
+
+/**
+ * A GUEST COMMUNITY'S ORDER OR LINK, signed by this device's account
+ * (`Client::guest_sign`, docs/sealed-messages.md §Guest orders):
+ * `request_json` is `{"call":"order","guestGroup","body","links"?}`,
+ * `{"call":"link","guestGroup","from","to"?}`,
+ * `{"call":"signer","guestGroup"}` or `{"call":"signers","wires":[wire]}`;
+ * `out_json` receives the `guest-order` wire (carrying `ac`, the signer
+ * certificate made from the account key this client holds), the link
+ * `{f, s}`, `signer`'s bare word (`ok`, `not-admin`, `not-settled` or
+ * `not-held`: whether `order` would sign), or `signers`'
+ * `{"signerKeys":{actor:[ik]},"search":[label]}` (the signers among the
+ * wires' certificates this device proves from its own account key, its
+ * pins or, for a signer it holds no pin or retired key for, the key
+ * transparency log, to pass unchanged to `guestHost`; and one `KtSearch`
+ * label per unproven pair the log could prove, none while key
+ * transparency is off, passed to `guestHost` as `signerSearch`: only the
+ * `search` that `take` or `judge` answers is ever sent), as UTF-8. `order` and `link` are refused when the guest group's
+ * stamp keys (or `from`) do not name this account's key.
+ * Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header. `request_json` must be a valid NUL-terminated
+ * string.
+ */
+int32_t peachy_mls_guest_sign(PeachyMlsClient *client,
+                              const char *request_json,
+                              PeachyMlsBuffer *out_json);
+
+/**
+ * THE STAMP FOR A GROUP LINK CHANGE in `group_id` (`Client::link_stamp`): 64
+ * bytes in `out_stamp`, this device's account's stamp over the
+ * `SetGroupLink` fields at the group's current epoch, or an EMPTY buffer
+ * when the group's state names no stamp key. [`PEACHY_MLS_ERR_POLICY`]
+ * (`commit_needs_admin`) when it names some and not this account's. The
+ * hashes are empty or 32 bytes. Freed with [`peachy_mls_buffer_free`].
+ *
+ * # Safety
+ * See the module header.
+ */
+int32_t peachy_mls_group_link_stamp(PeachyMlsClient *client,
+                                    const uint8_t *group_id,
+                                    uintptr_t group_id_len,
+                                    const uint8_t *join_key_hash,
+                                    uintptr_t join_key_hash_len,
+                                    bool closed,
+                                    const uint8_t *preview,
+                                    uintptr_t preview_len,
+                                    const uint8_t *reader_key_hash,
+                                    uintptr_t reader_key_hash_len,
+                                    PeachyMlsBuffer *out_stamp);
+
+/**
+ * THIS PERSON'S STAMP KEY ENTRY for `group_id` (`Client::stamp_key_entry`):
+ * UTF-8 JSON in `out_entry`, `{"a","k"}`, the entry naming this device's
+ * person (`a`) and their account's public stamp key for that group (`k`,
+ * base64url), the key this device's leaves carry there. Derived, never
+ * stored: every device of the account answers the same entry. Refused while the device holds no account key
+ * ([`peachy_mls_client_set_account_key`]). Freed with
  * [`peachy_mls_buffer_free`].
  *
  * # Safety
  * See the module header.
  */
-int32_t peachy_mls_group_take_commit_check(PeachyMlsClient *client,
-                                           const uint8_t *group_id,
-                                           uintptr_t group_id_len,
-                                           PeachyMlsBuffer *out_check);
+int32_t peachy_mls_group_stamp_key_entry(PeachyMlsClient *client,
+                                         const uint8_t *group_id,
+                                         uintptr_t group_id_len,
+                                         PeachyMlsBuffer *out_entry);
 
 /**
- * The GROUP HOLD of `group_id`, when it holds now: UTF-8 JSON in `out_hold`,
- * `{"epoch","since","until","reason"}` (`reason` one of `RefusedCommit`,
- * `UnopenableCommit`, `FalseRepair`). An EMPTY buffer for none. While held, a
- * caller makes no commit of its own, links no device, answers no seat ask,
- * and every rejoin path waits. Freed with [`peachy_mls_buffer_free`].
+ * THE STAMP for the commit staged in `group_id`, as it is submitted
+ * (`submitted`: the bytes `SubmitCommit` carries, a carried commit's whole
+ * entry included) (`Client::commit_stamp`). UTF-8 JSON in `out_stamp`,
+ * `{"stamp","set","own"}`: `stamp` the stamp (base64url), or null when the handle
+ * takes none; `set` the handle's new stamp set (base64url keys) when the
+ * commit changes it, else null; `own` true for an unstamped own-scope commit
+ * on a governed handle, sent with `scope = own`. [`PEACHY_MLS_ERR_POLICY`]
+ * (`commit_needs_admin`) when this device's stamp key is not in the set that
+ * signs, and [`PEACHY_MLS_ERR_INVALID_ARGUMENT`] when nothing is staged.
+ * Freed with [`peachy_mls_buffer_free`].
  *
  * # Safety
  * See the module header.
  */
-int32_t peachy_mls_group_hold(PeachyMlsClient *client,
-                              const uint8_t *group_id,
-                              uintptr_t group_id_len,
-                              PeachyMlsBuffer *out_hold);
-
-/**
- * Hold `group_id` for its steward's repair or veto, for `reason` (1 a
- * refused commit, 2 an unopenable or lost one, 3 a false repair notice).
- * `out_held` is false, and nothing changes, for a group this device does
- * not count as enrolled (its meta's steward key is not the one the server's
- * sealed stamp named): such a group behaves as it always did. False too for
- * a hold that already lapsed or was released at the group's current epoch:
- * at most one hold an epoch, and the caller falls back to rejoining.
- *
- * # Safety
- * See the module header.
- */
-int32_t peachy_mls_group_enter_hold(PeachyMlsClient *client,
-                                    const uint8_t *group_id,
-                                    uintptr_t group_id_len,
-                                    uint32_t reason,
-                                    bool *out_held);
-
-/**
- * Release the hold of `group_id`, if any: it lapses now and stays on
- * record, so the group is not held again at this epoch.
- *
- * # Safety
- * See the module header.
- */
-int32_t peachy_mls_group_release_hold(PeachyMlsClient *client,
+int32_t peachy_mls_group_commit_stamp(PeachyMlsClient *client,
                                       const uint8_t *group_id,
-                                      uintptr_t group_id_len);
-
-/**
- * What a commit entry's VETO FRAME means to this device, in `out_verdict`:
- * 0 nothing (no frame, or one that does not verify under the steward key the
- * group held at the vetoed epoch), 1 a valid veto of the commit at this
- * device's own epoch (skip the vetoed commit and take this one), 2 a valid
- * veto of a commit this device already merged (rejoin now), 3 a valid veto
- * of an epoch whose successor this copy keeps no verifier for, more than 63
- * epochs back or before its seat (read the group's head now, through the
- * fork check; never a rejoin on the frame's word).
- *
- * # Safety
- * See the module header.
- */
-int32_t peachy_mls_group_judge_veto(PeachyMlsClient *client,
-                                    const uint8_t *group_id,
-                                    uintptr_t group_id_len,
-                                    const uint8_t *entry,
-                                    uintptr_t entry_len,
-                                    uint32_t *out_verdict);
-
-/**
- * Judge a REPAIR NOTICE lane frame (`wire`, its UTF-8 JSON) from `sender`
- * (the MLS sender's actor id, UTF-8, as the message door reported it)
- * against the verifier this device's copy had at its epoch, in
- * `out_verdict`: 0 consistent, 1 inconsistent (an admin repointing the
- * head: alert, and an enrolled group is held, at most once an epoch), 2
- * nothing to judge (not a repair notice, a sender the group does not name
- * as an admin, or no verifier kept for that epoch).
- *
- * # Safety
- * See the module header.
- */
-int32_t peachy_mls_group_check_repair_notice(PeachyMlsClient *client,
-                                             const uint8_t *group_id,
-                                             uintptr_t group_id_len,
-                                             const uint8_t *sender,
-                                             uintptr_t sender_len,
-                                             const uint8_t *wire,
-                                             uintptr_t wire_len,
-                                             uint32_t *out_verdict);
-
-/**
- * Open FetchCommitAt's `sealed_commit` for the commit built at this device's
- * epoch of `group_id`, with that epoch's send key: the commit envelope as it
- * was placed, in `out_envelope`, which the caller opens and takes through
- * the commit door like any other (FetchCommitAt, not part of this specification).
- * [`PEACHY_MLS_ERR_INVALID_ARGUMENT`] for a copy that does not open. Freed with [`peachy_mls_buffer_free`].
- *
- * # Safety
- * See the module header.
- */
-int32_t peachy_mls_group_open_fetched_commit(PeachyMlsClient *client,
-                                             const uint8_t *group_id,
-                                             uintptr_t group_id_len,
-                                             const uint8_t *sealed,
-                                             uintptr_t sealed_len,
-                                             PeachyMlsBuffer *out_envelope);
+                                      uintptr_t group_id_len,
+                                      const uint8_t *submitted,
+                                      uintptr_t submitted_len,
+                                      PeachyMlsBuffer *out_stamp);
 
 /**
  * Drop every trace of a group from this device.
@@ -3688,6 +4871,30 @@ int32_t peachy_mls_group_process_mailbox_entry(PeachyMlsClient *client,
                                                const uint8_t *inner,
                                                uintptr_t inner_len,
                                                int64_t received_at,
+                                               PeachyMlsIncoming *out_incoming);
+
+/**
+ * THE COMMIT DOOR FOR A SECOND PROCESS, one kind of commit only: a member's
+ * plain rotation, an update path and no proposal, taken from a COMMIT entry
+ * (`peachy_mls_core::Client::process_peer_rotation`). `out_taken` is true when
+ * it was one, and it is merged and `out_incoming` is filled as
+ * [`peachy_mls_group_process_mailbox_entry`] fills it. False when it was
+ * anything more, or the group holds a staged commit: nothing moved, and
+ * nothing opening it spent is kept, so the process that owns the store meets
+ * it untouched. Any other refusal is an error, rolled back the same way.
+ *
+ * # Safety
+ * As [`peachy_mls_group_process_door`]; `out_taken` must point to writable
+ * storage for one `bool`.
+ */
+int32_t peachy_mls_group_process_peer_rotation(PeachyMlsClient *client,
+                                               const uint8_t *group_id,
+                                               uintptr_t group_id_len,
+                                               uint32_t mailbox_kind,
+                                               uint8_t envelope_kind,
+                                               const uint8_t *inner,
+                                               uintptr_t inner_len,
+                                               bool *out_taken,
                                                PeachyMlsIncoming *out_incoming);
 
 /**
@@ -3969,11 +5176,13 @@ int32_t peachy_mls_group_call_open(PeachyMlsClient *client,
  * A v2 call's participant media keys (docs/calls.md §Participant
  * media keys), one JSON request in and one JSON answer out:
  * `{"op":"start","callId","participantId","sessionId","trackNames"}` →
- * `{"mediaKeyHex"}` (`participantId` is the server's answer to JoinCall);
+ * `{"mediaKeyHex"}` (`participantId` is the media server's join answer);
  * `{"op":"share","callId"}` → `{"send":[hex…]}`;
- * `{"op":"remove","callId","participantId"}` (an admin's honored `Remove`:
- * the id is never bound again in this call) or
- * `{"op":"remove","callId","leafIndex"}` → `{"send":[hex…]}`;
+ * `{"op":"remove","callId","participantId","botActor"?}` (an honored
+ * `Remove`: the id is never bound again in this call; add `botActor` when it
+ * names a bot) or `{"op":"remove","callId","leafIndex"}` → `{"send":[hex…]}`;
+ * `{"op":"grantBots","callId","actors"}` (the bots this device grants its
+ * media keys to) → `{"send":[hex…]}`;
  * `{"op":"epoch","callId"}` (on every epoch change: a commit that removed a
  * participant rotates like a leave) → `{"send":[hex…]}`;
  * `{"op":"apply","callId"}` → `{"send":[hex…]}`; `{"op":"end","callId"}` → `{}`;
@@ -4127,6 +5336,23 @@ int32_t peachy_mls_test_issuer_issue(PeachyMlsTestIssuer *issuer,
                                      int64_t issued_at,
                                      int64_t expires_at,
                                      PeachyMlsBuffer *out_credential);
+#endif
+
+#if defined(PEACHY_MLS_TEST_ISSUER)
+/**
+ * [`peachy_mls_test_issuer_issue`] for a bot: a `pdc3`.
+ *
+ * # Safety
+ * As [`peachy_mls_test_issuer_issue`].
+ */
+int32_t peachy_mls_test_issuer_issue_bot(PeachyMlsTestIssuer *issuer,
+                                         const char *actor_id,
+                                         const char *device_id,
+                                         const uint8_t *device_seed,
+                                         uintptr_t device_seed_len,
+                                         int64_t issued_at,
+                                         int64_t expires_at,
+                                         PeachyMlsBuffer *out_credential);
 #endif
 
 #if defined(PEACHY_MLS_FIXTURE)

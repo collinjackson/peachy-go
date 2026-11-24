@@ -27,7 +27,13 @@ type person struct {
 
 func signIn(t *testing.T, srv *peachytest.Server, phone, name, handle string) person {
 	t.Helper()
-	actor := srv.AddAccount(phone, name, handle)
+	return signInAs(t, srv, srv.AddAccount(phone, name, handle), phone, name)
+}
+
+// signInAs signs in to an account the test already made (AddAccountOneKey,
+// AddBot).
+func signInAs(t *testing.T, srv *peachytest.Server, actor, phone, name string) person {
+	t.Helper()
 	ctx := context.Background()
 	dev, err := Open(srv.URL, t.TempDir(), name+"'s bot")
 	if err != nil {

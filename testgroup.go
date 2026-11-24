@@ -25,31 +25,10 @@ import (
 	"fmt"
 	"slices"
 	"sort"
-	"unsafe"
+	"time"
 
 	"github.com/collinjackson/peachy-go/pb"
 )
-
-const sendKeyLabel = "peachy sealed-sender v1"
-
-func (m *mlsClient) exportSecret(group []byte, pending bool) ([]byte, error) {
-	gp, gn := in(group)
-	label := C.CString(sendKeyLabel)
-	defer C.free(unsafe.Pointer(label))
-	return oneBuffer(func(out *C.PeachyMlsBuffer) C.int32_t {
-		if pending {
-			return C.peachy_mls_group_export_pending_secret(m.c, gp, gn, label, gp, gn, 32, out)
-		}
-		return C.peachy_mls_group_export_secret(m.c, gp, gn, label, gp, gn, 32, out)
-	})
-}
-
-func (m *mlsClient) epoch(group []byte) (uint64, error) {
-	gp, gn := in(group)
-	var e C.uint64_t
-	err := ffi(func() C.int32_t { return C.peachy_mls_group_epoch(m.c, gp, gn, &e) })
-	return uint64(e), err
-}
 
 func (m *mlsClient) setMeta(group, value []byte) ([]byte, error) {
 	gp, gn := in(group)
@@ -75,11 +54,6 @@ func (m *mlsClient) stageRemove(group []byte, leaf uint32, leafKey []byte) ([]by
 	return oneBuffer(func(out *C.PeachyMlsBuffer) C.int32_t {
 		return C.peachy_mls_group_remove_member(m.c, gp, gn, C.uint32_t(leaf), lp, ln, out)
 	})
-}
-
-func (m *mlsClient) clearPending(group []byte) {
-	gp, gn := in(group)
-	_ = ffi(func() C.int32_t { return C.peachy_mls_group_clear_pending_commit(m.c, gp, gn) })
 }
 
 type leaf struct {
@@ -114,6 +88,18 @@ func (m *mlsClient) leaves(group []byte) ([]leaf, error) {
 // name; every member an admin). It returns the conversation id. Built only
 // with -tags testissuer.
 func (d *Device) FoundGroupForTest(ctx context.Context, name string, dm bool, others []string) (string, error) {
+	return d.foundGroup(ctx, name, dm, false, others)
+}
+
+// FoundGovernedGroupForTest founds a named group that only this account's
+// devices commit to (pol.meta "adm"; the core names the stamp keys, stk,
+// and the founding enrolls them with the server): delivery.md "A commit the
+// policy refuses". Built only with -tags testissuer.
+func (d *Device) FoundGovernedGroupForTest(ctx context.Context, name string, others []string) (string, error) {
+	return d.foundGroup(ctx, name, false, true, others)
+}
+
+func (d *Device) foundGroup(ctx context.Context, name string, dm, governed bool, others []string) (string, error) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	if d.mls == nil {
@@ -151,12 +137,24 @@ func (d *Device) FoundGroupForTest(ctx context.Context, name string, dm bool, ot
 		adm = slices.Compact(adm)
 		name = ""
 	}
+	type policy struct {
+		Meta string `json:"meta"`
+	}
 	meta := struct {
-		V   int      `json:"v"`
-		N   string   `json:"n"`
-		Adm []string `json:"adm"`
-		DM  bool     `json:"dm,omitempty"`
-	}{1, name, adm, dm}
+		V   int               `json:"v"`
+		N   string            `json:"n"`
+		Adm []string          `json:"adm"`
+		DM  bool              `json:"dm,omitempty"`
+		Pol *policy           `json:"pol,omitempty"`
+		Stk []json.RawMessage `json:"stk,omitempty"`
+	}{V: 1, N: name, Adm: adm, DM: dm}
+	if governed {
+		entry, err := d.mls.stampKeyEntry(group)
+		if err != nil {
+			return "", err
+		}
+		meta.Pol, meta.Stk = &policy{Meta: "adm"}, []json.RawMessage{entry}
+	}
 	value, err := json.Marshal(meta)
 	if err != nil {
 		return "", err
@@ -246,53 +244,76 @@ func (d *Device) addLocked(ctx context.Context, group []byte, actor string) erro
 	return nil
 }
 
-// submitLocked submits a staged commit, wrapped at the epoch it was built
-// in, to every device in the tree before it (none for a founding's), and
-// merges it once taken; a refusal clears it. Called with d.mu held.
-func (d *Device) submitLocked(ctx context.Context, group, commit []byte, welcomes []*pb.MlsWelcome, toNobody bool) error {
-	fail := func(err error) error {
-		d.mls.clearPending(group)
+// stampKeyEntry is this person's {a, k} entry of a governed group's stk.
+func (m *mlsClient) stampKeyEntry(group []byte) ([]byte, error) {
+	gp, gn := in(group)
+	return oneBuffer(func(out *C.PeachyMlsBuffer) C.int32_t { return C.peachy_mls_group_stamp_key_entry(m.c, gp, gn, out) })
+}
+
+func (m *mlsClient) stageAddBot(group, keyPackage, meta []byte) (commit, welcome []byte, err error) {
+	gp, gn := in(group)
+	kp, kn := in(keyPackage)
+	mp, mn := in(meta)
+	var c, w C.PeachyMlsBuffer
+	if err := ffi(func() C.int32_t {
+		return C.peachy_mls_group_add_bot_with_meta(m.c, gp, gn, kp, kn, mp, mn, &c, &w)
+	}); err != nil {
+		return nil, nil, err
+	}
+	return take(&c), take(&w), nil
+}
+
+// AddBotForTest seats bot (an account whose device holds a pdc3) in the
+// conversation, granting it post, as owned by this account (the fake
+// serves no GetBot): one commit appending its bots entry and
+// setting bat (docs/bots.md, "The chat's bot keys"). Built only with -tags
+// testissuer.
+func (d *Device) AddBotForTest(ctx context.Context, conversation, bot string) error {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	if d.mls == nil {
+		return errors.New("not connected")
+	}
+	group := []byte(conversation)
+	me, _, err := d.mls.identity()
+	if err != nil {
 		return err
 	}
-	epoch, err := d.mls.epoch(group)
+	raw, err := d.mls.meta(group)
 	if err != nil {
-		return fail(err)
+		return err
 	}
-	sendKey, err := d.mls.exportSecret(group, false)
-	if err != nil {
-		return fail(err)
-	}
-	next, err := d.mls.exportSecret(group, true)
-	if err != nil {
-		return fail(err)
-	}
-	nextVerifier := sha256.Sum256(next)
-	wrapped, err := d.mls.sealEnvelope(group, envelopeCommit, commit)
-	if err != nil {
-		return fail(err)
-	}
-	d.rememberSent(wrapped, nowFunc())
-	handle, err := groupHandle(group)
-	if err != nil {
-		return fail(err)
-	}
-	var recipients []*pb.SealedRecipient
-	if !toNobody {
-		roster, err := d.mls.roster(group)
-		if err != nil {
-			return fail(err)
+	meta := map[string]any{}
+	if raw != nil {
+		if err := json.Unmarshal(raw, &meta); err != nil {
+			return err
 		}
-		for _, m := range roster {
-			recipients = append(recipients, &pb.SealedRecipient{UserId: m.actorID, DeviceId: m.deviceID})
-		}
-		sort.Slice(recipients, func(i, j int) bool { return recipients[i].DeviceId < recipients[j].DeviceId })
 	}
-	_, err = call[pb.SubmitCommitRequest, pb.SubmitCommitResponse](ctx, d.rpc, "SubmitCommit", &pb.SubmitCommitRequest{
-		Handle: handle, Epoch: epoch, Commit: wrapped, SendKey: sendKey, NextVerifier: nextVerifier[:],
-		Recipients: recipients, Welcomes: welcomes,
-	})
+	bat, _ := meta["bat"].(float64)
+	at := max(time.Now().Unix(), int64(bat)+1)
+	bots, _ := meta["bots"].([]any)
+	meta["bots"] = append(bots, map[string]any{"a": bot, "by": me, "at": at, "o": me, "gr": []string{"post"}})
+	meta["bat"] = at
+	if bots == nil {
+		meta["bot"] = "member" // with the first bot, as the door asks
+	}
+	value, err := json.Marshal(meta)
 	if err != nil {
-		return fail(err)
+		return err
 	}
-	return d.mls.merge(group)
+	fetched, err := call[pb.FetchKeyPackagesRequest, pb.FetchKeyPackagesResponse](ctx, d.rpc, "FetchKeyPackages",
+		&pb.FetchKeyPackagesRequest{UserIds: []string{bot}})
+	if err != nil {
+		return err
+	}
+	if len(fetched.GetKeyPackages()) != 1 {
+		return fmt.Errorf("the bot has %d key packages to hand out, not one device's", len(fetched.GetKeyPackages()))
+	}
+	kp := fetched.GetKeyPackages()[0]
+	commit, welcome, err := d.mls.stageAddBot(group, kp.GetKeyPackage(), value)
+	if err != nil {
+		return err
+	}
+	w := []*pb.MlsWelcome{{RecipientDeviceId: kp.GetDeviceId(), RecipientUserId: kp.GetUserId(), Welcome: welcome}}
+	return d.submitLocked(ctx, group, commit, w, false)
 }

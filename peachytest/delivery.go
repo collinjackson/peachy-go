@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"crypto/subtle"
+	"errors"
 	"sort"
 
 	"connectrpc.com/connect"
@@ -290,14 +291,26 @@ func (s *Server) submitCommit(c *caller, req *pb.SubmitCommitRequest) (*pb.Submi
 	if len(req.GetSendKey()) != 32 || !bytes.Equal(sum[:], h.verifier) {
 		return nil, errorf(connect.CodePermissionDenied, "not allowed")
 	}
+	if err := s.checkStamp(c, h, req); err != nil {
+		return nil, err
+	}
+	if len(req.GetStampSet()) > 0 {
+		h.stampSet = req.GetStampSet()
+	}
 	h.epoch++
 	h.verifier = append([]byte(nil), req.GetNextVerifier()...)
+	if c.session != nil {
+		for _, d := range s.devices {
+			if d.sessions[c.session.id] && !d.serverRun {
+				s.commits[d.id]++
+			}
+		}
+	}
 
 	welcomed := map[string]bool{}
 	for _, w := range req.GetWelcomes() {
 		welcomed[w.GetRecipientDeviceId()] = true
 	}
-	stamp := commitStamp(req.GetSendKey(), req.GetEpoch(), req.GetNextVerifier())
 	resp := &pb.SubmitCommitResponse{Seq: h.epoch, Epoch: h.epoch}
 	var to []*device
 	for _, r := range req.GetRecipients() {
@@ -311,10 +324,10 @@ func (s *Server) submitCommit(c *caller, req *pb.SubmitCommitRequest) (*pb.Submi
 		}
 	}
 	if len(to) > 0 {
-		s.place(to, pb.MailboxKind_MAILBOX_KIND_COMMIT, req.GetCommit(), stamp, "")
+		s.place(to, pb.MailboxKind_MAILBOX_KIND_COMMIT, req.GetCommit(), "")
 	}
 	for _, w := range req.GetWelcomes() {
-		s.place([]*device{s.devices[w.GetRecipientDeviceId()]}, pb.MailboxKind_MAILBOX_KIND_WELCOME, w.GetWelcome(), nil, "")
+		s.place([]*device{s.devices[w.GetRecipientDeviceId()]}, pb.MailboxKind_MAILBOX_KIND_WELCOME, w.GetWelcome(), "")
 	}
 	if c.session != nil {
 		s.poke(c.session.actor, pb.StateDomain_STATE_DOMAIN_MLS)
@@ -322,9 +335,67 @@ func (s *Server) submitCommit(c *caller, req *pb.SubmitCommitRequest) (*pb.Submi
 	return resp, nil
 }
 
+// checkStamp applies delivery.md "Commit stamps" and "Own-scope commits":
+// with no set a stamp is ignored and only the founding commit (epoch 0) may
+// enroll one; with a set the commit is stamped by one of its keys, or marked
+// own-scope and unstamped. The fake doesn't check who may enroll (the
+// community roster), doesn't meter own-scope commits, doesn't rewind, and
+// takes the core's word that an own-scope commit is one.
+func (s *Server) checkStamp(c *caller, h *head, req *pb.SubmitCommitRequest) error {
+	unstamped := func(msg string) error {
+		err := connect.NewError(connect.CodePermissionDenied, errors.New(msg))
+		err.Meta().Set("peachy-refusal", "unstamped")
+		return err
+	}
+	if st := req.GetStamp(); len(st) != 0 && len(st) != 64 {
+		return errorf(connect.CodeInvalidArgument, "stamp is 0 or 64 bytes")
+	}
+	newSet := req.GetStampSet()
+	if len(newSet) > 0 && !validStampSet(newSet) {
+		return errorf(connect.CodeInvalidArgument, "malformed stamp_set")
+	}
+	if req.GetRewind() {
+		return unstamped("the fake takes no rewind")
+	}
+	own := req.GetScope() == pb.CommitScope_COMMIT_SCOPE_OWN
+	if own {
+		if len(req.GetStamp()) != 0 || len(newSet) != 0 || req.GetEnrollCommunityId() != "" || req.GetEnrollOrganizationId() != "" {
+			return errorf(connect.CodeInvalidArgument, "an own-scope commit carries no stamp, set or enrollment")
+		}
+		if len(req.GetWelcomes()) > 0 {
+			if c.session == nil {
+				return errorf(connect.CodeInvalidArgument, "an own-scope commit with a Welcome goes signed in")
+			}
+			for _, w := range req.GetWelcomes() {
+				if w.GetRecipientUserId() != c.session.actor {
+					return errorf(connect.CodeInvalidArgument, "an own-scope commit's Welcomes name the caller's own account")
+				}
+			}
+		}
+	}
+	switch {
+	case len(h.stampSet) == 0 && len(newSet) == 0:
+		return nil
+	case len(h.stampSet) == 0:
+		if h.epoch != 0 || own {
+			return unstamped("a stamp set is enrolled only by a founding commit")
+		}
+		if !stampVerifies(newSet, req.GetStamp(), req.GetHandle(), req.GetEpoch(), req.GetCommit(), newSet) {
+			return unstamped("the founding stamp doesn't verify under the new set")
+		}
+		return nil
+	case own && len(newSet) == 0:
+		return nil
+	}
+	if !stampVerifies(h.stampSet, req.GetStamp(), req.GetHandle(), req.GetEpoch(), req.GetCommit(), newSet) {
+		return unstamped("no key of the handle's stamp set signed this commit")
+	}
+	return nil
+}
+
 // place stores one payload with an entry for each device and pokes their
 // accounts. Returns the envelope id. Called with s.mu held.
-func (s *Server) place(to []*device, kind pb.MailboxKind, data, stamp []byte, retryKey string) (string, *pb.MailboxEnvelope) {
+func (s *Server) place(to []*device, kind pb.MailboxKind, data []byte, retryKey string) (string, *pb.MailboxEnvelope) {
 	id := newUUID()
 	at := ts(s.now())
 	s.payloads[id] = &payload{refs: len(to), retryKey: retryKey}
@@ -334,7 +405,7 @@ func (s *Server) place(to []*device, kind pb.MailboxKind, data, stamp []byte, re
 	var env *pb.MailboxEnvelope
 	poked := map[string]bool{}
 	for _, d := range to {
-		env = &pb.MailboxEnvelope{Id: id, Kind: kind, Payload: data, ReceivedAt: at, CommitStamp: stamp}
+		env = &pb.MailboxEnvelope{Id: id, Kind: kind, Payload: data, ReceivedAt: at}
 		d.mailbox = append(d.mailbox, &entry{env: env, payloadID: id})
 		if !poked[d.actor] {
 			poked[d.actor] = true
@@ -449,8 +520,12 @@ func (s *Server) sendSealed(c *caller, req *pb.SendSealedRequest) (*pb.SendSeale
 		resp.Id, resp.ReceivedAt = newUUID(), ts(s.now())
 		return resp, nil
 	}
-	id, env := s.place(to, pb.MailboxKind_MAILBOX_KIND_MLS, req.GetPayload(), nil, req.GetClientMessageId())
+	id, env := s.place(to, pb.MailboxKind_MAILBOX_KIND_MLS, req.GetPayload(), req.GetClientMessageId())
 	resp.Id, resp.ReceivedAt = id, env.GetReceivedAt()
+	resp.Placement = &pb.Placement{}
+	for _, d := range to {
+		resp.Placement.DeviceIds = append(resp.Placement.DeviceIds, d.id)
+	}
 	return resp, nil
 }
 

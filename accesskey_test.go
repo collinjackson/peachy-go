@@ -84,14 +84,14 @@ func TestParseAccessKey(t *testing.T) {
 }
 
 func TestAccountsAdded(t *testing.T) {
-	before := []member{{"me", "d1"}, {"sam", "s1"}}
-	if accountsAdded(before, append(before, member{"sam", "s2"}), "me") {
+	before := []member{{actorID: "me", deviceID: "d1"}, {actorID: "sam", deviceID: "s1"}}
+	if accountsAdded(before, append(before, member{actorID: "sam", deviceID: "s2"}), "me") {
 		t.Error("a new device of an account already in the tree owes no hello")
 	}
-	if accountsAdded(before, append(before, member{"me", "d2"}), "me") {
+	if accountsAdded(before, append(before, member{actorID: "me", deviceID: "d2"}), "me") {
 		t.Error("our own new device owes no hello")
 	}
-	if !accountsAdded(before, append(before, member{"kim", "k1"}), "me") {
+	if !accountsAdded(before, append(before, member{actorID: "kim", deviceID: "k1"}), "me") {
 		t.Error("a new account owes a hello")
 	}
 }
