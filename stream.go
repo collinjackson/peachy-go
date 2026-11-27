@@ -103,6 +103,11 @@ func (d *Device) stream(ctx context.Context, out chan<- Change) (time.Duration, 
 					c.Settings = true
 				case pb.StateDomain_STATE_DOMAIN_PEOPLE:
 					c.People = true
+				case pb.StateDomain_STATE_DOMAIN_MLS:
+					// The pool fell low: check it at the next quiet poll,
+					// and drain (delivery.md §Realtime).
+					d.keyPackagesDue()
+					c.Mailbox = true
 				}
 			}
 			if c != (Change{}) {

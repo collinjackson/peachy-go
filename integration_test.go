@@ -387,3 +387,44 @@ func TestHungSendDoesNotBlockReceiving(t *testing.T) {
 		t.Fatal("the hung send didn't time out")
 	}
 }
+
+// A device whose key packages are all gone, last resort included, publishes
+// more at its next quiet poll, so it can still be added to new chats.
+func TestKeyPackagesReplenish(t *testing.T) {
+	srv := peachytest.Start(t)
+	ctx := context.Background()
+	alice := signIn(t, srv, "+15555550100", "Alice", "alice")
+	bob := signIn(t, srv, "+15555550101", "Bob", "bob")
+	bob.mu.Lock()
+	id := bob.state.DeviceID
+	bob.mu.Unlock()
+
+	srv.DropKeyPackages(id)
+	if _, err := alice.FoundGroupForTest(ctx, "", true, []string{bob.actor}); err == nil {
+		t.Fatal("added a device with no key packages")
+	}
+	bob.poll(t)
+	if n, last := srv.KeyPackages(id); n != 10 || !last {
+		t.Fatalf("after replenishing: %d packages, last resort %v", n, last)
+	}
+	dm, err := alice.FoundGroupForTest(ctx, "", true, []string{bob.actor})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if e := only(t, bob.poll(t), EventJoined); e.Conversation != dm {
+		t.Fatalf("joined %s, not %s", e.Conversation, dm)
+	}
+
+	// Within the check interval nothing is read again, unless the server
+	// pokes: a handout that leaves the pool low does.
+	for i := 0; i < 6; i++ {
+		if _, err := alice.FoundGroupForTest(ctx, "", false, []string{bob.actor}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	bob.keyPackagesDue() // the poke, as the stream would hand it on
+	bob.poll(t)
+	if n, _ := srv.KeyPackages(id); n != 10 {
+		t.Fatalf("after a poke: %d packages", n)
+	}
+}

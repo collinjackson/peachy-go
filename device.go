@@ -30,6 +30,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -82,6 +83,11 @@ type Device struct {
 	// When every group was last checked against its head.
 	allChecked time.Time
 	ownSent    map[string]time.Time // nonces of envelopes sent, until they come back
+
+	// The key package pool (keypackages.go): when it was last checked, and
+	// whether the server asked for a check.
+	kpCheckedAt time.Time
+	kpDue       atomic.Bool
 
 	// Groups forgotten and waiting for a seat (rejoin.go), as in rejoins.json.
 	rejoins map[string]*rejoin
@@ -313,6 +319,7 @@ func (d *Device) connect(ctx context.Context) error {
 			return err
 		}
 		d.state.PublishedKeyPackages = true
+		d.state.LastResortAt = time.Now().Unix()
 		if err := d.state.save(d.dir); err != nil {
 			return err
 		}
@@ -427,6 +434,7 @@ func (d *Device) Poll(ctx context.Context) (events []Event, more bool, err error
 	d.sendHellos(ctx, time.Now())
 	if !more {
 		d.sendLeafUpdates(ctx, time.Now())
+		d.replenishKeyPackages(ctx, time.Now())
 	}
 	return events, more, err
 }

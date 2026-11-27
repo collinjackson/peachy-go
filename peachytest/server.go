@@ -403,6 +403,7 @@ func (s *Server) handler() http.Handler {
 	unary(s, mux, "WriteStore", s.writeStore)
 	unary(s, mux, "PublishKeyPackages", s.publishKeyPackages)
 	unary(s, mux, "FetchKeyPackages", s.fetchKeyPackages)
+	unary(s, mux, "KeyPackagePoolStatus", s.keyPackagePoolStatus)
 	unary(s, mux, "FetchKeyPackagesAnonymous", s.fetchKeyPackagesAnonymous)
 	unary(s, mux, "CreateHandle", s.createHandle)
 	unary(s, mux, "SubmitCommit", s.submitCommit)

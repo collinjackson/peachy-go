@@ -24,6 +24,9 @@ type deviceState struct {
 	DeviceID             string `json:"device_id"`
 	AccountKeyHex        string `json:"account_key_hex"`
 	PublishedKeyPackages bool   `json:"published_key_packages"`
+	// When the last-resort key package was last published, Unix seconds
+	// (keypackages.go).
+	LastResortAt int64 `json:"last_resort_at,omitempty"`
 	// Hellos owed, by conversation (accesskey.go).
 	Hellos map[string]*owedHello `json:"hellos,omitempty"`
 	// The account store's floor per store key (storefloor.go): the highest

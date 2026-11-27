@@ -101,6 +101,47 @@ func (s *Server) publishKeyPackages(c *caller, req *pb.PublishKeyPackagesRequest
 		HasLastResort: d.lastResort != nil}, nil
 }
 
+// lowWater is the pool size below which a device is told to replenish
+// (delivery.md "Replenish"); production's is 5 as well.
+const lowWater = 5
+
+func (s *Server) keyPackagePoolStatus(c *caller, _ *pb.KeyPackagePoolStatusRequest) (*pb.KeyPackagePoolStatusResponse, error) {
+	sess, err := c.needSession()
+	if err != nil {
+		return nil, err
+	}
+	resp := &pb.KeyPackagePoolStatusResponse{LowWater: lowWater}
+	for _, d := range s.sortedDevices(sess.actor) {
+		if !d.mls || d.revoked != nil {
+			continue
+		}
+		resp.Devices = append(resp.Devices, &pb.DeviceKeyPackagePool{DeviceId: d.id, Platform: d.platform,
+			Available: uint32(len(d.packages)), HasLastResort: d.lastResort != nil, Low: len(d.packages) < lowWater})
+	}
+	return resp, nil
+}
+
+// DropKeyPackages empties a device's pool, its last resort included, as
+// packages that outlived their credential are: a test of replenishing.
+func (s *Server) DropKeyPackages(deviceID string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if d := s.devices[deviceID]; d != nil {
+		d.packages, d.lastResort = nil, nil
+	}
+}
+
+// KeyPackages is how many ordinary packages a device has, and whether it
+// has a last resort.
+func (s *Server) KeyPackages(deviceID string) (int, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if d := s.devices[deviceID]; d != nil {
+		return len(d.packages), d.lastResort != nil
+	}
+	return 0, false
+}
+
 // handOut consumes one package of each approved device of actor
 // (delivery.md "Consume").
 func (s *Server) handOut(actor string, skip, only []string) ([]*pb.FetchedKeyPackage, []string) {
@@ -122,6 +163,9 @@ func (s *Server) handOut(actor string, skip, only []string) ([]*pb.FetchedKeyPac
 		last := false
 		if len(d.packages) > 0 {
 			kp, d.packages = d.packages[0], d.packages[1:]
+			if len(d.packages) < lowWater {
+				s.poke(actor, pb.StateDomain_STATE_DOMAIN_MLS)
+			}
 		} else if d.lastResort != nil {
 			kp, last = d.lastResort, true
 		}
